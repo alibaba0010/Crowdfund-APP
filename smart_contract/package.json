@@ -1,0 +1,15 @@
+{
+  "name": "crowdfund",
+  "scripts": {
+    "build": "npx thirdweb@latest detect",
+    "deploy": "SECRET_KEY=$secretKey npx thirdweb@latest deploy -k $SECRET_KEY",
+    "publish": "npx thirdweb@latest publish"
+  },
+  "devDependencies": {
+    "hardhat": "^2.22.18"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "thirdweb": "^5.86.1"
+  }
+}
