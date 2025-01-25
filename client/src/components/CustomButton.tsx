@@ -1,6 +1,16 @@
-import PropTypes from "prop-types";
+interface CustomButtonProps {
+  btnType: "button" | "submit" | "reset";
+  title: string;
+  handleClick: () => void;
+  styles: string;
+}
 
-const CustomButton = ({ btnType, title, handleClick, styles }) => {
+const CustomButton = ({
+  btnType,
+  title,
+  handleClick,
+  styles,
+}: CustomButtonProps) => {
   return (
     <button
       type={btnType}
@@ -10,13 +20,6 @@ const CustomButton = ({ btnType, title, handleClick, styles }) => {
       {title}
     </button>
   );
-};
-
-CustomButton.propTypes = {
-  btnType: PropTypes.string,
-  title: PropTypes.string,
-  handleClick: PropTypes.func,
-  styles: PropTypes.string,
 };
 
 export default CustomButton;
