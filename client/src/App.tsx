@@ -16,7 +16,7 @@ function App() {
   useEffect(() => {
     if (account) {
       const { address, addresses, status } = account;
-      dispatch(setWalletAdress(address, addresses, status));
+      dispatch(setWalletAdress({ address, addresses, status }));
     }
   }, [account.address]);
   return (

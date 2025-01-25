@@ -1,13 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = { address: undefined, addresses: [], status: undefined };
+const initialState = {
+  address: undefined,
+  addresses: [],
+  status: "disconnected",
+};
 export const walletAdressSlice = createSlice({
   name: "wallet",
   initialState,
   reducers: {
     setWalletAdress: (state, action) => {
       console.log(action.payload);
-      state.address = action.payload;
+      const { address, addresses, status } = action.payload;
+      state.address = address;
+      state.addresses = addresses;
+      state.status = status;
     },
   },
 });
