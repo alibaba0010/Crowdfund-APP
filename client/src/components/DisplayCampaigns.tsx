@@ -57,7 +57,7 @@ const DisplayCampaigns: React.FC<DisplayCampaignsProps> = ({
           campaigns.map((campaign) => (
             <FundCard
               key={uuidv4()}
-              campaign={campaign}
+              {...campaign}
               handleClick={() => handleNavigate(campaign)}
             />
           ))}

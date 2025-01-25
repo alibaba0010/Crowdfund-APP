@@ -4,49 +4,42 @@ import {
   logout,
   payment,
   profile,
-  thirdweb,
   withdraw,
 } from "../assets";
 import { configureStore } from "@reduxjs/toolkit";
 import walletAddressReducer from "../actions/wallet";
 export const navlinks = [
   {
-    name: "dashboard",
+    name: "Dashboard",
     imgUrl: dashboard,
     link: "/",
   },
   {
-    name: "campaign",
+    name: "Create-Campaign",
     imgUrl: createCampaign,
     link: "/create-campaign",
   },
   {
-    name: "payment",
+    name: "Payment",
     imgUrl: payment,
     link: "/",
     disabled: true,
   },
   {
-    name: "withdraw",
+    name: "Withdraw",
     imgUrl: withdraw,
     link: "/",
     disabled: true,
   },
   {
-    name: "profile",
+    name: "Profile",
     imgUrl: profile,
     link: "/profile",
   },
   {
-    name: "logout",
+    name: "Logout",
     imgUrl: logout,
     link: "/",
-    disabled: true,
-  },
-  {
-    name: "Connect Wallet",
-    imgUrl: thirdweb,
-    link: "/connect-wallet",
     disabled: true,
   },
 ];

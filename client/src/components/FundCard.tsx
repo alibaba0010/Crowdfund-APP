@@ -1,31 +1,29 @@
 import React from "react";
 
-interface FundCardProps {
-  campaign: {
-    owner: string;
-    title: string;
-    description: string;
-    target: string;
-    deadline: string;
-    amountCollected: string;
-    image: string;
-  };
-  handleClick: () => void;
-}
-
 import { tagType, thirdweb } from "../assets";
 import { daysLeft } from "../utils";
 
-const FundCard: React.FC<FundCardProps> = ({ campaign, handleClick }) => {
-  const {
-    owner,
-    title,
-    description,
-    target,
-    deadline,
-    amountCollected,
-    image,
-  } = campaign;
+interface FundCardProps {
+  owner?: string;
+  title?: string;
+  description?: string;
+  target?: string | number;
+  deadline?: string | Date;
+  amountCollected?: string | number;
+  image?: string;
+  handleClick: () => void;
+}
+
+const FundCard: React.FC<FundCardProps> = ({
+  owner,
+  title,
+  description,
+  target,
+  deadline,
+  amountCollected,
+  image,
+  handleClick,
+}) => {
   const remainingDays = daysLeft(deadline);
 
   return (
