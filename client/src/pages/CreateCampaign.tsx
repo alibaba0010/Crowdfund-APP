@@ -3,12 +3,15 @@ import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader } from "../components";
+import { CustomButton, FormField, Loader } from "../components";
 
 const formSchema = z.object({
   name: z.string(),
   title: z.string(),
-  description: z.string(),
+  description: z
+    .string()
+    .min(8, "Description must be at least 8 characters long!")
+    .max(100, "Description must be less than 100 characters"),
   targetAmount: z.number(),
   deadline: z.date(), // z.coerce.date()
 });
@@ -24,7 +27,7 @@ const CreateCampaign = () => {
   } = useForm<CreateCampaignSchema>({
     resolver: zodResolver(formSchema),
   });
-  const onSubmit = async (data: CreateCampaignSchema) => {
+  const onSubmitHandler = async (data: CreateCampaignSchema) => {
     setIsLoading(false);
     navigate("/");
   };
@@ -37,9 +40,76 @@ const CreateCampaign = () => {
         </h1>
       </div>
       <form
-        //   onSubmit={onSubmit}
+        onSubmit={handleSubmit(onSubmitHandler)}
         className="w-full mt-[65px] flex flex-col gap-[30px]"
-      ></form>
+      >
+        <div className="flex flex-wrap gap-[40px]">
+          <FormField
+            {...register("name")}
+            labelName="Your Name *"
+            placeholder="John Doe"
+            inputType="text"
+          />
+          {errors.name && (
+            <span className="text-red-500 block mt-1">
+              {`${errors.name.message}`}
+            </span>
+          )}
+          <FormField
+            {...register("title")}
+            labelName="Campaign Title *"
+            placeholder="Add the campaign title"
+            inputType="text"
+          />
+          {errors.title && (
+            <span className="text-red-500 block mt-1">
+              {`${errors.title.message}`}
+            </span>
+          )}
+        </div>
+        <FormField
+          {...register("description")}
+          labelName="Description *"
+          placeholder="State what the crowdfunding ig going to acheive"
+          isTextArea
+        />
+        {errors.description && (
+          <span className="text-red-500 block mt-1">
+            {`${errors.description.message}`}
+          </span>
+        )}
+        <div className="flex flex-wrap gap-[40px]">
+          <FormField
+            {...register("targetAmount")}
+            labelName="Target Amount *"
+            placeholder="0.50 ETN"
+            inputType="text"
+          />
+          {errors.targetAmount && (
+            <span className="text-red-500 block mt-1">
+              {`${errors.targetAmount.message}`}
+            </span>
+          )}
+          <FormField
+            {...register("deadline")}
+            labelName="End Date *"
+            placeholder="End Date"
+            inputType="date"
+          />
+          {errors.deadline && (
+            <span className="text-red-500 block mt-1">
+              {`${errors.deadline.message}`}
+            </span>
+          )}
+        </div>
+        <div className="flex justify-center items-center mt-[40px]">
+          <CustomButton
+            btnType="submit"
+            title="Submit new campaign"
+            styles="bg-[#1dc071]"
+          />
+        </div>
+      </form>
     </div>
   );
 };
