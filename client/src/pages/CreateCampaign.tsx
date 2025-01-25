@@ -28,7 +28,10 @@ const CreateCampaign = () => {
     resolver: zodResolver(formSchema),
   });
   const onSubmitHandler = async (data: CreateCampaignSchema) => {
+    console.log("Data saved", data);
+
     setIsLoading(false);
+    reset();
     navigate("/");
   };
   return (
