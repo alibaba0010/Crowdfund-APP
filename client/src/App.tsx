@@ -1,12 +1,12 @@
 import { useAccount } from "wagmi";
 import Navbar from "./components/Navbar";
 import { Route, Routes } from "react-router-dom";
-import Profile from "./pages/Profile";
-import Home from "./pages/Home";
+
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setWalletAdress } from "./actions/wallet";
 import { Sidebar } from "./components";
+import { CreateCampaign, Home, Profile } from "./pages";
 
 function App() {
   const account = useAccount();
@@ -30,7 +30,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/profile" element={<Profile />} />
-          {/* <Route path="/create-campaign" element={<CreateCampaign />} /> */}
+          <Route path="/create-campaign" element={<CreateCampaign />} />
           {/* <Route path="/campaign-details/:id" element={<CampaignDetails />} /> */}
         </Routes>
       </div>
