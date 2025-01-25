@@ -107,6 +107,7 @@ const CreateCampaign = () => {
             btnType="submit"
             title="Submit new campaign"
             styles="bg-[#1dc071]"
+            disabled={isSubmitting}
           />
         </div>
       </form>

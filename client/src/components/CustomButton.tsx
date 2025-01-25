@@ -3,6 +3,7 @@ interface CustomButtonProps {
   title: string;
   handleClick?: () => void;
   styles: string;
+  disabled?: boolean;
 }
 
 const CustomButton = ({
