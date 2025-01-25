@@ -5,7 +5,7 @@ import Profile from "./pages/Profile";
 import Home from "./pages/Home";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { setWalletAdress } from "./actions/walletAdress";
+import { setWalletAdress } from "./actions/wallet";
 
 function App() {
   const account = useAccount();
@@ -14,8 +14,9 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (account.addresses) {
-      dispatch(setWalletAdress(account.addresses[0]));
+    if (account) {
+      const { address, addresses, status } = account;
+      dispatch(setWalletAdress(address, addresses, status));
     }
   }, [account.address]);
   return (
