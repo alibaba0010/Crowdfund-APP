@@ -10,7 +10,7 @@ const Navbar = () => {
   const [isActive, setIsActive] = useState("dashboard");
   const [toggleDrawer, setToggleDrawer] = useState(false);
   const [isWalletConnectOpen, setIsWalletConnectOpen] = useState(false);
-  const address = useSelector((state: any) => state.wallet.address);
+  const address = useSelector((state: any) => state.wallet.addresses[0]);
   console.log("account", address);
 
   return (

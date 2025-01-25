@@ -10,7 +10,6 @@ export const walletAdressSlice = createSlice({
   initialState,
   reducers: {
     setWalletAdress: (state, action) => {
-      console.log(action.payload);
       const { address, addresses, status } = action.payload;
       state.address = address;
       state.addresses = addresses;
