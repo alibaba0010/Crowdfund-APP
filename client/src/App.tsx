@@ -4,8 +4,7 @@ import { Route, Routes } from "react-router-dom";
 
 function App() {
   const account = useAccount();
-  console.log("Account: ", account);
-  const { connectors, connect, status, error } = useConnect();
+  const { status, error } = useConnect();
   const { disconnect } = useDisconnect();
 
   return (

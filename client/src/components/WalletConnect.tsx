@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useConnect } from "wagmi";
 import { brave, coinbase, metamask } from "../assets";
+import { useAccount } from "wagmi";
+import { useDispatch } from "react-redux";
+import { setWalletAdress } from "../actions/walletAdress";
 
 interface WalletConnectProps {
   onClose?: () => void;
@@ -12,6 +15,8 @@ const WalletConnect: React.FC<WalletConnectProps> = ({
   setIsWalletConnectOpen,
 }) => {
   const { connectors, connect, status, error } = useConnect();
+  const account = useAccount();
+  const dispatch = useDispatch();
 
   // List of supported wallet names
   const supportedWallets = ["MetaMask", "Brave Wallet", "Coinbase Wallet"];
@@ -34,6 +39,11 @@ const WalletConnect: React.FC<WalletConnectProps> = ({
         return ""; // Fallback for unknown connectors
     }
   };
+  useEffect(() => {
+    if (account.addresses) {
+      dispatch(setWalletAdress(account.addresses[0]));
+    }
+  }, [account.address]);
 
   // Close the wallet component when the overlay (screen) is clicked
   const handleClose = (e: React.MouseEvent<HTMLDivElement>) => {
