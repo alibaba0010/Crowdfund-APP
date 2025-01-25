@@ -1,17 +1,31 @@
 import { useAccount, useConnect, useDisconnect } from "wagmi";
 import Navbar from "./pages/Navbar";
 import { Route, Routes } from "react-router-dom";
+import Profile from "./pages/Profile";
+import Home from "./pages/Home";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { setWalletAdress } from "./actions/walletAdress";
 
 function App() {
   const account = useAccount();
   const { status, error } = useConnect();
   const { disconnect } = useDisconnect();
+  const dispatch = useDispatch();
 
+  useEffect(() => {
+    if (account.addresses) {
+      dispatch(setWalletAdress(account.addresses[0]));
+    }
+  }, [account.address]);
   return (
     <>
       <div className="flex-1 max-sm:w-full max-w-[1280px] mx-auto sm:pr-5">
         <Navbar />
-        <Routes></Routes>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/profile" element={<Profile />} />
+        </Routes>
       </div>
 
       <div>
@@ -19,9 +33,6 @@ function App() {
 
         <div>
           status: {account.status}
-          <br />
-          addresses: {JSON.stringify(account.addresses)}
-          <br />
           chainId: {account.chainId}
         </div>
 
