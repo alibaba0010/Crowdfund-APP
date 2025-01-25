@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { CustomButton, WalletConnect } from "../components";
+import { CustomButton, WalletConnect } from ".";
 import { logo, menu, search } from "../assets";
 import { navlinks } from "../constants";
 import { useSelector } from "react-redux";

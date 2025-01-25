@@ -1,5 +1,5 @@
-import { useAccount, useConnect, useDisconnect } from "wagmi";
-import Navbar from "./pages/Navbar";
+import { useAccount } from "wagmi";
+import Navbar from "./components/Navbar";
 import { Route, Routes } from "react-router-dom";
 import Profile from "./pages/Profile";
 import Home from "./pages/Home";
@@ -9,8 +9,8 @@ import { setWalletAdress } from "./actions/wallet";
 
 function App() {
   const account = useAccount();
-  const { status, error } = useConnect();
-  const { disconnect } = useDisconnect();
+  // const { status, error } = useConnect();
+  // const { disconnect } = useDisconnect();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -20,36 +20,43 @@ function App() {
     }
   }, [account.address]);
   return (
-    <>
+    <div className="relative sm:-8 p-4 bg-[#13131a] min-h-screen flex flex-row">
+      <div className="sm:flex hidden mr-10 relative">{<Sidebar />}</div>
+
       <div className="flex-1 max-sm:w-full max-w-[1280px] mx-auto sm:pr-5">
         <Navbar />
+
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/profile" element={<Profile />} />
+          {/* <Route path="/create-campaign" element={<CreateCampaign />} /> */}
+          {/* <Route path="/campaign-details/:id" element={<CampaignDetails />} /> */}
         </Routes>
       </div>
-
-      <div>
-        <h2>Account</h2>
-
-        <div>
-          status: {account.status}
-          chainId: {account.chainId}
-        </div>
-
-        {account.status === "connected" && (
-          <button type="button" onClick={() => disconnect()}>
-            Disconnect
-          </button>
-        )}
-      </div>
-
-      <div>
-        <div>{status}</div>
-        <div>{error?.message}</div>
-      </div>
-    </>
+    </div>
   );
 }
 
 export default App;
+
+{
+  /* <div>
+<h2>Account</h2>
+
+<div>
+  status: {account.status}
+  chainId: {account.chainId}
+</div>
+
+{account.status === "connected" && (
+  <button type="button" onClick={() => disconnect()}>
+    Disconnect
+  </button>
+)}
+</div>
+
+<div>
+<div>{status}</div>
+<div>{error?.message}</div>
+</div> */
+}
