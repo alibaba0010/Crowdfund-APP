@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import DisplayCampaigns from "../components/DisplayCampains";
+import { DisplayCampaigns } from "../components";
 
 const Home = () => {
   const [isLoading, setIsLoading] = useState(false);

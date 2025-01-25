@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setWalletAdress } from "./actions/wallet";
+import { Sidebar } from "./components";
 
 function App() {
   const account = useAccount();
