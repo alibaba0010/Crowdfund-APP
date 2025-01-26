@@ -3006,7 +3006,12 @@ picocolors@^1.0.0, picocolors@^1.1.0:
   resolved "https://registry.npmjs.org/picocolors/-/picocolors-1.1.1.tgz"
   integrity sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==
 
-picomatch@^2.0.4, picomatch@^2.2.1:
+picomatch@^2.0.4:
+  version "2.3.1"
+  resolved "https://registry.npmjs.org/picomatch/-/picomatch-2.3.1.tgz"
+  integrity sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA==
+
+picomatch@^2.2.1:
   version "2.3.1"
   resolved "https://registry.npmjs.org/picomatch/-/picomatch-2.3.1.tgz"
   integrity sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA==
@@ -3449,10 +3454,10 @@ supports-preserve-symlinks-flag@^1.0.0:
   resolved "https://registry.npmjs.org/supports-preserve-symlinks-flag/-/supports-preserve-symlinks-flag-1.0.0.tgz"
   integrity sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==
 
-thirdweb@^5.86.1:
-  version "5.86.1"
-  resolved "https://registry.npmjs.org/thirdweb/-/thirdweb-5.86.1.tgz"
-  integrity sha512-K3cgGoN1jb4BfOadLwxLYWZfD42H3YUh+gYlGhRjW0YQB6aW04KVfzzUMIia7RjnUw3c8uk2wYMAgM/of52EBQ==
+thirdweb@^5.86.2:
+  version "5.86.2"
+  resolved "https://registry.npmjs.org/thirdweb/-/thirdweb-5.86.2.tgz"
+  integrity sha512-r/3fCYmqO0ZlZEwxELFRUENxvpnI63tx9CNnT/m9cGL8GlB3zs2/YFlnp6dSP068ubxMZaZTipLCVbor0tcByw==
   dependencies:
     "@coinbase/wallet-sdk" "4.2.4"
     "@emotion/react" "11.14.0"

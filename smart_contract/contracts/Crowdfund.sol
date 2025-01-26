@@ -128,6 +128,15 @@ function getCampaignsByCreator(address creator) public view returns (uint256[] m
 
     return filteredResult;
 }
+// 9. Get all campaigns 
+function getAllCampaigns() public view returns (uint256[] memory) {
+    uint256[] memory result = new uint256[](campaignCount);
 
+    for (uint256 i = 0; i < campaignCount; i++) {
+        result[i] = i;
+    }
+
+    return result;
+}
 
 }
