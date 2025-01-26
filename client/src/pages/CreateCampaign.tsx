@@ -6,16 +6,18 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { CustomButton, FormField, Loader } from "../components";
 
 const formSchema = z.object({
-  name: z.string(),
-  title: z.string(),
+  name: z.string().min(1, "Your Name is required!"),
+  title: z.string().min(1, "Campaign Title is required!"),
   description: z
     .string()
     .min(8, "Description must be at least 8 characters long!")
     .max(100, "Description must be less than 100 characters"),
-  targetAmount: z.number(),
-  deadline: z.date(), // z.coerce.date()
+  targetAmount: z.coerce.number().min(0, "Amount must not be negative"),
+  deadline: z.coerce.date({ message: "End Date is required!" }),
 });
+
 type CreateCampaignSchema = z.infer<typeof formSchema>;
+
 const CreateCampaign = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -27,13 +29,14 @@ const CreateCampaign = () => {
   } = useForm<CreateCampaignSchema>({
     resolver: zodResolver(formSchema),
   });
+
   const onSubmitHandler = async (data: CreateCampaignSchema) => {
     console.log("Data saved", data);
-
     setIsLoading(false);
     reset();
     navigate("/");
   };
+
   return (
     <div className="bg-[#1c1c24] flex justify-center items-center flex-col rounded-[10px] sm:p-10 p-4">
       {isLoading && <Loader />}
@@ -42,11 +45,13 @@ const CreateCampaign = () => {
           Create a Campaign
         </h1>
       </div>
+
       <form
         onSubmit={handleSubmit(onSubmitHandler)}
         className="w-full mt-[65px] flex flex-col gap-[30px]"
       >
-        <div className="flex flex-wrap gap-[40px]">
+        {/* Name Field */}
+        <div className="flex flex-col gap-2">
           <FormField
             {...register("name")}
             labelName="Your Name *"
@@ -54,10 +59,14 @@ const CreateCampaign = () => {
             inputType="text"
           />
           {errors.name && (
-            <span className="text-red-500 block mt-1">
-              {`${errors.name.message}`}
+            <span className="text-red-500 text-sm mt-1">
+              {errors.name.message}
             </span>
           )}
+        </div>
+
+        {/* Title Field */}
+        <div className="flex flex-col gap-2">
           <FormField
             {...register("title")}
             labelName="Campaign Title *"
@@ -65,46 +74,59 @@ const CreateCampaign = () => {
             inputType="text"
           />
           {errors.title && (
-            <span className="text-red-500 block mt-1">
-              {`${errors.title.message}`}
+            <span className="text-red-500 text-sm mt-1">
+              {errors.title.message}
             </span>
           )}
         </div>
-        <FormField
-          {...register("description")}
-          labelName="Description *"
-          placeholder="State what the crowdfunding ig going to acheive"
-          isTextArea
-        />
-        {errors.description && (
-          <span className="text-red-500 block mt-1">
-            {`${errors.description.message}`}
-          </span>
-        )}
+
+        {/* Description Field */}
+        <div className="flex flex-col gap-2">
+          <FormField
+            {...register("description")}
+            labelName="Description *"
+            placeholder="State what the crowdfunding is going to achieve"
+            isTextArea
+          />
+          {errors.description && (
+            <span className="text-red-500 text-sm mt-1">
+              {errors.description.message}
+            </span>
+          )}
+        </div>
+
+        {/* Target Amount and Deadline Fields */}
         <div className="flex flex-wrap gap-[40px]">
-          <FormField
-            {...register("targetAmount")}
-            labelName="Target Amount *"
-            placeholder="0.50 ETN"
-            inputType="text"
-          />
-          {errors.targetAmount && (
-            <span className="text-red-500 block mt-1">
-              {`${errors.targetAmount.message}`}
-            </span>
-          )}
-          <FormField
-            {...register("deadline")}
-            labelName="End Date *"
-            placeholder="End Date"
-            inputType="date"
-          />
-          {errors.deadline && (
-            <span className="text-red-500 block mt-1">
-              {`${errors.deadline.message}`}
-            </span>
-          )}
+          <div className="flex-1 flex flex-col gap-2">
+            <FormField
+              {...register("targetAmount", { valueAsNumber: true })}
+              labelName="Target Amount *"
+              placeholder="0.50 ETN"
+              inputType="number"
+            />
+            {errors.targetAmount && (
+              <span className="text-red-500 text-sm mt-1">
+                {errors.targetAmount.message}
+              </span>
+            )}
+          </div>
+
+          <div className="flex-1 flex flex-col gap-2">
+            <FormField
+              {...register("deadline")}
+              labelName="End Date *"
+              placeholder="End Date"
+              inputType="date"
+            />
+            {errors.deadline && (
+              <span className="text-red-500 text-sm mt-1">
+                {errors.deadline.message}
+              </span>
+            )}
+          </div>
         </div>
+
+        {/* Submit Button */}
         <div className="flex justify-center items-center mt-[40px]">
           <CustomButton
             btnType="submit"
