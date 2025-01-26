@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { DisplayCampaigns } from "../components";
+import { useReadContract } from "wagmi";
+import { wagmiContractConfig } from "../utils/contract";
 
 const Home = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -11,13 +13,17 @@ const Home = () => {
 
   const fetchCampaigns = async () => {
     setIsLoading(true);
-    // const data = await getCampaigns();
+    const { data } = useReadContract({
+      ...wagmiContractConfig,
+      functionName: "getAllCampaigns",
+    });
+    console.log("Data fetched", data);
     // setCampaigns(data);
     setIsLoading(false);
   };
 
   useEffect(() => {
-    // if (contract) fetchCampaigns();
+    fetchCampaigns();
   }, [address]);
 
   return (
