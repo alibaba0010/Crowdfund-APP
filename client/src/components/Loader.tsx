@@ -16,13 +16,13 @@ const Loader: React.FC<LoaderProps> = ({ text, isChecker }) => {
         <img
           src={checker}
           alt="checker"
-          className="w-[100px] h-[100px] object-contain"
+          className="w-[100px] h-[100px] object-contain checker-pulse"
         />
       ) : (
         <img
-          src={checker}
-          alt="checker"
-          className="w-[100px] h-[100px] object-contain checker-animation"
+          src={loader}
+          alt="loader"
+          className="w-[100px] h-[100px] object-contain "
         />
       )}
       {text || (
