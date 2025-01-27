@@ -7,6 +7,7 @@ import { parseEther } from "viem";
 import { useWriteContract } from "wagmi";
 import { wagmiContractConfig } from "../utils/contract";
 import { useWaitForTransactionReceipt } from "wagmi";
+import { useEffect } from "react";
 
 const validateDate = (date: Date) => {
   const today = new Date();
@@ -48,10 +49,11 @@ const CreateCampaign = () => {
   } = useForm<CreateCampaignSchema>({
     resolver: zodResolver(formSchema),
   });
-  const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({
-    hash,
-  });
-  const isConfirmed = true;
+  const { isLoading: isConfirming, isSuccess: isConfirmed } =
+    useWaitForTransactionReceipt({
+      hash,
+    });
+
   const onSubmitHandler = async (data: CreateCampaignSchema) => {
     try {
       const { deadline, description, targetAmount, title } = data;
@@ -63,15 +65,17 @@ const CreateCampaign = () => {
         args: [parsedAmount, deadlineTimestamp, title, description],
         // gas: 3000000,
       });
-
-      if (isConfirmed) {
-        reset();
-        navigate("/");
-      }
     } catch (error) {
       console.error("Error creating campaign:", error);
     }
   };
+  useEffect(() => {
+    if (isConfirmed) {
+      console.log("Campaign created successfully!");
+      reset();
+      navigate("/");
+    }
+  }, [isConfirmed]);
 
   return (
     <div className="bg-[#1c1c24] flex justify-center items-center flex-col rounded-[10px] sm:p-10 p-4">
