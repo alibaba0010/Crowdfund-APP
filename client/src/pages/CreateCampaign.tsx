@@ -43,10 +43,9 @@ const CreateCampaign = () => {
       ...wagmiContractConfig,
       functionName: "createCampaign",
       args: [parsedAmount, deadlineTimestamp, title, description],
-      gas: 3000000,
+      // gas: 3000000,
     });
-    console.log("Result", result);
-    console.log("Transaction Hash:", hash);
+
     reset();
     navigate("/");
   };
