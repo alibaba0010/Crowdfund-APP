@@ -4,7 +4,10 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CustomButton, FormField, Loader } from "../components";
-
+import { parseEther } from "viem";
+import { useWriteContract } from "wagmi";
+import { wagmiContractConfig } from "../utils/contract";
+import { useWaitForTransactionReceipt } from "wagmi";
 const formSchema = z.object({
   name: z.string().min(1, "Your Name is required!"),
   title: z.string().min(1, "Campaign Title is required!"),
@@ -20,7 +23,7 @@ type CreateCampaignSchema = z.infer<typeof formSchema>;
 
 const CreateCampaign = () => {
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(false);
+  const { data: hash, isPending, writeContract } = useWriteContract();
   const {
     register,
     handleSubmit,
@@ -32,14 +35,28 @@ const CreateCampaign = () => {
 
   const onSubmitHandler = async (data: CreateCampaignSchema) => {
     console.log("Data saved", data);
-    setIsLoading(false);
+    const { deadline, description, targetAmount, title } = data;
+    const parsedAmount = parseEther(targetAmount.toString());
+    const deadlineTimestamp = Math.floor(deadline.getTime() / 1000);
+    console.log("Parsed Amount", deadlineTimestamp);
+    const result = writeContract({
+      ...wagmiContractConfig,
+      functionName: "createCampaign",
+      args: [parsedAmount, deadlineTimestamp, title, description],
+      gas: 3000000,
+    });
+    console.log("Result", result);
+    console.log("Transaction Hash:", hash);
     reset();
     navigate("/");
   };
-
+  const { isLoading: isConfirming, isSuccess: isConfirmed } =
+    useWaitForTransactionReceipt({
+      hash,
+    });
   return (
     <div className="bg-[#1c1c24] flex justify-center items-center flex-col rounded-[10px] sm:p-10 p-4">
-      {isLoading && <Loader />}
+      {isPending && <Loader />}
       <div className="flex justify-center items-center p-[16px] sm:min-w-[380px] bg-[#3a3a43] rounded-[10px]">
         <h1 className="font-epilogue font-bold sm:text-[25px] text-[18px] leading-[38px] text-white">
           Create a Campaign
@@ -103,6 +120,7 @@ const CreateCampaign = () => {
               labelName="Target Amount *"
               placeholder="0.50 ETN"
               inputType="number"
+              step="0.0001"
             />
             {errors.targetAmount && (
               <span className="text-red-500 text-sm mt-1">

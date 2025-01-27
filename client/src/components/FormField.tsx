@@ -6,6 +6,7 @@ interface FormFieldProps {
   inputType?: string;
   isTextArea?: boolean;
   className?: string;
+  step?: string;
 }
 
 const FormField = React.forwardRef<
@@ -33,7 +34,6 @@ const FormField = React.forwardRef<
           ref={ref as React.Ref<HTMLInputElement>}
           required
           type={inputType}
-          step="0.1"
           placeholder={placeholder}
           className="py-[15px] sm:px-[25px] px-[15px] outline-none border-[1px] border-[#3a3a43] bg-transparent font-epilogue text-white text-[14px] placeholder:text-[#4b5264] rounded-[10px] sm:min-w-[300px]"
           {...rest}
