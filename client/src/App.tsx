@@ -1,6 +1,6 @@
 import { useAccount } from "wagmi";
 import Navbar from "./components/Navbar";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
@@ -13,11 +13,13 @@ function App() {
   // const { status, error } = useConnect();
   // const { disconnect } = useDisconnect();
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   useEffect(() => {
-    if (account) {
+    if (account.isConnected) {
       const { address, addresses, status } = account;
       dispatch(setWalletAdress({ address, addresses, status }));
+    } else {
+      navigate("/");
     }
   }, [account.address]);
   return (

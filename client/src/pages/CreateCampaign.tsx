@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -8,6 +7,13 @@ import { parseEther } from "viem";
 import { useWriteContract } from "wagmi";
 import { wagmiContractConfig } from "../utils/contract";
 import { useWaitForTransactionReceipt } from "wagmi";
+
+const validateDate = (date: Date) => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // Set time to midnight to compare only dates
+  return date > today;
+};
+
 const formSchema = z.object({
   name: z.string().min(1, "Your Name is required!"),
   title: z.string().min(1, "Campaign Title is required!"),
@@ -16,14 +22,24 @@ const formSchema = z.object({
     .min(8, "Description must be at least 8 characters long!")
     .max(100, "Description must be less than 100 characters"),
   targetAmount: z.coerce.number().min(0, "Amount must not be negative"),
-  deadline: z.coerce.date({ message: "End Date is required!" }),
+  deadline: z.coerce
+    .date({ message: "End Date is required!" })
+    .refine(
+      validateDate,
+      "Deadline must be in the future (tomorrow or later)."
+    ),
 });
 
 type CreateCampaignSchema = z.infer<typeof formSchema>;
 
 const CreateCampaign = () => {
   const navigate = useNavigate();
-  const { data: hash, isPending, writeContract } = useWriteContract();
+  const {
+    data: hash,
+    isPending,
+    writeContract,
+    error: writeError,
+  } = useWriteContract();
   const {
     register,
     handleSubmit,
@@ -32,27 +48,32 @@ const CreateCampaign = () => {
   } = useForm<CreateCampaignSchema>({
     resolver: zodResolver(formSchema),
   });
-
-  const onSubmitHandler = async (data: CreateCampaignSchema) => {
-    console.log("Data saved", data);
-    const { deadline, description, targetAmount, title } = data;
-    const parsedAmount = parseEther(targetAmount.toString());
-    const deadlineTimestamp = Math.floor(deadline.getTime() / 1000);
-    console.log("Parsed Amount", deadlineTimestamp);
-    const result = writeContract({
-      ...wagmiContractConfig,
-      functionName: "createCampaign",
-      args: [parsedAmount, deadlineTimestamp, title, description],
-      // gas: 3000000,
-    });
-
-    reset();
-    navigate("/");
-  };
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({
       hash,
     });
+
+  const onSubmitHandler = async (data: CreateCampaignSchema) => {
+    try {
+      const { deadline, description, targetAmount, title } = data;
+      const parsedAmount = parseEther(targetAmount.toString());
+      const deadlineTimestamp = Math.floor(deadline.getTime() / 1000);
+      writeContract({
+        ...wagmiContractConfig,
+        functionName: "createCampaign",
+        args: [parsedAmount, deadlineTimestamp, title, description],
+        // gas: 3000000,
+      });
+
+      if (isConfirmed) {
+        reset();
+        navigate("/");
+      }
+    } catch (error) {
+      console.error("Error creating campaign:", error);
+    }
+  };
+
   return (
     <div className="bg-[#1c1c24] flex justify-center items-center flex-col rounded-[10px] sm:p-10 p-4">
       {isPending && <Loader />}
@@ -149,9 +170,26 @@ const CreateCampaign = () => {
             btnType="submit"
             title="Submit new campaign"
             styles="bg-[#1dc071]"
-            disabled={isSubmitting}
+            disabled={isSubmitting || isPending}
           />
         </div>
+        {writeError && (
+          <span className="text-red-500 text-sm mt-1">
+            Error: {writeError.message}
+          </span>
+        )}
+
+        {isConfirming && (
+          <span className="text-yellow-500 text-sm mt-1">
+            Waiting for transaction confirmation...
+          </span>
+        )}
+
+        {isConfirmed && (
+          <span className="text-green-500 text-sm mt-1">
+            Transaction confirmed! Campaign created successfully.
+          </span>
+        )}
       </form>
     </div>
   );

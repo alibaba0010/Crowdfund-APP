@@ -15,6 +15,7 @@ import thirdweb from "./thirdweb.png";
 import metamask from "./metamask.svg";
 import brave from "./brave.svg";
 import coinbase from "./coinbase.svg";
+import checker from "./checker.svg";
 
 export {
   tagType,
@@ -34,4 +35,5 @@ export {
   metamask,
   brave,
   coinbase,
+  checker,
 };
