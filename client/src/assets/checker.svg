@@ -1,23 +1,16 @@
-<svg
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}
-    >
-      <path
-        d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
-        stroke="#1dc071"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M8 12L11 15L16 9"
-        stroke="#1dc071"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
+ "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+ width="24.000000pt" height="24.000000pt" viewBox="0 0 24.000000 24.000000"
+ preserveAspectRatio="xMidYMid meet">
+
+<g transform="translate(0.000000,24.000000) scale(0.100000,-0.100000)"
+fill="#1dc071" stroke="none">
+<path d="M71 206 c-87 -48 -50 -186 49 -186 33 0 71 23 86 51 16 32 19 83 4
+74 -5 -3 -10 -17 -10 -31 0 -35 -42 -74 -80 -74 -71 0 -105 86 -54 137 21 21
+32 25 65 20 39 -5 53 5 23 17 -25 9 -57 6 -83 -8z"/>
+<path d="M158 153 c-40 -40 -49 -45 -63 -33 -25 21 -31 2 -7 -22 l22 -22 55
+54 c52 51 65 70 47 70 -4 0 -28 -21 -54 -47z"/>
+</g>
+</svg>

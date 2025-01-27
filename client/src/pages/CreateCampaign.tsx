@@ -48,11 +48,10 @@ const CreateCampaign = () => {
   } = useForm<CreateCampaignSchema>({
     resolver: zodResolver(formSchema),
   });
-  const { isLoading: isConfirming, isSuccess: isConfirmed } =
-    useWaitForTransactionReceipt({
-      hash,
-    });
-
+  const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({
+    hash,
+  });
+  const isConfirmed = true;
   const onSubmitHandler = async (data: CreateCampaignSchema) => {
     try {
       const { deadline, description, targetAmount, title } = data;
@@ -180,15 +179,24 @@ const CreateCampaign = () => {
         )}
 
         {isConfirming && (
-          <span className="text-yellow-500 text-sm mt-1">
-            Waiting for transaction confirmation...
-          </span>
+          <Loader
+            text={
+              <span className="text-yellow-500 text-sm mt-1">
+                Waiting for transaction confirmation...
+              </span>
+            }
+          />
         )}
 
         {isConfirmed && (
-          <span className="text-green-500 text-sm mt-1">
-            Transaction confirmed! Campaign created successfully.
-          </span>
+          <Loader
+            text={
+              <span className="text-green-500 text-sm mt-1">
+                Transaction confirmed! Campaign created successfully.
+              </span>
+            }
+            isChecker
+          />
         )}
       </form>
     </div>
