@@ -16,6 +16,17 @@ constructor() payable {}
         bool withdrawn;
         bool reachedDeadline;
     }
+    struct CampaignDetails {
+         address creator;
+    string title;
+    string description;
+    uint256 targetAmount;
+    uint256 deadline;
+    uint256 totalDonated;
+    address[] donators;
+    bool withdrawn;
+    bool reachedDeadline;
+    }
 
     mapping(uint256 => Campaign) public campaigns;
     uint256 public campaignCount; // Keeps track of the number of campaigns
@@ -128,15 +139,81 @@ function getCampaignsByCreator(address creator) public view returns (uint256[] m
 
     return filteredResult;
 }
-// 9. Get all campaigns 
-function getAllCampaigns() public view returns (uint256[] memory) {
-    uint256[] memory result = new uint256[](campaignCount);
 
+
+//9. Get all active campaigns
+function getAvailableCampaigns() public view returns (CampaignDetails[] memory) {
+    uint256 matchCount;
+    
+    // First pass - count matches
     for (uint256 i = 0; i < campaignCount; i++) {
-        result[i] = i;
+        if (_isAvailable(campaigns[i])) {
+            matchCount++;
+        }
     }
 
+    // Second pass - populate results
+    CampaignDetails[] memory result = new CampaignDetails[](matchCount);
+    uint256 index;
+    
+    for (uint256 i = 0; i < campaignCount; i++) {
+        Campaign storage c = campaigns[i];
+        if (_isAvailable(c)) {
+            result[index++] = _mapCampaign(c);
+        }
+    }
+    
     return result;
+}
+
+//10. Get all past campaigns
+function getPastCampaigns() public view returns (CampaignDetails[] memory) {
+    uint256 matchCount;
+
+    // First pass - count matches
+    for (uint256 i = 0; i < campaignCount; i++) {
+        if (_isPast(campaigns[i])) {
+            matchCount++;
+        }
+    }
+
+    // Second pass - populate results
+    CampaignDetails[] memory result = new CampaignDetails[](matchCount);
+    uint256 index;
+    
+    for (uint256 i = 0; i < campaignCount; i++) {
+        Campaign storage c = campaigns[i];
+        if (_isPast(c)) {
+            result[index++] = _mapCampaign(c);
+        }
+    }
+    
+    return result;
+}
+
+// Internal helper to check availability
+function _isAvailable(Campaign storage c) internal view returns (bool) {
+    return !c.withdrawn && !c.reachedDeadline && block.timestamp <= c.deadline;
+}
+
+// Internal helper to check if campaign is concluded
+function _isPast(Campaign storage c) internal view returns (bool) {
+    return c.withdrawn || c.reachedDeadline || block.timestamp > c.deadline;
+}
+
+// Internal helper to map storage struct to memory struct
+function _mapCampaign(Campaign storage c) internal view returns (CampaignDetails memory) {
+    return CampaignDetails({
+        creator: c.creator,
+        title: c.title,
+        description: c.description,
+        targetAmount: c.targetAmount,
+        deadline: c.deadline,
+        totalDonated: c.totalDonated,
+        donators: c.donators,
+        withdrawn: c.withdrawn,
+        reachedDeadline: c.reachedDeadline
+    });
 }
 
 }

@@ -42,7 +42,7 @@
  */
 
 require("dotenv").config();
-const { PRIVATE_KEY, INFURA_API_KEY, ETHERSCAN_API_KEY } = process.env;
+const { PRIVATE_KEY, INFURA_API_KEY } = process.env;
 
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 
@@ -64,10 +64,10 @@ module.exports = {
     // tab if you use this network and you must also set the `host`, `port` and `network_id`
     // options below to some value.
     //
-    plugins: ["truffle-verify"],
-    api_keys: {
-      etherscan: ETHERSCAN_API_KEY,
-    },
+    // plugins: ["truffle-verify"],
+    // api_keys: {
+    //   etherscan: ETHERSCAN_API_KEY,
+    // },
     development: {
       host: "127.0.0.1", // Localhost (default: none)
       port: 8545, // Standard Ethereum port (default: none)

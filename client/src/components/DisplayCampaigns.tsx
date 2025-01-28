@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import FundCard from "./FundCard";
 import { loader } from "../assets";
 
-interface Campaign {
+export interface Campaign {
   owner: string;
   title: string;
   description: string;
@@ -30,7 +30,7 @@ const DisplayCampaigns: React.FC<DisplayCampaignsProps> = ({
   const handleNavigate = (campaign: Campaign) => {
     navigate(`/campaign-details/${campaign.title}`, { state: campaign });
   };
-
+  console.log("Camapagns: ", campaigns.length);
   return (
     <div>
       <h1 className="font-epilogue font-semibold text-[18px] text-white text-left">
