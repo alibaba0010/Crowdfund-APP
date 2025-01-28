@@ -71,7 +71,6 @@ const CreateCampaign = () => {
   };
   useEffect(() => {
     if (isConfirmed) {
-      console.log("Campaign created successfully!");
       reset();
       navigate("/");
     }

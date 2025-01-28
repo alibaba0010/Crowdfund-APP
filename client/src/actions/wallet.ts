@@ -6,7 +6,7 @@ const initialState = {
   status: "disconnected",
   isWalletConnectOpen: false,
 };
-export const walletAdressSlice = createSlice({
+const walletAdressSlice = createSlice({
   name: "wallet",
   initialState,
   reducers: {
