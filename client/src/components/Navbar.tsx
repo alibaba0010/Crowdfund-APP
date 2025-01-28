@@ -3,14 +3,16 @@ import { Link, useNavigate } from "react-router-dom";
 import { CustomButton, WalletConnect } from ".";
 import { logo, menu, search } from "../assets";
 import { navlinks } from "../constants";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleWalletConnect } from "../actions/wallet";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const [isActive, setIsActive] = useState("dashboard");
   const [toggleDrawer, setToggleDrawer] = useState(false);
-  const [isWalletConnectOpen, setIsWalletConnectOpen] = useState(false);
   const address = useSelector((state: any) => state.wallet.addresses?.[0]);
+  const { isWalletConnectOpen } = useSelector((state: any) => state.wallet);
+  const dispatch = useDispatch();
 
   return (
     <div className="flex md:flex-row flex-col-reverse justify-between mb-[35px] gap-6">
@@ -42,7 +44,7 @@ const Navbar = () => {
             if (address) {
               navigate("create-campaign");
             } else {
-              setIsWalletConnectOpen(true);
+              dispatch(toggleWalletConnect());
             }
           }}
         />
@@ -114,12 +116,7 @@ const Navbar = () => {
       </div>
 
       {/* Wallet Connect Modal */}
-      {isWalletConnectOpen && (
-        <WalletConnect
-          onClose={() => setIsWalletConnectOpen(false)}
-          setIsWalletConnectOpen={setIsWalletConnectOpen}
-        />
-      )}
+      {isWalletConnectOpen && <WalletConnect />}
     </div>
   );
 };

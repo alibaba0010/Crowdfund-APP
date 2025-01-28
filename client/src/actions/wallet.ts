@@ -4,11 +4,15 @@ const initialState = {
   address: undefined,
   addresses: [],
   status: "disconnected",
+  isWalletConnectOpen: false,
 };
 export const walletAdressSlice = createSlice({
   name: "wallet",
   initialState,
   reducers: {
+    toggleWalletConnect: (state) => {
+      state.isWalletConnectOpen = !state.isWalletConnectOpen;
+    },
     setWalletAdress: (state, action) => {
       const { address, addresses, status } = action.payload;
       state.address = address;
@@ -18,6 +22,7 @@ export const walletAdressSlice = createSlice({
   },
 });
 
-export const { setWalletAdress } = walletAdressSlice.actions;
+export const { setWalletAdress, toggleWalletConnect } =
+  walletAdressSlice.actions;
 
 export default walletAdressSlice.reducer;

@@ -1,18 +1,15 @@
 import React, { useEffect } from "react";
 import { useConnect } from "wagmi";
 import { brave, coinbase, metamask } from "../assets";
+import { useDispatch } from "react-redux";
+import { toggleWalletConnect } from "../actions/wallet";
 
-interface WalletConnectProps {
-  onClose?: () => void;
-  setIsWalletConnectOpen: (value: boolean) => void;
-}
-
-const WalletConnect: React.FC<WalletConnectProps> = ({
-  onClose,
-  setIsWalletConnectOpen,
-}) => {
+const WalletConnect = () => {
   const { connectors, connect, status, error } = useConnect();
-
+  const dispatch = useDispatch();
+  const showWalletConnect = () => {
+    dispatch(toggleWalletConnect());
+  };
   // List of supported wallet names
   const supportedWallets = ["MetaMask", "Brave Wallet", "Coinbase Wallet"];
 
@@ -36,17 +33,16 @@ const WalletConnect: React.FC<WalletConnectProps> = ({
   };
 
   // Close the wallet component when the overlay (screen) is clicked
-  const handleClose = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleClose = (e: React.MouseEvent<HTMLElement>) => {
     if (e.target === e.currentTarget) {
-      setIsWalletConnectOpen(false);
-      if (onClose) onClose(); // Call the onClose prop if provided
+      showWalletConnect();
     }
   };
   useEffect(() => {
     if (status === "success") {
-      setIsWalletConnectOpen(false);
+      showWalletConnect();
     }
-  }, [status, setIsWalletConnectOpen]);
+  }, [status]);
   return (
     <div
       id="screen"
@@ -57,7 +53,7 @@ const WalletConnect: React.FC<WalletConnectProps> = ({
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold">Connect Wallet</h2>
           <button
-            onClick={onClose}
+            onClick={handleClose}
             className="text-gray-500 hover:text-gray-700"
           >
             &times;

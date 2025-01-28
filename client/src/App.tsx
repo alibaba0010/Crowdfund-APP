@@ -10,8 +10,7 @@ import { CreateCampaign, Home, Profile } from "./pages";
 
 function App() {
   const account = useAccount();
-  // const { status, error } = useConnect();
-  // const { disconnect } = useDisconnect();
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   useEffect(() => {
@@ -43,6 +42,8 @@ function App() {
 export default App;
 
 {
+  // const { status, error } = useConnect();
+  // const { disconnect } = useDisconnect();
   /* <div>
 <h2>Account</h2>
 
