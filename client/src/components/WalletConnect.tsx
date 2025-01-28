@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useConnect } from "wagmi";
 import { brave, coinbase, metamask } from "../assets";
 
@@ -42,7 +42,11 @@ const WalletConnect: React.FC<WalletConnectProps> = ({
       if (onClose) onClose(); // Call the onClose prop if provided
     }
   };
-
+  useEffect(() => {
+    if (status === "success") {
+      setIsWalletConnectOpen(false);
+    }
+  }, [status, setIsWalletConnectOpen]);
   return (
     <div
       id="screen"
@@ -89,11 +93,6 @@ const WalletConnect: React.FC<WalletConnectProps> = ({
               ? "A wallet request is already pending. Please check your wallet."
               : error.message}
           </div>
-        )}
-
-        {/* Hide "idle" status and only show meaningful statuses */}
-        {status && status !== "idle" && (
-          <div className="mt-4 text-center text-gray-600">{status}</div>
         )}
       </div>
     </div>
