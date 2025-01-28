@@ -5,7 +5,7 @@ const initialState = {
   isMenuOpen: false,
 };
 
-const allCampaigns = createSlice({
+const allCampaignsSlice = createSlice({
   name: "campaigns",
   initialState,
   reducers: {
@@ -17,3 +17,5 @@ const allCampaigns = createSlice({
     },
   },
 });
+export const { toggleDarkMode } = allCampaignsSlice.actions;
+export default allCampaignsSlice.reducer;
