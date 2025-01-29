@@ -6,3 +6,4 @@ export { default as Sidebar } from "./Sidebar";
 export { default as FundCard } from "./CampaignCard";
 export { default as Loader } from "./Loader";
 export { default as FormField } from "./FormField";
+export { default as CountBox } from "./CountBox";
