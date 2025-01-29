@@ -87,11 +87,6 @@ constructor() payable {}
        
         campaign.totalDonated += msg.value;
         campaign.donations[msg.sender] = campaign.donations[msg.sender] + msg.value;
-
-// to send to the campaign owner directly
-// (bool sent,) = payable (campaign.creator).call{value: msg.value}("");
-// if(sent) {}else {revert();
-
         emit DonationMade(campaignId, msg.sender, msg.value);
     }
 // 3. Check if campaign hasn't exist the deadline
@@ -108,13 +103,15 @@ constructor() payable {}
     function withdrawFunds(uint256 campaignId) campaignExists(campaignId) public {
         Campaign storage campaign = campaigns[campaignId];
         require(campaign.creator == msg.sender, "Only the creator can withdraw funds.");
-        require(campaign.withdrawn == true, "Funds already withdrawn.");
-        require(checkTargetReached(campaignId) && !checkDeadline(campaignId), "Target not reached or deadline passed.");
+        require(!campaign.withdrawn, "Funds already withdrawn.");
+        require(checkTargetReached(campaignId), "Target not reached.");
+ require(!checkDeadline(campaignId), "Deadline passed");
         uint256 amount = campaign.totalDonated;
         campaign.creator.transfer(amount);
         campaign.withdrawn = true;
         campaign.reachedDeadline = true; // Set to true to prevent future withdrawals
-
+    (bool success,) = campaign.creator.call{value: amount}("");
+    require(success, "Transfer failed");
         emit FundsWithdrawn(campaignId, msg.sender, amount);
     }
 // 6. Fetch the balance for a campaign
@@ -229,13 +226,21 @@ function _mapCampaign(Campaign storage c) internal view returns (CampaignDetails
     });
 }
 
-// 11. delete a campaign by the creator
-function deleteCampaign(uint256 campaignId) public campaignExists(campaignId) {
-    Campaign storage campaign = campaigns[campaignId];
-    require(campaign.creator == msg.sender, "Only the creator can delete the campaign.");
-    require(!campaign.withdrawn, "Funds already withdrawn.");
-    require(!campaign.reachedDeadline, "Campaign deadline has passed.");
-    campaign.withdrawn = true;
-    campaign.reachedDeadline = true;
-    
+   // 11. Delete a campaign by the creator
+    function deleteCampaign(uint256 campaignId) public campaignExists(campaignId) {
+        Campaign storage campaign = campaigns[campaignId];
+        require(campaign.creator == msg.sender, "Only the creator can delete this campaign.");
+        require(campaign.totalDonated == 0, "Cannot delete a campaign that has received donations.");
+
+        delete campaigns[campaignId];
+          // Maintain donators list integrity
+    delete campaign.donators;
+    }
+
+    // 12. Get a campaign using its ID
+    function getCampaignById(uint256 campaignId) public view campaignExists(campaignId) returns (CampaignDetails memory) {
+        Campaign storage c = campaigns[campaignId];
+        return _mapCampaign(c);
+    }
+
 }
