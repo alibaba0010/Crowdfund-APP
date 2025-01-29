@@ -17,10 +17,13 @@ const validateDate = (date: Date) => {
 
 const formSchema = z.object({
   name: z.string().min(1, "Your Name is required!"),
-  title: z.string().min(1, "Campaign Title is required!"),
+  title: z
+    .string()
+    .min(1, "Campaign Title is required!")
+    .max(20, "Campaign Title is must not be more than 20 words!"),
   description: z
     .string()
-    .min(8, "Description must be at least 8 characters long!")
+    .min(10, "Description must be at least 8 characters long!")
     .max(100, "Description must be less than 100 characters"),
   targetAmount: z.coerce.number().min(0, "Amount must not be negative"),
   deadline: z.coerce
@@ -93,7 +96,7 @@ const CreateCampaign = () => {
         <div className="flex flex-col gap-2">
           <FormField
             {...register("name")}
-            labelName="Your Name *"
+            labelName="Creator's Name *"
             placeholder="John Doe"
             inputType="text"
           />
@@ -123,7 +126,7 @@ const CreateCampaign = () => {
         <div className="flex flex-col gap-2">
           <FormField
             {...register("description")}
-            labelName="Description *"
+            labelName="Campaign Description *"
             placeholder="State what the crowdfunding is going to achieve"
             isTextArea
           />

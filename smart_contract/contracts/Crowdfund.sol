@@ -5,8 +5,8 @@ contract GoFundme {
 constructor() payable {}
     struct Campaign {
         address payable creator;
-        // new params
-        string title; 
+        // new params uint256 createdAt; // New field string name //creator full name
+         string title; 
         string description;
         uint256 targetAmount;
         uint256 deadline; // Unix timestamp (seconds since epoch)
