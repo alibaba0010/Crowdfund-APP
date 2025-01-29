@@ -16,7 +16,6 @@ const Home = () => {
       enabled: !!address,
     },
   });
-  console.log(data);
   useEffect(() => {
     if (address) {
       refetch();

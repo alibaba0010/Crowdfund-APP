@@ -30,7 +30,6 @@ const DisplayCampaigns: React.FC<DisplayCampaignsProps> = ({
   const handleNavigate = (campaign: Campaign) => {
     navigate(`/campaign-details/${campaign.title}`, { state: campaign });
   };
-  console.log("Camapagns: ", campaigns.length);
   return (
     <div>
       <h1 className="font-epilogue font-semibold text-[18px] text-white text-left">
