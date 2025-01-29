@@ -45,6 +45,7 @@ constructor() payable {}
         _;
     }
 // 1. Create a new campaign
+// add a name
     function createCampaign(uint256 targetAmount, uint256 deadline, string memory title, string memory description) public payable returns (uint256){
         require(targetAmount > 0, "Target amount must be greater than zero.");
         require(deadline > block.timestamp, "Deadline must be in the future.");

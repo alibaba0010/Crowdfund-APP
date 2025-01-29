@@ -11,7 +11,7 @@ const Home = () => {
   const dispatch = useDispatch();
   const { data, isLoading, refetch } = useReadContract({
     ...wagmiContractConfig,
-    functionName: "getAllCampaigns",
+    functionName: "getAvailableCampaigns",
     query: {
       enabled: !!address,
     },
