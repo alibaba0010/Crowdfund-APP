@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setWalletAdress } from "./actions/wallet";
 import { Sidebar } from "./components";
-import { CreateCampaign, Home, Profile } from "./pages";
+import { CampaignDetails, CreateCampaign, Home, Profile } from "./pages";
 
 function App() {
   const account = useAccount();
@@ -32,7 +32,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/create-campaign" element={<CreateCampaign />} />
-          {/* <Route path="/campaign-details/:id" element={<CampaignDetails />} /> */}
+          <Route path="/campaign-details/:id" element={<CampaignDetails />} />
         </Routes>
       </div>
     </div>
