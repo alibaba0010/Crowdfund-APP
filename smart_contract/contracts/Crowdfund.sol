@@ -229,4 +229,13 @@ function _mapCampaign(Campaign storage c) internal view returns (CampaignDetails
     });
 }
 
+// 11. delete a campaign by the creator
+function deleteCampaign(uint256 campaignId) public campaignExists(campaignId) {
+    Campaign storage campaign = campaigns[campaignId];
+    require(campaign.creator == msg.sender, "Only the creator can delete the campaign.");
+    require(!campaign.withdrawn, "Funds already withdrawn.");
+    require(!campaign.reachedDeadline, "Campaign deadline has passed.");
+    campaign.withdrawn = true;
+    campaign.reachedDeadline = true;
+    
 }
