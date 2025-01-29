@@ -9,7 +9,7 @@ export interface Campaign {
   title: string;
   description: string;
   target: string;
-  deadline: string;
+  deadline: bigint;
   amountCollected: string;
   image: string;
 }

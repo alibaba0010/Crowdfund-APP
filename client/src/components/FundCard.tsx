@@ -8,7 +8,7 @@ interface FundCardProps {
   title?: string;
   description?: string;
   target?: string | number;
-  deadline?: string | Date;
+  deadline?: bigint;
   amountCollected?: string | number;
   image?: string;
   handleClick: () => void;
@@ -24,7 +24,7 @@ const FundCard: React.FC<FundCardProps> = ({
   image,
   handleClick,
 }) => {
-  const remainingDays = daysLeft(deadline);
+  const remainingDays = deadline ? daysLeft(deadline) : 0;
 
   return (
     <div
