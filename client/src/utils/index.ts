@@ -1,4 +1,7 @@
 import abi from "./Crowdfund.json";
+export const contractABI = abi.abi;
+export const contractAddress = "0x278e7D5f487D6559faf54066793aa622E81427f3";
+// export const contractAddress = "0xd509662722AdF6613d58252259Ef559632951A83";
 interface CalculateBarPercentageParams {
   goal: number;
   raisedAmount: number;
@@ -24,7 +27,6 @@ export const calculateBarPercentage = ({
 // };
 export const activeChain = "sepolia";
 export const clientId = import.meta.env.VITE_HELLO;
-export const contractABI = abi.abi;
 export const daysLeft = (deadline: bigint) => {
   const msPerDay = 86_400_000n; // 1000 * 60 * 60 * 24
   const deadlineMs = deadline * 1000n;
@@ -56,3 +58,6 @@ export const daysLeft = (deadline: bigint) => {
 
 //   return remainingDays.toString();
 // };
+export const shortenAddress = (address: string) => {
+  return address.slice(0, 6) + "..." + address.slice(-4);
+};

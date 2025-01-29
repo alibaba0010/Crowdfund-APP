@@ -8,9 +8,9 @@ export interface Campaign {
   owner: string;
   title: string;
   description: string;
-  target: string;
+  target: bigint;
   deadline: bigint;
-  amountCollected: string;
+  amountCollected: bigint;
   image: string;
 }
 

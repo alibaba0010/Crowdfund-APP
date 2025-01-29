@@ -1,31 +1,32 @@
 import React from "react";
-
 import { tagType, thirdweb } from "../assets";
-import { daysLeft } from "../utils";
-
+import { formatEther } from "viem";
+import { daysLeft, shortenAddress } from "../utils";
 interface FundCardProps {
-  owner?: string;
+  creator?: string;
   title?: string;
   description?: string;
-  target?: string | number;
+  targetAmount?: bigint;
   deadline?: bigint;
-  amountCollected?: string | number;
+  totalDonated?: bigint;
   image?: string;
   handleClick: () => void;
 }
 
 const FundCard: React.FC<FundCardProps> = ({
-  owner,
+  creator,
   title,
   description,
-  target,
+  targetAmount,
   deadline,
-  amountCollected,
+  totalDonated,
   image,
   handleClick,
 }) => {
   const remainingDays = deadline ? daysLeft(deadline) : 0;
-
+  const target = targetAmount ? formatEther(targetAmount) : 0;
+  const amountCollected = Number(totalDonated);
+  const owner = creator ? shortenAddress(creator) : "0x";
   return (
     <div
       className="sm:w-[288px] w-full rounded-[15px] bg-[#1c1c24] cursor-pointer"
@@ -38,7 +39,7 @@ const FundCard: React.FC<FundCardProps> = ({
       />
 
       <div className="flex flex-col p-4">
-        <div className="flex flex-row items-center mb-[18px]">
+        {/* <div className="flex flex-row items-center mb-[18px]">
           <img
             src={tagType}
             alt="tag"
@@ -47,7 +48,7 @@ const FundCard: React.FC<FundCardProps> = ({
           <p className="ml-[12px] mt-[2px] font-epilogue font-medium text-[12px] text-[#808191]">
             Education
           </p>
-        </div>
+        </div> */}
 
         <div className="block">
           <h3 className="font-epilogue font-semibold text-[16px] text-white text-left leading-[26px] truncate">
