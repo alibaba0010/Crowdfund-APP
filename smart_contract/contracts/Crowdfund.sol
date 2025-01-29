@@ -6,9 +6,12 @@ constructor() payable {}
     struct Campaign {
         address payable creator;
         // new params uint256 createdAt; // New field string name //creator full name
-         string title; 
+        string name; // 1
+        string title; 
         string description;
         uint256 targetAmount;
+        string image; // 2
+        uint256 createdAt; // 3
         uint256 deadline; // Unix timestamp (seconds since epoch)
         uint256 totalDonated;
         mapping(address => uint256) donations; //   
@@ -17,10 +20,13 @@ constructor() payable {}
         bool reachedDeadline;
     }
     struct CampaignDetails {
-         address creator;
+    address creator;
+    string name; // 1
     string title;
     string description;
     uint256 targetAmount;
+    string image; // 2
+    uint256 createdAt; // 3
     uint256 deadline;
     uint256 totalDonated;
     address[] donators;
@@ -46,14 +52,17 @@ constructor() payable {}
     }
 // 1. Create a new campaign
 // add a name
-    function createCampaign(uint256 targetAmount, uint256 deadline, string memory title, string memory description) public payable returns (uint256){
+    function createCampaign(string memory name, string memory title, string memory description, uint256 targetAmount, string memory image, uint256 deadline) public payable returns (uint256){
         require(targetAmount > 0, "Target amount must be greater than zero.");
         require(deadline > block.timestamp, "Deadline must be in the future.");
 
  Campaign storage newCampaign = campaigns[campaignCount];
         newCampaign.creator = payable(msg.sender);
-        newCampaign.targetAmount = targetAmount;
+        newCampaign.name = name;
         newCampaign.title = title;
+        newCampaign.targetAmount = targetAmount;
+        newCampaign.image = image;
+        newCampaign.createdAt = block.timestamp;
         newCampaign.description = description;
         newCampaign.deadline = deadline;
         newCampaign.totalDonated = 0;
@@ -206,9 +215,12 @@ function _isPast(Campaign storage c) internal view returns (bool) {
 function _mapCampaign(Campaign storage c) internal view returns (CampaignDetails memory) {
     return CampaignDetails({
         creator: c.creator,
+        name: c.name,
         title: c.title,
         description: c.description,
         targetAmount: c.targetAmount,
+        image: c.image,
+        createdAt: c.createdAt,
         deadline: c.deadline,
         totalDonated: c.totalDonated,
         donators: c.donators,
