@@ -8,6 +8,7 @@ import {
 } from "../assets";
 import { configureStore } from "@reduxjs/toolkit";
 import walletAddressReducer from "../actions/wallet";
+import campaignsReducer from "../actions/campaigns";
 export const navlinks = [
   {
     name: "Dashboard",
@@ -44,5 +45,5 @@ export const navlinks = [
   },
 ];
 export const store = configureStore({
-  reducer: { wallet: walletAddressReducer },
+  reducer: { wallet: walletAddressReducer, campaignsReducer },
 });

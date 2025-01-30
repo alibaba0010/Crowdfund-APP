@@ -1,5 +1,5 @@
 import React from "react";
-import { tagType, thirdweb } from "../assets";
+import { thirdweb } from "../assets";
 import { formatEther } from "viem";
 import { daysLeft, shortenAddress } from "../utils";
 
@@ -18,12 +18,12 @@ interface FundCardProps {
 const FundCard: React.FC<FundCardProps> = ({
   creator,
   title,
-  description,
+  // description,
   targetAmount,
   deadline,
   totalDonated,
   image,
-  createdAt,
+  // createdAt,
   handleClick,
 }) => {
   const remainingDays = deadline ? daysLeft(deadline) : 0;
