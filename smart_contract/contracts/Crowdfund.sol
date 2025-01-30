@@ -5,7 +5,6 @@ contract GoFundme {
 constructor() payable {}
     struct Campaign {
         address payable creator;
-        // new params uint256 createdAt; // New field string name //creator full name
         string name; // 1
         string title; 
         string description;
@@ -232,9 +231,9 @@ function _mapCampaign(Campaign storage c) internal view returns (CampaignDetails
         require(campaign.creator == msg.sender, "Only the creator can delete this campaign.");
         require(campaign.totalDonated == 0, "Cannot delete a campaign that has received donations.");
 
-        delete campaigns[campaignId];
+       campaign.withdrawn = true;
+        campaign.reachedDeadline = true;
           // Maintain donators list integrity
-    delete campaign.donators;
     }
 
     // 12. Get a campaign using its ID
