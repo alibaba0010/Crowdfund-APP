@@ -1,17 +1,18 @@
 import React from "react";
 import { thirdweb } from "../assets";
-import { formatEther } from "viem";
-import { daysLeft, shortenAddress } from "../utils";
+import { shortenAddress } from "../utils";
 
 interface CampaignCardProps {
-  creator?: string;
-  title?: string;
-  description?: string;
-  targetAmount?: bigint;
-  deadline?: bigint;
-  totalDonated?: bigint;
-  image?: string;
-  createdAt?: bigint;
+  creator: string;
+  name: string;
+  title: string;
+  description: string;
+  targetAmount: string;
+  deadline: string;
+  totalDonated: number;
+  donators: string[];
+  image: string;
+  pId: number;
   handleClick: () => void;
 }
 
@@ -22,14 +23,10 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
   deadline,
   totalDonated,
   image,
-  // createdAt,
   handleClick,
 }) => {
-  const remainingDays = deadline ? daysLeft(deadline) : 0;
-  const target = targetAmount ? formatEther(targetAmount) : 0;
-  const amountCollected = Number(totalDonated);
   const owner = creator ? shortenAddress(creator) : "0x";
-  const progress = (amountCollected / Number(target)) * 100;
+  const progress = (totalDonated / Number(targetAmount)) * 100;
 
   return (
     <div
@@ -61,16 +58,14 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
         <div className="grid grid-cols-2 gap-4 mb-4">
           <div className="space-y-1">
             <p className="text-sm text-[#b2b3bd] font-medium">
-              {amountCollected.toFixed(2)} ETH
+              {totalDonated.toFixed(2)} ETH
             </p>
             <p className="text-xs text-[#808191]">
-              Raised of {Number(target).toFixed(2)} ETH
+              Raised of {Number(targetAmount).toFixed(2)} ETH
             </p>
           </div>
           <div className="space-y-1">
-            <p className="text-sm text-[#b2b3bd] font-medium">
-              {remainingDays}
-            </p>
+            <p className="text-sm text-[#b2b3bd] font-medium">{deadline}</p>
             <p className="text-xs text-[#808191]">Days Remaining</p>
           </div>
         </div>

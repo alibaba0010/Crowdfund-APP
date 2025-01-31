@@ -45,11 +45,7 @@ const Home = () => {
   return (
     <>
       {address ? (
-        <DisplayCampaigns
-          title="All Campaigns"
-          isLoading={isLoading}
-          campaigns={(data as Campaign[]) || []}
-        />
+        <DisplayCampaigns />
       ) : (
         <div className="p-4 text-center">
           <p className="mb-4 text-lg text-red-500">

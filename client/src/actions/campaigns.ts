@@ -20,7 +20,6 @@ const campaignsSlice = createSlice({
       state.isChanged = !state.isChanged;
     },
     setAvailableCampaigns(state, action) {
-      console.log(action.payload.data);
       const parsedCampaings = action.payload.data.map(
         (campaign: Campaign, i: number) => ({
           creator: campaign.creator,
