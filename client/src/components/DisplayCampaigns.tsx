@@ -1,8 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
-import FundCard from "./CampaignCard";
 import { loader } from "../assets";
+import CampaignCard from "./CampaignCard";
 
 export interface Campaign {
   owner: string;
@@ -55,7 +55,7 @@ const DisplayCampaigns: React.FC<DisplayCampaignsProps> = ({
         {!isLoading &&
           campaigns.length > 0 &&
           campaigns.map((campaign) => (
-            <FundCard
+            <CampaignCard
               key={uuidv4()}
               {...campaign}
               handleClick={() => handleNavigate(campaign)}

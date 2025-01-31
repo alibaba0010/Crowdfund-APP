@@ -3,7 +3,7 @@ import { thirdweb } from "../assets";
 import { formatEther } from "viem";
 import { daysLeft, shortenAddress } from "../utils";
 
-interface FundCardProps {
+interface CampaignCardProps {
   creator?: string;
   title?: string;
   description?: string;
@@ -15,10 +15,9 @@ interface FundCardProps {
   handleClick: () => void;
 }
 
-const FundCard: React.FC<FundCardProps> = ({
+const CampaignCard: React.FC<CampaignCardProps> = ({
   creator,
   title,
-  // description,
   targetAmount,
   deadline,
   totalDonated,
@@ -89,4 +88,4 @@ const FundCard: React.FC<FundCardProps> = ({
   );
 };
 
-export default FundCard;
+export default CampaignCard;
