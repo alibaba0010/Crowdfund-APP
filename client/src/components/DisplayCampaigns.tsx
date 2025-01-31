@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import FundCard from "./CampaignCard";
 import { loader } from "../assets";
-import { useSelector } from "react-redux";
 
 export interface Campaign {
   owner: string;
@@ -27,9 +26,7 @@ const DisplayCampaigns: React.FC<DisplayCampaignsProps> = ({
   campaigns,
 }) => {
   const navigate = useNavigate();
-  const availableCampaigns = useSelector(
-    (state: any) => state.campaigns.availableCampaigns
-  );
+
   const handleNavigate = (campaign: Campaign) => {
     navigate(`/campaign-details/${campaign.title}`, { state: campaign });
   };

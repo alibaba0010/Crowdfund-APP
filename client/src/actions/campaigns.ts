@@ -2,11 +2,6 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   isChanged: false,
-  availableCampaigns: {
-    title: "",
-    isLoading: false,
-    data: [],
-  },
 };
 
 const campaignsSlice = createSlice({
