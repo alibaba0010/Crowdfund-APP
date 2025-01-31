@@ -70,7 +70,6 @@ interface UploadToPinataResponse {
 export const uploadToPinata = async (
   file: any
 ): Promise<UploadToPinataResponse> => {
-  console.log("File", import.meta.env.VITE_WC_PINATA_JWT);
   const formData = new FormData();
   formData.append("file", file);
 
@@ -84,6 +83,5 @@ export const uploadToPinata = async (
       },
     }
   );
-  console.log("Response", response);
   return response.data;
 };

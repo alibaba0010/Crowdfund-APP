@@ -8,10 +8,10 @@ const campaignsSlice = createSlice({
   name: "campaigns",
   initialState,
   reducers: {
-    addCampaign(state, action) {
-      state.isChanged = true;
+    refreshCampaigns(state) {
+      state.isChanged = !state.isChanged;
     },
   },
 });
-export const { addCampaign } = campaignsSlice.actions;
+export const { refreshCampaigns } = campaignsSlice.actions;
 export default campaignsSlice.reducer;

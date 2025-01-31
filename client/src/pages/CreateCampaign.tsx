@@ -7,7 +7,7 @@ import { parseEther } from "viem";
 import { useWriteContract } from "wagmi";
 import { wagmiContractConfig } from "../utils/contract";
 import { useWaitForTransactionReceipt } from "wagmi";
-import { type ChangeEvent, useEffect, useState } from "react";
+import { type ChangeEvent, DragEvent, useEffect, useState } from "react";
 import { uploadToPinata } from "../utils";
 
 const validateDate = (date: Date) => {
@@ -33,12 +33,14 @@ const formSchema = z.object({
       validateDate,
       "Deadline must be in the future (tomorrow or later)."
     ),
+  image: z.string(),
 });
 
 type CreateCampaignSchema = z.infer<typeof formSchema>;
 
 const CreateCampaign = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [drag, setDrag] = useState(false);
   const navigate = useNavigate();
   const {
     data: hash,
@@ -49,6 +51,7 @@ const CreateCampaign = () => {
   const {
     register,
     handleSubmit,
+
     formState: { errors, isSubmitting },
     reset,
   } = useForm<CreateCampaignSchema>({
@@ -65,21 +68,49 @@ const CreateCampaign = () => {
     }
   };
 
+  const handleDragOver = (e: DragEvent<HTMLLabelElement>) => {
+    e.preventDefault();
+    setDrag(true);
+  };
+
+  const handleDragLeave = () => {
+    setDrag(false);
+  };
+
+  const handleImageDrop = (e: DragEvent<HTMLLabelElement>) => {
+    e.preventDefault();
+    setDrag(false);
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      setSelectedImage(e.dataTransfer.files[0]);
+    }
+  };
+
+  const uploadImage = async () => {
+    if (selectedImage) {
+      const { IpfsHash } = await uploadToPinata(selectedImage);
+      console.log("Image", IpfsHash);
+      return `https://ipfs.io/ipfs/${IpfsHash}`;
+    } else {
+      return `https://ipfs.io/ipfs/`;
+    }
+  };
   const onSubmitHandler = async (data: CreateCampaignSchema) => {
     try {
-      const { deadline, description, targetAmount, title } = data;
+      const { deadline, description, targetAmount, title, name } = data;
       const parsedAmount = parseEther(targetAmount.toString());
       const deadlineTimestamp = Math.floor(deadline.getTime() / 1000);
-
-      let imageCID = "";
-      if (selectedImage) {
-        imageCID = await uploadToPinata(selectedImage);
-      }
-
+      const image = await uploadImage();
       writeContract({
         ...wagmiContractConfig,
         functionName: "createCampaign",
-        args: [parsedAmount, deadlineTimestamp, title, description, imageCID],
+        args: [
+          name,
+          title,
+          description,
+          parsedAmount,
+          image,
+          deadlineTimestamp,
+        ],
       });
     } catch (error) {
       console.error("Error creating campaign:", error);
@@ -190,7 +221,12 @@ const CreateCampaign = () => {
           <div className="flex justify-center items-center w-full">
             <label
               htmlFor="dropzone-file"
-              className="flex flex-col justify-center items-center w-full h-40 bg-[#1c1c24] rounded-lg border-2 border-gray-300 border-dashed cursor-pointer hover:bg-[#2c2f32] transition-all duration-300 ease-in-out"
+              className={`flex flex-col justify-center items-center w-full h-40 bg-[#1c1c24] rounded-lg border-2 ${
+                drag ? "border-[#1dc071]" : "border-gray-300"
+              } border-dashed cursor-pointer hover:bg-[#2c2f32] transition-all duration-300 ease-in-out`}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleImageDrop}
             >
               <div className="flex flex-col justify-center items-center pt-5 pb-6">
                 <svg
