@@ -7,7 +7,8 @@ import { parseEther } from "viem";
 import { useWriteContract } from "wagmi";
 import { wagmiContractConfig } from "../utils/contract";
 import { useWaitForTransactionReceipt } from "wagmi";
-import { useEffect } from "react";
+import { type ChangeEvent, useEffect, useState } from "react";
+import { uploadToPinata } from "../utils";
 
 const validateDate = (date: Date) => {
   const today = new Date();
@@ -37,6 +38,7 @@ const formSchema = z.object({
 type CreateCampaignSchema = z.infer<typeof formSchema>;
 
 const CreateCampaign = () => {
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const navigate = useNavigate();
   const {
     data: hash,
@@ -57,16 +59,27 @@ const CreateCampaign = () => {
       hash,
     });
 
+  const handleImageFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setSelectedImage(e.target.files[0]);
+    }
+  };
+
   const onSubmitHandler = async (data: CreateCampaignSchema) => {
     try {
       const { deadline, description, targetAmount, title } = data;
       const parsedAmount = parseEther(targetAmount.toString());
       const deadlineTimestamp = Math.floor(deadline.getTime() / 1000);
+
+      let imageCID = "";
+      if (selectedImage) {
+        imageCID = await uploadToPinata(selectedImage);
+      }
+
       writeContract({
         ...wagmiContractConfig,
         functionName: "createCampaign",
-        args: [parsedAmount, deadlineTimestamp, title, description],
-        // gas: 3000000,
+        args: [parsedAmount, deadlineTimestamp, title, description, imageCID],
       });
     } catch (error) {
       console.error("Error creating campaign:", error);
@@ -75,9 +88,10 @@ const CreateCampaign = () => {
   useEffect(() => {
     if (isConfirmed) {
       reset();
+      setSelectedImage(null);
       navigate("/");
     }
-  }, [isConfirmed]);
+  }, [isConfirmed, navigate, reset]); // Added navigate and reset to dependencies
 
   return (
     <div className="bg-[#1c1c24] flex justify-center items-center flex-col rounded-[10px] sm:p-10 p-4">
@@ -168,7 +182,62 @@ const CreateCampaign = () => {
             )}
           </div>
         </div>
-
+        {/* Image Upload */}
+        <div className="flex flex-col gap-2">
+          <label className="font-epilogue font-medium text-[14px] leading-[22px] text-[#808191] mb-[10px]">
+            Campaign Image (Optional)
+          </label>
+          <div className="flex justify-center items-center w-full">
+            <label
+              htmlFor="dropzone-file"
+              className="flex flex-col justify-center items-center w-full h-40 bg-[#1c1c24] rounded-lg border-2 border-gray-300 border-dashed cursor-pointer hover:bg-[#2c2f32] transition-all duration-300 ease-in-out"
+            >
+              <div className="flex flex-col justify-center items-center pt-5 pb-6">
+                <svg
+                  aria-hidden="true"
+                  className="mb-3 w-10 h-10 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                  ></path>
+                </svg>
+                <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                  <span className="font-semibold">Click to upload</span> or drag
+                  and drop
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  PNG, JPG or GIF (MAX. 800x400px)
+                </p>
+              </div>
+              <input
+                id="dropzone-file"
+                type="file"
+                className="hidden"
+                accept="image/*"
+                onChange={handleImageFileChange}
+              />
+            </label>
+          </div>
+          {selectedImage && (
+            <div className="mt-4 flex items-center space-x-2">
+              <img
+                src={URL.createObjectURL(selectedImage) || "/placeholder.svg"}
+                alt="Selected"
+                className="w-16 h-16 object-cover rounded"
+              />
+              <span className="font-epilogue text-[14px] text-[#808191]">
+                {selectedImage.name}
+              </span>
+            </div>
+          )}
+        </div>
         {/* Submit Button */}
         <div className="flex justify-center items-center mt-[40px]">
           <CustomButton

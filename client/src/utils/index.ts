@@ -1,4 +1,5 @@
 import abi from "./Crowdfund.json";
+import axios from "axios";
 export const contractABI = abi.abi;
 export const contractAddress = "0x278e7D5f487D6559faf54066793aa622E81427f3";
 // export const contractAddress = "0xd509662722AdF6613d58252259Ef559632951A83";
@@ -60,4 +61,29 @@ export const daysLeft = (deadline: bigint) => {
 // };
 export const shortenAddress = (address: string) => {
   return address.slice(0, 6) + "..." + address.slice(-4);
+};
+
+interface UploadToPinataResponse {
+  IpfsHash: string;
+}
+
+export const uploadToPinata = async (
+  file: any
+): Promise<UploadToPinataResponse> => {
+  console.log("File", import.meta.env.VITE_WC_PINATA_JWT);
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const response = await axios.post<UploadToPinataResponse>(
+    "https://api.pinata.cloud/pinning/pinFileToIPFS",
+    formData,
+    {
+      headers: {
+        Authorization: `Bearer ${import.meta.env.VITE_WC_PINATA_JWT}`,
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+  console.log("Response", response);
+  return response.data;
 };
