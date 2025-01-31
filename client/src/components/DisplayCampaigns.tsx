@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import { loader } from "../assets";
 import CampaignCard from "./CampaignCard";
 import { useSelector } from "react-redux";
+import { useMemo } from "react";
 
 export interface Campaign {
   creator: string;
@@ -34,6 +35,11 @@ const DisplayCampaigns = () => {
     (state: any) => state.campaigns.availableCampaigns
   );
   const { title, isLoading, campaigns } = availableCampaigns;
+
+  const sortedCampaigns = useMemo(() => {
+    return [...campaigns].sort((a, b) => b.pId - a.pId);
+  }, [campaigns]);
+
   const handleNavigate = (campaign: CampaignData) => {
     navigate(`/campaign-details/${campaign.title}`, { state: campaign });
   };
@@ -47,7 +53,7 @@ const DisplayCampaigns = () => {
       <div className="flex flex-wrap mt-[20px] gap-[26px]">
         {isLoading && (
           <img
-            src={loader}
+            src={loader || "/placeholder.svg"}
             alt="loader"
             className="w-[100px] h-[100px] object-contain"
           />
@@ -55,13 +61,13 @@ const DisplayCampaigns = () => {
 
         {!isLoading && campaigns.length === 0 && (
           <p className="font-epilogue font-semibold text-[14px] leading-[30px] text-[#818183]">
-            You have not created any campigns yet
+            You have not created any campaigns yet
           </p>
         )}
 
         {!isLoading &&
           campaigns.length > 0 &&
-          campaigns.map((campaign: CampaignData) => (
+          sortedCampaigns.map((campaign: CampaignData) => (
             <CampaignCard
               key={uuidv4()}
               {...campaign}
