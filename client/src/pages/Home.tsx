@@ -5,7 +5,7 @@ import { useReadContract } from "wagmi";
 import { wagmiContractConfig } from "../utils/contract";
 import { toggleWalletConnect } from "../actions/wallet";
 import { Campaign } from "../components/DisplayCampaigns";
-import { refreshCampaigns } from "../actions/campaigns";
+import { refreshCampaigns, setAvailableCampaigns } from "../actions/campaigns";
 
 const Home = () => {
   const address = useSelector((state: any) => state.wallet.addresses?.[0]);
@@ -29,14 +29,22 @@ const Home = () => {
       dispatch(refreshCampaigns());
     }
   }, [address, refreshCampaign]);
+
+  useEffect(() => {
+    if (data) {
+      dispatch(
+        setAvailableCampaigns({
+          title: "All Campaigns",
+          isLoading,
+          data: data as Campaign[],
+        })
+      );
+    }
+  }, [data, isLoading]);
   return (
     <>
       {address ? (
-        <DisplayCampaigns
-          title="All Campaigns"
-          isLoading={isLoading}
-          campaigns={(data as Campaign[]) || []}
-        />
+        <DisplayCampaigns />
       ) : (
         <div className="p-4 text-center">
           <p className="mb-4 text-lg text-red-500">

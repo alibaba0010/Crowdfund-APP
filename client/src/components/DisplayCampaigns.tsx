@@ -1,8 +1,8 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import FundCard from "./CampaignCard";
 import { loader } from "../assets";
+import { useSelector } from "react-redux";
 
 export interface Campaign {
   owner: string;
@@ -14,22 +14,16 @@ export interface Campaign {
   image: string;
 }
 
-interface DisplayCampaignsProps {
-  title: string;
-  isLoading: boolean;
-  campaigns: Campaign[];
-}
-
-const DisplayCampaigns: React.FC<DisplayCampaignsProps> = ({
-  title,
-  isLoading,
-  campaigns,
-}) => {
+const DisplayCampaigns = () => {
   const navigate = useNavigate();
-
+  const availableCampaigns = useSelector(
+    (state: any) => state.campaigns.availableCampaigns
+  );
   const handleNavigate = (campaign: Campaign) => {
     navigate(`/campaign-details/${campaign.title}`, { state: campaign });
   };
+  const { title, isLoading, campaigns } = availableCampaigns;
+
   return (
     <div>
       <h1 className="font-epilogue font-semibold text-[18px] text-white text-left">
@@ -53,7 +47,7 @@ const DisplayCampaigns: React.FC<DisplayCampaignsProps> = ({
 
         {!isLoading &&
           campaigns.length > 0 &&
-          campaigns.map((campaign) => (
+          campaigns.map((campaign: Campaign) => (
             <FundCard
               key={uuidv4()}
               {...campaign}

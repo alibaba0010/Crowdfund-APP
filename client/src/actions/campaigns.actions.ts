@@ -1,4 +1,6 @@
-// const getCampaigns = async () => {
+const getCampaigns = () => {
+  return async (dispatch: any) => {};
+};
 //   const campaigns = await contract.call('getCampaigns');
 
 //   const parsedCampaings = campaigns.map((campaign, i) => ({
