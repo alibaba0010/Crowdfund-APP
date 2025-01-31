@@ -35,7 +35,6 @@ const DisplayCampaigns = () => {
     (state: any) => state.campaigns.availableCampaigns
   );
   const { title, isLoading, campaigns } = availableCampaigns;
-
   const sortedCampaigns = useMemo(() => {
     return [...campaigns].sort((a, b) => b.pId - a.pId);
   }, [campaigns]);

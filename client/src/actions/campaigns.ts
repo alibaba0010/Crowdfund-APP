@@ -23,12 +23,15 @@ const campaignsSlice = createSlice({
       const parsedCampaings = action.payload.data.map(
         (campaign: Campaign, i: number) => ({
           creator: campaign.creator,
+          name: campaign.name,
           title: campaign.title,
           description: campaign.description,
           targetAmount: formatEther(campaign.targetAmount),
           deadline: daysLeft(campaign.deadline),
           totalDonated: Number(campaign.totalDonated),
           image: campaign.image,
+          // createdAt: campaign.createdAt,
+          donators: campaign.donators,
           pId: i,
         })
       );

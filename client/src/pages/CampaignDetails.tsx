@@ -4,17 +4,41 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { CountBox, CustomButton, Loader } from "../components";
 import { calculateBarPercentage, daysLeft } from "../utils";
 import { thirdweb } from "../assets";
+import { useSelector } from "react-redux";
+import { useWaitForTransactionReceipt } from "wagmi";
+import { useWriteContract } from "wagmi";
+import { wagmiContractConfig } from "../utils/contract";
 
 const CampaignDetails = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
-  const amountCollected = 200;
   const [isLoading, setIsLoading] = useState(false);
   const [amount, setAmount] = useState("");
+  const [error, setError] = useState("");
+  const address = useSelector((state: any) => state.wallet.addresses?.[0]);
+  const {
+    deadline,
+    donators,
+    targetAmount,
+    totalDonated,
+    name,
+    image,
+    description,
+    creator,
+    pId,
+  } = state;
   //   const [donators, setDonators] = useState([]);
-
-  const remainingDays = daysLeft(state.deadline);
-  const donators = [{ donator: "", donation: 0 }];
+  const target = Number(targetAmount);
+  const {
+    data: hash,
+    isPending,
+    writeContract,
+    error: writeError,
+  } = useWriteContract();
+  const { isLoading: isConfirming, isSuccess: isConfirmed } =
+    useWaitForTransactionReceipt({
+      hash,
+    });
   const fetchDonators = async () => {
     //  const data = await getDonations(state.pId);
     //  setDonators(data);
@@ -23,8 +47,26 @@ const CampaignDetails = () => {
   //   useEffect(() => {
   //     if(contract) fetchDonators();
   //   }, [contract, address])
+  useEffect(() => {
+    setError("");
+  }, [amount]);
 
   const handleDonate = async () => {
+    console.log(amount);
+    const donate = Number(amount);
+    if (isNaN(donate) || donate <= 0 || donate > target) {
+      setError("Invalid amount or amount exceeds the target.");
+      return;
+    }
+    if (address === creator) {
+      setError("You can't donate to your own campaign.");
+      return;
+    }
+    writeContract({
+      ...wagmiContractConfig,
+      functionName: "donate",
+      args: [pId, donate],
+    });
     setIsLoading(true);
 
     //  await donate(state.pId, amount);
@@ -40,7 +82,7 @@ const CampaignDetails = () => {
       <div className="w-full flex md:flex-row flex-col mt-10 gap-[30px]">
         <div className="flex-1 flex-col">
           <img
-            src={state.image}
+            src={image}
             alt="campaign"
             className="w-full h-[410px] object-cover rounded-xl"
           />
@@ -48,7 +90,7 @@ const CampaignDetails = () => {
             <div
               className="absolute h-full bg-[#4acd8d]"
               style={{
-                //  width: `${calculateBarPercentage(state.target, amountCollected)}%`,
+                width: `${calculateBarPercentage(target, totalDonated)}%`,
                 maxWidth: "100%",
               }}
             ></div>
@@ -56,11 +98,8 @@ const CampaignDetails = () => {
         </div>
 
         <div className="flex md:w-[150px] w-full flex-wrap justify-between gap-[30px]">
-          <CountBox title="Days Left" value={remainingDays} />
-          <CountBox
-            title={`Raised of ${state.target}`}
-            value={state.amountCollected}
-          />
+          <CountBox title="Days Left" value={deadline} />
+          <CountBox title={`Raised of ${target}`} value={totalDonated} />
           <CountBox title="Total Backers" value={donators.length} />
         </div>
       </div>
@@ -82,10 +121,10 @@ const CampaignDetails = () => {
               </div>
               <div>
                 <h4 className="font-epilogue font-semibold text-[14px] text-white break-all">
-                  {state.owner}
+                  {creator}
                 </h4>
                 <p className="mt-[4px] font-epilogue font-normal text-[12px] text-[#808191]">
-                  10 Campaigns
+                  {name}
                 </p>
               </div>
             </div>
@@ -98,7 +137,7 @@ const CampaignDetails = () => {
 
             <div className="mt-[20px]">
               <p className="font-epilogue font-normal text-[16px] text-[#808191] leading-[26px] text-justify">
-                {state.description}
+                {description}
               </p>
             </div>
           </div>
@@ -110,7 +149,7 @@ const CampaignDetails = () => {
 
             <div className="mt-[20px] flex flex-col gap-4">
               {donators.length > 0 ? (
-                donators.map((item, index) => (
+                donators.map((item: any, index: any) => (
                   <div
                     key={`${item.donator}-${index}`}
                     className="flex justify-between items-center gap-4"
@@ -145,19 +184,23 @@ const CampaignDetails = () => {
               <input
                 type="number"
                 placeholder="ETH 0.1"
-                step="0.01"
+                step="0.0001"
                 className="w-full py-[10px] sm:px-[20px] px-[15px] outline-none border-[1px] border-[#3a3a43] bg-transparent font-epilogue text-white text-[18px] leading-[30px] placeholder:text-[#4b5264] rounded-[10px]"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
               />
+              {error && (
+                <p className="mt-[10px] font-epilogue font-normal leading-[22px] text-red-500">
+                  {error}
+                </p>
+              )}
 
               <div className="my-[20px] p-4 bg-[#13131a] rounded-[10px]">
                 <h4 className="font-epilogue font-semibold text-[14px] leading-[22px] text-white">
-                  Back it because you believe in it.
+                  Believe in the vision, invest in the future.
                 </h4>
                 <p className="mt-[20px] font-epilogue font-normal leading-[22px] text-[#808191]">
-                  Support the project for no reward, just because it speaks to
-                  you.
+                  Champion dreams that resonate with your soul
                 </p>
               </div>
 

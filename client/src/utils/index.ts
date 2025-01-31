@@ -3,20 +3,12 @@ import axios from "axios";
 export const contractABI = abi.abi;
 export const contractAddress = "0xd40B7753C20397330BB63D7Dd2140Ada1CDC5f33";
 // export const contractAddress = "0xd509662722AdF6613d58252259Ef559632951A83";
-interface CalculateBarPercentageParams {
-  goal: number;
-  raisedAmount: number;
-}
 
-export const calculateBarPercentage = ({
-  goal,
-  raisedAmount,
-}: CalculateBarPercentageParams): number => {
+export const calculateBarPercentage = (goal: number, raisedAmount: number) => {
   const percentage = Math.round((raisedAmount * 100) / goal);
 
   return percentage;
 };
-
 // export const checkIfImage = (url, callback) => {
 //   const img = new Image();
 //   img.src = url;
