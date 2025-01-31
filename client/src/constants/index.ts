@@ -45,5 +45,5 @@ export const navlinks = [
   },
 ];
 export const store = configureStore({
-  reducer: { wallet: walletAddressReducer, campaignsReducer },
+  reducer: { wallet: walletAddressReducer, campaigns: campaignsReducer },
 });

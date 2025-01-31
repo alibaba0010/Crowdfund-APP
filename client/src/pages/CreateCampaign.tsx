@@ -9,6 +9,8 @@ import { wagmiContractConfig } from "../utils/contract";
 import { useWaitForTransactionReceipt } from "wagmi";
 import { type ChangeEvent, DragEvent, useEffect, useState } from "react";
 import { uploadToPinata } from "../utils";
+import { refreshCampaigns } from "../actions/campaigns";
+import { useDispatch } from "react-redux";
 
 const validateDate = (date: Date) => {
   const today = new Date();
@@ -33,7 +35,6 @@ const formSchema = z.object({
       validateDate,
       "Deadline must be in the future (tomorrow or later)."
     ),
-  image: z.string(),
 });
 
 type CreateCampaignSchema = z.infer<typeof formSchema>;
@@ -42,6 +43,7 @@ const CreateCampaign = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [drag, setDrag] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const {
     data: hash,
     isPending,
@@ -51,7 +53,6 @@ const CreateCampaign = () => {
   const {
     register,
     handleSubmit,
-
     formState: { errors, isSubmitting },
     reset,
   } = useForm<CreateCampaignSchema>({
@@ -88,10 +89,9 @@ const CreateCampaign = () => {
   const uploadImage = async () => {
     if (selectedImage) {
       const { IpfsHash } = await uploadToPinata(selectedImage);
-      console.log("Image", IpfsHash);
       return `https://ipfs.io/ipfs/${IpfsHash}`;
     } else {
-      return `https://ipfs.io/ipfs/`;
+      return `https://ipfs.io/ipfs/QmZZaxkQd2LCWssUmzFygFycSDGW2Zhuw4fP4iX7xWogUm`;
     }
   };
   const onSubmitHandler = async (data: CreateCampaignSchema) => {
@@ -120,9 +120,11 @@ const CreateCampaign = () => {
     if (isConfirmed) {
       reset();
       setSelectedImage(null);
+      dispatch(refreshCampaigns());
+
       navigate("/");
     }
-  }, [isConfirmed, navigate, reset]); // Added navigate and reset to dependencies
+  }, [isConfirmed]);
 
   return (
     <div className="bg-[#1c1c24] flex justify-center items-center flex-col rounded-[10px] sm:p-10 p-4">

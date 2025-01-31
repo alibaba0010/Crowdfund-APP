@@ -5,10 +5,14 @@ import { useReadContract } from "wagmi";
 import { wagmiContractConfig } from "../utils/contract";
 import { toggleWalletConnect } from "../actions/wallet";
 import { Campaign } from "../components/DisplayCampaigns";
+import { refreshCampaigns } from "../actions/campaigns";
 
 const Home = () => {
   const address = useSelector((state: any) => state.wallet.addresses?.[0]);
   const dispatch = useDispatch();
+  const refreshCampaign = useSelector(
+    (state: any) => state.campaigns.isChanged
+  );
   const { data, isLoading, refetch } = useReadContract({
     ...wagmiContractConfig,
     functionName: "getAvailableCampaigns",
@@ -20,7 +24,11 @@ const Home = () => {
     if (address) {
       refetch();
     }
-  }, [address, refetch]);
+    if (refreshCampaign) {
+      refetch();
+      dispatch(refreshCampaigns());
+    }
+  }, [address, refreshCampaign]);
   return (
     <>
       {address ? (
