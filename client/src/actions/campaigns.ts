@@ -16,16 +16,7 @@ const campaignsSlice = createSlice({
     refreshCampaigns(state) {
       state.isChanged = !state.isChanged;
     },
-    setAvailableCampaigns(state, action) {
-      console.log("Available: ", action.payload);
-      // state.availableCampaigns = {
-      //   ...state.availableCampaigns,
-      //   ...action.payload,
-      // };
-      Object.assign(state.availableCampaigns, action.payload);
-    },
   },
 });
-export const { refreshCampaigns, setAvailableCampaigns } =
-  campaignsSlice.actions;
+export const { refreshCampaigns } = campaignsSlice.actions;
 export default campaignsSlice.reducer;
