@@ -46,4 +46,10 @@ export const navlinks = [
 ];
 export const store = configureStore({
   reducer: { wallet: walletAddressReducer, campaigns: campaignsReducer },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: ["campaigns/setAvailableCampaigns"],
+      },
+    }),
 });

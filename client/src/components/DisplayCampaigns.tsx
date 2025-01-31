@@ -3,15 +3,19 @@ import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { loader } from "../assets";
 import CampaignCard from "./CampaignCard";
+import { useSelector } from "react-redux";
 
 export interface Campaign {
-  owner: string;
+  creator: string;
+  name: string;
   title: string;
   description: string;
-  target: bigint;
+  targetAmount: bigint;
   deadline: bigint;
-  amountCollected: bigint;
+  totalDonated: bigint;
+  donators: string[];
   image: string;
+  createdAt: bigint;
 }
 
 interface DisplayCampaignsProps {
@@ -26,7 +30,10 @@ const DisplayCampaigns: React.FC<DisplayCampaignsProps> = ({
   campaigns,
 }) => {
   const navigate = useNavigate();
-
+  const availableCampaigns = useSelector(
+    (state: any) => state.campaigns.availableCampaigns
+  );
+  console.log(availableCampaigns);
   const handleNavigate = (campaign: Campaign) => {
     navigate(`/campaign-details/${campaign.title}`, { state: campaign });
   };
