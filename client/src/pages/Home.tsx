@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { DisplayCampaigns } from "../components";
 import { useReadContract } from "wagmi";
 import { wagmiContractConfig } from "../utils/contract";
-import { toggleWalletConnect } from "../actions/wallet";
 import { Campaign } from "../components/DisplayCampaigns";
 import { refreshCampaigns, setAvailableCampaigns } from "../actions/campaigns";
 
@@ -29,13 +28,11 @@ const Home = () => {
       dispatch(refreshCampaigns());
     }
   }, [address, refreshCampaign]);
-
   useEffect(() => {
     if (data) {
       dispatch(
         setAvailableCampaigns({
           title: "Available Campaigns",
-          isLoading,
           data: data as Campaign[],
         })
       );
@@ -44,21 +41,7 @@ const Home = () => {
 
   return (
     <>
-      {address ? (
-        <DisplayCampaigns />
-      ) : (
-        <div className="p-4 text-center">
-          <p className="mb-4 text-lg text-red-500">
-            Please connect your wallet to view campaigns
-          </p>
-          <button
-            onClick={() => dispatch(toggleWalletConnect())}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Connect Wallet
-          </button>
-        </div>
-      )}
+      <DisplayCampaigns isLoading={isLoading} />
     </>
   );
 };

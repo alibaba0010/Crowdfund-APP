@@ -21,7 +21,7 @@ export const navlinks = [
     link: "/create-campaign",
   },
   {
-    name: "Payment",
+    name: "Donate",
     imgUrl: payment,
     link: "/",
     disabled: true,

@@ -29,12 +29,12 @@ type CampaignData = {
   image: string;
   pId: number;
 };
-const DisplayCampaigns = () => {
+const DisplayCampaigns = ({ isLoading }: { isLoading: boolean }) => {
   const navigate = useNavigate();
   const availableCampaigns = useSelector(
     (state: any) => state.campaigns.availableCampaigns
   );
-  const { title, isLoading, campaigns } = availableCampaigns;
+  const { title, campaigns } = availableCampaigns;
   const sortedCampaigns = useMemo(() => {
     return [...campaigns].sort((a, b) => b.pId - a.pId);
   }, [campaigns]);

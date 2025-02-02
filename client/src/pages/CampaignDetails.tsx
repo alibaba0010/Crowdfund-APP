@@ -1,21 +1,46 @@
-import React, { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+"use client";
 
-import { CountBox, CustomButton, Loader } from "../components";
-import { calculateBarPercentage, daysLeft } from "../utils";
-import { thirdweb } from "../assets";
+import { useEffect, useState } from "react";
+import {
+  FiClock,
+  FiUsers,
+  FiDollarSign,
+  FiUser,
+  FiBookOpen,
+  FiHeart,
+} from "react-icons/fi";
 import { useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useWaitForTransactionReceipt } from "wagmi";
 import { useWriteContract } from "wagmi";
+import { CountBox, CustomButton, Loader } from "../components";
 import { wagmiContractConfig } from "../utils/contract";
+import { parseEther } from "viem";
+import { shortenAddress } from "../utils";
 
 const CampaignDetails = () => {
+  const [amount, setAmount] = useState("");
   const { state } = useLocation();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  const [amount, setAmount] = useState("");
   const [error, setError] = useState("");
   const address = useSelector((state: any) => state.wallet.addresses?.[0]);
+
+  useEffect(() => {
+    if (!state) {
+      navigate("/", { replace: true });
+    }
+  }, [state, navigate]);
+  if (!state) {
+    return null;
+  }
+  useEffect(() => {
+    setError("");
+    if (isConfirmed) {
+      navigate("/");
+      setIsLoading(false);
+    }
+  }, [amount]);
   const {
     deadline,
     donators,
@@ -27,8 +52,10 @@ const CampaignDetails = () => {
     creator,
     pId,
   } = state;
+  const creatorAddress = shortenAddress(creator);
   //   const [donators, setDonators] = useState([]);
   const target = Number(targetAmount);
+  console.log(`Creator ${creator} with address ${address}`);
   const {
     data: hash,
     isPending,
@@ -48,11 +75,15 @@ const CampaignDetails = () => {
   //     if(contract) fetchDonators();
   //   }, [contract, address])
   useEffect(() => {
-    setError("");
-  }, [amount]);
+    console.log("steasddff: ", state);
 
+    setError("");
+    if (isConfirmed) {
+      navigate("/");
+      setIsLoading(false);
+    }
+  }, [amount]);
   const handleDonate = async () => {
-    console.log(amount);
     const donate = Number(amount);
     if (isNaN(donate) || donate <= 0 || donate > target) {
       setError("Invalid amount or amount exceeds the target.");
@@ -62,160 +93,162 @@ const CampaignDetails = () => {
       setError("You can't donate to your own campaign.");
       return;
     }
-    writeContract({
-      ...wagmiContractConfig,
-      functionName: "donate",
-      args: [pId, donate],
-    });
-    setIsLoading(true);
+    try {
+      writeContract({
+        ...wagmiContractConfig,
+        functionName: "donate",
+        args: [pId],
+        value: parseEther(amount),
+      });
+      setIsLoading(true);
+    } catch (error) {
+      console.log(error);
+    }
 
     //  await donate(state.pId, amount);
-
-    navigate("/");
-    setIsLoading(false);
   };
 
   return (
-    <div>
+    <>
       {isLoading && <Loader />}
-
-      <div className="w-full flex md:flex-row flex-col mt-10 gap-[30px]">
-        <div className="flex-1 flex-col">
+      <div className="min-h-screen bg-[#1a1b1f] text-white p-6">
+        <div className="max-w-6xl mx-auto space-y-8">
+          {/* Main Image */}
           <img
             src={image}
-            alt="campaign"
-            className="w-full h-[410px] object-cover rounded-xl"
+            alt="CrowdFund Me"
+            className="h-[400px] object-contain w-full rounded-xl"
           />
-          <div className="relative w-full h-[5px] bg-[#3a3a43] mt-2">
-            <div
-              className="absolute h-full bg-[#4acd8d]"
-              style={{
-                width: `${calculateBarPercentage(target, totalDonated)}%`,
-                maxWidth: "100%",
-              }}
-            ></div>
-          </div>
-        </div>
 
-        <div className="flex md:w-[150px] w-full flex-wrap justify-between gap-[30px]">
-          <CountBox title="Days Left" value={deadline} />
-          <CountBox title={`Raised of ${target}`} value={totalDonated} />
-          <CountBox title="Total Backers" value={donators.length} />
-        </div>
-      </div>
-
-      <div className="mt-[60px] flex lg:flex-row flex-col gap-5">
-        <div className="flex-[2] flex flex-col gap-[40px]">
-          <div>
-            <h4 className="font-epilogue font-semibold text-[18px] text-white uppercase">
-              Creator
-            </h4>
-
-            <div className="mt-[20px] flex flex-row items-center flex-wrap gap-[14px]">
-              <div className="w-[52px] h-[52px] flex items-center justify-center rounded-full bg-[#2c2f32] cursor-pointer">
-                <img
-                  src={thirdweb}
-                  alt="user"
-                  className="w-[60%] h-[60%] object-contain"
-                />
+          {/* Stats Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="bg-[#21222d] rounded-lg p-4">
+              <p className="text-gray-400 text-sm">Days Left</p>
+              <div className="flex items-center gap-2 mt-1">
+                <FiClock className="text-gray-400" />
+                <span className="text-2xl font-bold">{deadline}</span>
               </div>
-              <div>
-                <h4 className="font-epilogue font-semibold text-[14px] text-white break-all">
-                  {creator}
-                </h4>
-                <p className="mt-[4px] font-epilogue font-normal text-[12px] text-[#808191]">
-                  {name}
-                </p>
+            </div>
+
+            <div className="bg-[#21222d] rounded-lg p-4">
+              <p className="text-gray-400 text-sm">{`Raised of ${target}`}</p>
+              <div className="flex items-center gap-2 mt-1">
+                <FiDollarSign className="text-gray-400" />
+                <span className="text-2xl font-bold">{totalDonated}</span>
+              </div>
+            </div>
+
+            <div className="bg-[#21222d] rounded-lg p-4">
+              <p className="text-gray-400 text-sm">Total Backers</p>
+              <div className="flex items-center gap-2 mt-1">
+                <FiUsers className="text-gray-400" />
+                <span className="text-2xl font-bold">{donators.length}</span>
               </div>
             </div>
           </div>
 
-          <div>
-            <h4 className="font-epilogue font-semibold text-[18px] text-white uppercase">
-              Story
-            </h4>
-
-            <div className="mt-[20px]">
-              <p className="font-epilogue font-normal text-[16px] text-[#808191] leading-[26px] text-justify">
-                {description}
-              </p>
-            </div>
-          </div>
-
-          <div>
-            <h4 className="font-epilogue font-semibold text-[18px] text-white uppercase">
-              Donators
-            </h4>
-
-            <div className="mt-[20px] flex flex-col gap-4">
-              {donators.length > 0 ? (
-                donators.map((item: any, index: any) => (
-                  <div
-                    key={`${item.donator}-${index}`}
-                    className="flex justify-between items-center gap-4"
-                  >
-                    <p className="font-epilogue font-normal text-[16px] text-[#b2b3bd] leading-[26px] break-ll">
-                      {index + 1}. {item.donator}
-                    </p>
-                    <p className="font-epilogue font-normal text-[16px] text-[#808191] leading-[26px] break-ll">
-                      {item.donation}
+          {/* Main Content Grid */}
+          <div className="grid md:grid-cols-3 gap-6">
+            {/* Left Column */}
+            <div className="md:col-span-2 space-y-6">
+              {/* Creator Section */}
+              <div className="bg-[#21222d] rounded-lg p-6">
+                <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                  <FiUser />
+                  CREATOR
+                </h2>
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-[#2c2f32] rounded-full flex items-center justify-center">
+                    <FiUser className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-400">{name}</p>
+                    <p className="text-xs text-gray-500 break-all">
+                      {creatorAddress}
                     </p>
                   </div>
-                ))
-              ) : (
-                <p className="font-epilogue font-normal text-[16px] text-[#808191] leading-[26px] text-justify">
-                  No donators yet. Be the first one!
-                </p>
-              )}
-            </div>
-          </div>
-        </div>
-
-        <div className="flex-1">
-          <h4 className="font-epilogue font-semibold text-[18px] text-white uppercase">
-            Fund
-          </h4>
-
-          <div className="mt-[20px] flex flex-col p-4 bg-[#1c1c24] rounded-[10px]">
-            <p className="font-epilogue fount-medium text-[20px] leading-[30px] text-center text-[#808191]">
-              Fund the campaign
-            </p>
-            <div className="mt-[30px]">
-              <input
-                type="number"
-                placeholder="ETH 0.1"
-                step="0.0001"
-                className="w-full py-[10px] sm:px-[20px] px-[15px] outline-none border-[1px] border-[#3a3a43] bg-transparent font-epilogue text-white text-[18px] leading-[30px] placeholder:text-[#4b5264] rounded-[10px]"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-              />
-              {error && (
-                <p className="mt-[10px] font-epilogue font-normal leading-[22px] text-red-500">
-                  {error}
-                </p>
-              )}
-
-              <div className="my-[20px] p-4 bg-[#13131a] rounded-[10px]">
-                <h4 className="font-epilogue font-semibold text-[14px] leading-[22px] text-white">
-                  Believe in the vision, invest in the future.
-                </h4>
-                <p className="mt-[20px] font-epilogue font-normal leading-[22px] text-[#808191]">
-                  Champion dreams that resonate with your soul
-                </p>
+                </div>
               </div>
 
-              <CustomButton
-                btnType="button"
-                title="Fund Campaign"
-                styles="w-full bg-[#8c6dfd]"
-                handleClick={handleDonate}
-              />
+              {/* Story Section */}
+              <div className="bg-[#21222d] rounded-lg p-6">
+                <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                  <FiBookOpen />
+                  STORY
+                </h2>
+                <p className="text-gray-400 text-sm">{description}</p>
+              </div>
+
+              {/* Donators Section */}
+              <div className="bg-[#21222d] rounded-lg p-6">
+                <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                  <FiHeart />
+                  DONATORS
+                </h2>
+                <div className="mt-[20px] flex flex-col gap-4">
+                  {donators.length > 0 ? (
+                    donators.map((item: any, index: any) => (
+                      <div
+                        key={`${item.donator}-${index}`}
+                        className="flex justify-between items-center gap-4"
+                      >
+                        <p className="font-epilogue font-normal text-[16px] text-[#b2b3bd] leading-[26px] break-ll">
+                          {index + 1}. {item.donator}
+                        </p>
+                        <p className="font-epilogue font-normal text-[16px] text-[#808191] leading-[26px] break-ll">
+                          {item.donation}
+                        </p>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="font-epilogue font-normal text-[16px] text-[#808191] leading-[26px] text-justify">
+                      No donators yet. Be the first one!
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column - Fund Section */}
+            <div className="bg-[#21222d] rounded-lg p-6">
+              <h2 className="text-lg font-semibold mb-4">
+                Donate to the campaign
+              </h2>
+              <div className="space-y-4">
+                <input
+                  type="number"
+                  placeholder="ETH 0.1"
+                  step="0.0001"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  className="w-full px-4 py-3 bg-[#1a1b1f] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                />
+                {error && (
+                  <p className="mt-[10px] font-epilogue font-normal leading-[22px] text-red-500">
+                    {error}
+                  </p>
+                )}
+                <div className="bg-[#1a1b1f] p-4 rounded-lg">
+                  <h4 className="font-semibold">
+                    Believe in the vision, invest in the future.
+                  </h4>
+                  <p className="text-sm text-gray-400 mt-2">
+                    Champion dreams that resonate with your soul
+                  </p>
+                </div>
+
+                <CustomButton
+                  btnType="button"
+                  title="Fund Campaign"
+                  styles="w-full bg-[#8c6dfd]"
+                  handleClick={handleDonate}
+                />
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
-
 export default CampaignDetails;

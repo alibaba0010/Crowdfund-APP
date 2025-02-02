@@ -6,8 +6,7 @@ import { daysLeft } from "../utils";
 const initialState = {
   isChanged: false,
   availableCampaigns: {
-    title: "",
-    isLoading: false,
+    title: "Available Campaigns",
     campaigns: [],
   },
 };
@@ -37,7 +36,6 @@ const campaignsSlice = createSlice({
       );
       state.availableCampaigns = {
         title: action.payload.title,
-        isLoading: action.payload.isLoading,
         campaigns: parsedCampaings,
       };
     },
