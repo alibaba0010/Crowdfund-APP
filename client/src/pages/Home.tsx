@@ -20,9 +20,6 @@ const Home = () => {
     },
   });
   useEffect(() => {
-    if (address) {
-      refetch();
-    }
     if (refreshCampaign) {
       refetch();
       dispatch(refreshCampaigns());

@@ -49,7 +49,10 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredActions: ["campaigns/setAvailableCampaigns"],
+        ignoredActions: [
+          "campaigns/setAvailableCampaigns",
+          "campaigns/getCampaignById",
+        ],
       },
     }),
 });

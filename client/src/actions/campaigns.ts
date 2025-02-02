@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { Campaign } from "../components/DisplayCampaigns";
 import { formatEther } from "viem";
 import { daysLeft } from "../utils";
+import { v4 as uuidv4 } from "uuid";
 
 const initialState = {
   isChanged: false,
@@ -9,6 +10,7 @@ const initialState = {
     title: "Available Campaigns",
     campaigns: [],
   },
+  campaignDetails: {},
 };
 
 const campaignsSlice = createSlice({
@@ -31,7 +33,8 @@ const campaignsSlice = createSlice({
           image: campaign.image,
           // createdAt: campaign.createdAt,
           donators: campaign.donators,
-          pId: i,
+          id: i,
+          pId: uuidv4(),
         })
       );
       state.availableCampaigns = {
@@ -39,8 +42,25 @@ const campaignsSlice = createSlice({
         campaigns: parsedCampaings,
       };
     },
+    getCampaignById(state, action) {
+      const { campaign } = action.payload;
+      console.log(campaign);
+      state.campaignDetails = {
+        creator: campaign.creator,
+        name: campaign.name,
+        title: campaign.title,
+        description: campaign.description,
+        targetAmount: formatEther(campaign.targetAmount),
+        deadline: daysLeft(campaign.deadline),
+        totalDonated: Number(formatEther(campaign.totalDonated)),
+        image: campaign.image,
+        // createdAt: campaign.createdAt,
+        donators: campaign.donators,
+        pId: campaign.pId,
+      };
+    },
   },
 });
-export const { refreshCampaigns, setAvailableCampaigns } =
+export const { refreshCampaigns, setAvailableCampaigns, getCampaignById } =
   campaignsSlice.actions;
 export default campaignsSlice.reducer;

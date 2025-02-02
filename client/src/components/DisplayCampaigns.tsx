@@ -27,6 +27,7 @@ type CampaignData = {
   totalDonated: number;
   donators: string[];
   image: string;
+  id: number;
   pId: number;
 };
 const DisplayCampaigns = ({ isLoading }: { isLoading: boolean }) => {
@@ -39,14 +40,9 @@ const DisplayCampaigns = ({ isLoading }: { isLoading: boolean }) => {
     return [...campaigns].sort((a, b) => b.pId - a.pId);
   }, [campaigns]);
   const handleNavigate = (campaign: CampaignData) => {
-    const id = encryptId(campaign.pId);
-    // console.log("Encrypt: " + encrypt);
-    // if (encrypt) {
-    //   const title = decryptId(encrypt);
-    //   console.log("Title: " + title);
-    // }
+    const { id, pId } = campaign;
 
-    navigate(`/campaign-details/${campaign.pId}`, { state: campaign });
+    navigate(`/campaign-details/${pId}/${id}`, { state: campaign });
   };
 
   return (
