@@ -27,7 +27,7 @@ const campaignsSlice = createSlice({
           description: campaign.description,
           targetAmount: formatEther(campaign.targetAmount),
           deadline: daysLeft(campaign.deadline),
-          totalDonated: Number(campaign.totalDonated),
+          totalDonated: Number(formatEther(campaign.totalDonated)),
           image: campaign.image,
           // createdAt: campaign.createdAt,
           donators: campaign.donators,

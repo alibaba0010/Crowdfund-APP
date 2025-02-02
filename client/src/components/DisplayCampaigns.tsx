@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
-import { v4 as uuidv4 } from "uuid";
 import { loader } from "../assets";
 import CampaignCard from "./CampaignCard";
 import { useSelector } from "react-redux";
 import { useMemo } from "react";
+import { decryptId, encryptId } from "../utils";
 
 export interface Campaign {
   creator: string;
@@ -38,9 +38,15 @@ const DisplayCampaigns = ({ isLoading }: { isLoading: boolean }) => {
   const sortedCampaigns = useMemo(() => {
     return [...campaigns].sort((a, b) => b.pId - a.pId);
   }, [campaigns]);
-
   const handleNavigate = (campaign: CampaignData) => {
-    navigate(`/campaign-details/${campaign.title}`, { state: campaign });
+    const id = encryptId(campaign.pId);
+    // console.log("Encrypt: " + encrypt);
+    // if (encrypt) {
+    //   const title = decryptId(encrypt);
+    //   console.log("Title: " + title);
+    // }
+
+    navigate(`/campaign-details/${campaign.pId}`, { state: campaign });
   };
 
   return (
@@ -68,7 +74,7 @@ const DisplayCampaigns = ({ isLoading }: { isLoading: boolean }) => {
           campaigns.length > 0 &&
           sortedCampaigns.map((campaign: CampaignData) => (
             <CampaignCard
-              key={uuidv4()}
+              key={campaign.pId}
               {...campaign}
               handleClick={() => handleNavigate(campaign)}
             />

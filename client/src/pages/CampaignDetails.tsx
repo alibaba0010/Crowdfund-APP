@@ -10,7 +10,7 @@ import {
   FiHeart,
 } from "react-icons/fi";
 import { useSelector } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useWaitForTransactionReceipt } from "wagmi";
 import { useWriteContract } from "wagmi";
 import { CountBox, CustomButton, Loader } from "../components";
@@ -25,7 +25,8 @@ const CampaignDetails = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const address = useSelector((state: any) => state.wallet.addresses?.[0]);
-
+  const { id } = useParams();
+  console.log("Id: " + id);
   useEffect(() => {
     if (!state) {
       navigate("/", { replace: true });
@@ -55,7 +56,6 @@ const CampaignDetails = () => {
   const creatorAddress = shortenAddress(creator);
   //   const [donators, setDonators] = useState([]);
   const target = Number(targetAmount);
-  console.log(`Creator ${creator} with address ${address}`);
   const {
     data: hash,
     isPending,
@@ -75,8 +75,6 @@ const CampaignDetails = () => {
   //     if(contract) fetchDonators();
   //   }, [contract, address])
   useEffect(() => {
-    console.log("steasddff: ", state);
-
     setError("");
     if (isConfirmed) {
       navigate("/");
@@ -242,6 +240,7 @@ const CampaignDetails = () => {
                   title="Fund Campaign"
                   styles="w-full bg-[#8c6dfd]"
                   handleClick={handleDonate}
+                  disabled={isPending}
                 />
               </div>
             </div>

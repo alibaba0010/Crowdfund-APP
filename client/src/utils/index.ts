@@ -1,4 +1,5 @@
 import abi from "./Crowdfund.json";
+import CryptoJS from "crypto-js";
 import axios from "axios";
 export const contractABI = abi.abi;
 export const contractAddress = "0xd40B7753C20397330BB63D7Dd2140Ada1CDC5f33";
@@ -8,6 +9,20 @@ export const calculateBarPercentage = (goal: number, raisedAmount: number) => {
   const percentage = Math.round((raisedAmount * 100) / goal);
 
   return percentage;
+};
+// src/utils/cryptoUtils.js
+
+const SECRET_KEY = import.meta.env.VITE_NC_SEC_KEY; // Replace with a strong secret key
+// Encrypt the campaign ID
+export const encryptId = (id: number) => {
+  console.log("Id: " + id);
+  if (id) return CryptoJS.AES.encrypt(id.toString(), SECRET_KEY).toString();
+};
+
+// Decrypt the campaign ID
+export const decryptId = (encryptedId: string) => {
+  const bytes = CryptoJS.AES.decrypt(encryptedId, SECRET_KEY);
+  return bytes.toString(CryptoJS.enc.Utf8);
 };
 // export const checkIfImage = (url, callback) => {
 //   const img = new Image();
