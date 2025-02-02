@@ -1,5 +1,4 @@
 import abi from "./Crowdfund.json";
-import { Buffer } from "buffer";
 import axios from "axios";
 export const contractABI = abi.abi;
 export const contractAddress = "0xd40B7753C20397330BB63D7Dd2140Ada1CDC5f33";
@@ -26,14 +25,7 @@ export const calculateBarPercentage = (goal: number, raisedAmount: number) => {
 //   img.onerror = () => callback(false);
 // };
 // src/utils/base64Utils.js
-export const encryptId = (id: number) => {
-  console.log("id: " + id);
-  if (id) return Buffer.from(id.toString()).toString("base64");
-};
 
-export const decryptId = (encodedId: string) => {
-  return Buffer.from(encodedId, "base64").toString("utf8");
-};
 export const activeChain = "sepolia";
 export const clientId = import.meta.env.VITE_HELLO;
 export const daysLeft = (deadline: bigint) => {
@@ -68,7 +60,8 @@ export const daysLeft = (deadline: bigint) => {
 //   return remainingDays.toString();
 // };
 export const shortenAddress = (address: string) => {
-  return address.slice(0, 6) + "..." + address.slice(-4);
+  console.log("Address: ", address);
+  if (address) return address.slice(0, 6) + "..." + address.slice(-4);
 };
 
 interface UploadToPinataResponse {

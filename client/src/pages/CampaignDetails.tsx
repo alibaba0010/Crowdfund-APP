@@ -10,50 +10,31 @@ import {
   FiHeart,
 } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useWaitForTransactionReceipt } from "wagmi";
 import { useWriteContract } from "wagmi";
 import { CustomButton, Loader } from "../components";
 import { wagmiContractConfig } from "../utils/contract";
 import { parseEther } from "viem";
-import { decryptId, shortenAddress } from "../utils";
-import { useReadContract } from "wagmi";
+import { shortenAddress } from "../utils";
 import { loader } from "../assets";
-import { getCampaignById } from "../actions/campaigns";
 
-const CampaignDetails = () => {
+const CampaignDetails = ({ isLoading }: { isLoading: boolean }) => {
   const [amount, setAmount] = useState("");
   const dispatch = useDispatch();
-  const { state } = useLocation();
+
   const navigate = useNavigate();
   const [error, setError] = useState("");
-  const address = useSelector((state: any) => state.wallet.addresses?.[0]);
-  const { id } = useParams();
   const campaign = useSelector((state: any) => state.campaigns.campaignDetails);
-  console.log("Campaign: " + campaign);
-  const campaignId = id ? decryptId(id) : "";
-  useEffect(() => {
-    if (!state) {
-      navigate("/", { replace: true });
-    }
-  }, [state, navigate]);
-  if (!state) {
+  console.log("Campaign: " + campaign.creator);
+  useEffect(() => {}, [campaign, navigate]);
+  if (!campaign) {
     return null;
   }
-  const { data, isLoading, refetch } = useReadContract({
-    ...wagmiContractConfig,
-    functionName: "getCampaignById",
-    args: [campaignId],
-    query: {
-      enabled: !!address,
-    },
-  });
+
   useEffect(() => {
     setError("");
-    if (data) {
-      dispatch(getCampaignById({ campaign: data }));
-    }
-  }, [amount, data]);
+  }, [amount]);
   const {
     deadline,
     donators,
@@ -65,7 +46,7 @@ const CampaignDetails = () => {
     creator,
     pId,
   } = campaign;
-  const creatorAddress = shortenAddress(creator);
+  const creatorAddress = shortenAddress(campaign.creator);
   //   const [donators, setDonators] = useState([]);
   const target = Number(targetAmount);
   const {

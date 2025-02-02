@@ -3,7 +3,6 @@ import { loader } from "../assets";
 import CampaignCard from "./CampaignCard";
 import { useSelector } from "react-redux";
 import { useMemo } from "react";
-import { decryptId, encryptId } from "../utils";
 
 export interface Campaign {
   creator: string;
@@ -37,7 +36,7 @@ const DisplayCampaigns = ({ isLoading }: { isLoading: boolean }) => {
   );
   const { title, campaigns } = availableCampaigns;
   const sortedCampaigns = useMemo(() => {
-    return [...campaigns].sort((a, b) => b.pId - a.pId);
+    return [...campaigns].sort((a, b) => b.id - a.id);
   }, [campaigns]);
   const handleNavigate = (campaign: CampaignData) => {
     const { id, pId } = campaign;
