@@ -24,19 +24,26 @@ const Icon = ({
   <div
     className={`w-[48px] h-[48px] rounded-[10px] ${
       isActive && isActive === name && "bg-[#2c2f32]"
-    } flex justify-center items-center ${
-      !disabled && "cursor-pointer"
-    } ${styles}`}
+    } flex justify-center items-center ${!disabled && "cursor-pointer"} ${styles} group relative`}
     onClick={handleClick}
   >
     {!isActive ? (
-      <img src={imgUrl} alt="fund_logo" className="w-1/2 h-1/2" />
+      <img
+        src={imgUrl || "/placeholder.svg"}
+        alt="fund_logo"
+        className="w-1/2 h-1/2"
+      />
     ) : (
       <img
-        src={imgUrl}
+        src={imgUrl || "/placeholder.svg"}
         alt="fund_logo"
         className={`w-1/2 h-1/2 ${isActive !== name && "grayscale"}`}
       />
+    )}
+    {name && (
+      <span className="absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+        {name}
+      </span>
     )}
   </div>
 );
@@ -47,7 +54,11 @@ const Sidebar = () => {
   return (
     <div className="flex justify-between items-center flex-col sticky top-5 h-[93vh]">
       <Link to="/">
-        <Icon styles="w-[52px] h-[52px] bg-[#2c2f32]" imgUrl={logo} />
+        <Icon
+          styles="w-[52px] h-[52px] bg-[#2c2f32]"
+          imgUrl={logo}
+          name="Home"
+        />
       </Link>
 
       <div className="flex-1 flex flex-col justify-between items-center bg-[#1c1c24] rounded-[20px] w-[76px] py-4 mt-12">
@@ -67,7 +78,11 @@ const Sidebar = () => {
           ))}
         </div>
 
-        <Icon styles="bg-[#1c1c24] shadow-secondary" imgUrl={sun} />
+        <Icon
+          styles="bg-[#1c1c24] shadow-secondary"
+          imgUrl={sun}
+          name="Theme"
+        />
       </div>
     </div>
   );

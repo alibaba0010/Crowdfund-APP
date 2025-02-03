@@ -10,7 +10,6 @@ import {
   FiHeart,
 } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { useWaitForTransactionReceipt } from "wagmi";
 import { useWriteContract } from "wagmi";
 import { CustomButton, Loader } from "../components";
@@ -28,12 +27,8 @@ const CampaignDetails = ({
   campaign: CampaignData;
 }) => {
   const [amount, setAmount] = useState("");
-  const dispatch = useDispatch();
-
-  const navigate = useNavigate();
+  const address = useSelector((state: any) => state.wallet.addresses?.[0]);
   const [error, setError] = useState("");
-  console.log(campaign);
-  useEffect(() => {}, [campaign, navigate]);
 
   useEffect(() => {
     setError("");
@@ -47,10 +42,10 @@ const CampaignDetails = ({
     image,
     description,
     creator,
-    pId,
+    // pId,
+    id,
   } = campaign;
   const creatorAddress = shortenAddress(campaign.creator);
-  //   const [donators, setDonators] = useState([]);
   const target = Number(targetAmount);
   const {
     data: hash,
@@ -77,7 +72,7 @@ const CampaignDetails = ({
       writeContract({
         ...wagmiContractConfig,
         functionName: "donate",
-        args: [pId],
+        args: [id],
         value: parseEther(amount),
       });
     } catch (error) {
@@ -229,6 +224,32 @@ const CampaignDetails = ({
                     handleClick={handleDonate}
                     disabled={isPending}
                   />
+                  {writeError && (
+                    <span className="text-red-500 text-sm mt-1">
+                      Error: {writeError.message}
+                    </span>
+                  )}
+
+                  {isConfirming && (
+                    <Loader
+                      text={
+                        <span className="text-yellow-500 text-sm mt-1">
+                          Waiting for transaction confirmation...
+                        </span>
+                      }
+                    />
+                  )}
+
+                  {isConfirmed && (
+                    <Loader
+                      text={
+                        <span className="text-green-500 text-sm mt-1">
+                          Transaction confirmed! Campaign created successfully.
+                        </span>
+                      }
+                      isChecker
+                    />
+                  )}
                 </div>
               </div>
             </div>

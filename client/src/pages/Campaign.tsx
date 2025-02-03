@@ -13,12 +13,13 @@ const Campaign = () => {
   const campaignId = id ? parseInt(id, 10) : undefined; // Convert to number
   const address = useSelector((state: any) => state.wallet.addresses?.[0]);
   const [campaign, setCampaign] = useState<CampaignData | null>(null);
+  console.log(campaignId);
   const { data, isLoading, error, refetch } = useReadContract({
     ...wagmiContractConfig,
     functionName: "getCampaignById",
     args: [campaignId],
     query: {
-      enabled: !!address && !!campaignId,
+      enabled: !!address,
     },
   });
   useEffect(() => {
