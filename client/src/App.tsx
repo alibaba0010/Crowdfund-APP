@@ -37,6 +37,7 @@ function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/create-campaign" element={<CreateCampaign />} />
             <Route path="/campaign-details/:pId/:id" element={<Campaign />} />
+            <Route path="/my-campaigns" element={<CreateCampaign />} />
           </Routes>
         ) : (
           <p className="text-center text-xl font-medium text-gray-300 bg-gray-800 rounded-lg p-6 shadow-lg mt-8">

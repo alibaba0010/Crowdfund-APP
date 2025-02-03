@@ -41,31 +41,3 @@ input::-webkit-inner-spin-button {
 .checker-pulse {
   animation: pulse 1.5s ease-in-out infinite;
 }
-/* @keyframes wiggle {
-  0%,
-  100% {
-    transform: rotate(0deg);
-  }
-  25% {
-    transform: rotate(-5deg);
-  }
-  75% {
-    transform: rotate(5deg);
-  }
-}
-
-.checker-wiggle {
-  animation: wiggle 0.5s ease-in-out infinite;
-} */
-/* @keyframes colorChange {
-  0% {
-    filter: hue-rotate(0deg);
-  }
-  100% {
-    filter: hue-rotate(360deg);
-  }
-}
-
-.checker-color-change {
-  animation: colorChange 3s linear infinite;
-} */

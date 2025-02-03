@@ -6,7 +6,6 @@ import {
   DropdownTrigger,
 } from "@nextui-org/react";
 import { useSelector } from "react-redux";
-import { CgProfile } from "react-icons/cg";
 import { logo } from "../assets";
 import { useState } from "react";
 
@@ -27,7 +26,16 @@ const ProfileDropDown = () => {
             />
           </DropdownTrigger>
           <DropdownMenu aria-label="Profile Actions" variant="flat">
-            <DropdownItem key="profile" className="h-14 gap-2"></DropdownItem>
+            <DropdownItem
+              key="profile"
+              textValue="wallet"
+              className="h-14 gap-2"
+            >
+              <p className="font-semibold">Wallet Address</p>
+              <p className="font-semibold">{address}</p>
+            </DropdownItem>
+            <DropdownItem key="settings">My Profile</DropdownItem>
+            <DropdownItem key="all_orders">All Orders</DropdownItem>
           </DropdownMenu>
         </Dropdown>
       )}

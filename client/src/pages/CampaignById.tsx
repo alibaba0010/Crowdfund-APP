@@ -8,7 +8,7 @@ import type { Campaign, CampaignData } from "../components/DisplayCampaigns";
 import { formatEther } from "viem";
 import { daysLeft } from "../utils";
 
-const Campaign = () => {
+const CampaignById = () => {
   const { id, pId } = useParams();
   const campaignId = id ? parseInt(id, 10) : undefined; // Convert to number
   const address = useSelector((state: any) => state.wallet.addresses?.[0]);
@@ -56,4 +56,4 @@ const Campaign = () => {
   );
 };
 
-export default Campaign;
+export default CampaignById;
