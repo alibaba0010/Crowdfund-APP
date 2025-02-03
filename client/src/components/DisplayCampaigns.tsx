@@ -16,7 +16,7 @@ export interface Campaign {
   image: string;
   createdAt: bigint;
 }
-type CampaignData = {
+export type CampaignData = {
   creator: string;
   name: string;
   title: string;

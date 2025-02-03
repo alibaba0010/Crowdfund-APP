@@ -21,7 +21,7 @@ const campaignsSlice = createSlice({
       state.isChanged = !state.isChanged;
     },
     setAvailableCampaigns(state, action) {
-      const parsedCampaings = action.payload.data.map(
+      const parsedCampaigns = action.payload.data.map(
         (campaign: Campaign, i: number) => ({
           creator: campaign.creator,
           name: campaign.name,
@@ -39,12 +39,13 @@ const campaignsSlice = createSlice({
       );
       state.availableCampaigns = {
         title: action.payload.title,
-        campaigns: parsedCampaings,
+        campaigns: parsedCampaigns,
       };
     },
     getCampaignById(state, action) {
       const { campaign } = action.payload;
-      console.log(campaign);
+      console.log("Data: " + campaign);
+
       state.campaignDetails = {
         creator: campaign.creator,
         name: campaign.name,
@@ -56,6 +57,7 @@ const campaignsSlice = createSlice({
         image: campaign.image,
         // createdAt: campaign.createdAt,
         donators: campaign.donators,
+        id: campaign.id,
         pId: campaign.pId,
       };
     },

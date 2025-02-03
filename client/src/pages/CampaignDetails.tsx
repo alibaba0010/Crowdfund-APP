@@ -18,19 +18,22 @@ import { wagmiContractConfig } from "../utils/contract";
 import { parseEther } from "viem";
 import { shortenAddress } from "../utils";
 import { loader } from "../assets";
+import { CampaignData } from "../components/DisplayCampaigns";
 
-const CampaignDetails = ({ isLoading }: { isLoading: boolean }) => {
+const CampaignDetails = ({
+  isLoading,
+  campaign,
+}: {
+  isLoading: boolean;
+  campaign: CampaignData;
+}) => {
   const [amount, setAmount] = useState("");
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
   const [error, setError] = useState("");
-  const campaign = useSelector((state: any) => state.campaigns.campaignDetails);
-  console.log("Campaign: " + campaign.creator);
+  console.log(campaign);
   useEffect(() => {}, [campaign, navigate]);
-  if (!campaign) {
-    return null;
-  }
 
   useEffect(() => {
     setError("");
