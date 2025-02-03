@@ -1,12 +1,18 @@
 import { useAccount } from "wagmi";
 import Navbar from "./components/Navbar";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setWalletAdress } from "./actions/wallet";
 import { Sidebar } from "./components";
-import { Campaign, CreateCampaign, Home, Profile } from "./pages";
+import {
+  CampaignById,
+  CreateCampaign,
+  CreatorCampaigns,
+  Home,
+  Profile,
+} from "./pages";
 
 function App() {
   const account = useAccount();
@@ -36,8 +42,12 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/create-campaign" element={<CreateCampaign />} />
-            <Route path="/campaign-details/:pId/:id" element={<Campaign />} />
-            <Route path="/my-campaigns" element={<CreateCampaign />} />
+            <Route
+              path="/campaign-details/:pId/:id"
+              element={<CampaignById />}
+            />
+            <Route path="/my-campaigns" element={<CreatorCampaigns />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         ) : (
           <p className="text-center text-xl font-medium text-gray-300 bg-gray-800 rounded-lg p-6 shadow-lg mt-8">
