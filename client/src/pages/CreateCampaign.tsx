@@ -27,7 +27,7 @@ const formSchema = z.object({
   description: z
     .string()
     .min(10, "Description must be at least 8 characters long!")
-    .max(100, "Description must be less than 100 characters"),
+    .max(250, "Description must be less than 100 characters"),
   targetAmount: z.coerce.number().min(0, "Amount must not be negative"),
   deadline: z.coerce
     .date({ message: "End Date is required!" })

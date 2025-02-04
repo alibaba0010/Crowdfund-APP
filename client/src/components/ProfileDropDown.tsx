@@ -5,13 +5,20 @@ import {
   DropdownMenu,
   DropdownTrigger,
 } from "@nextui-org/react";
+import { Typography } from "antd";
 import { useSelector } from "react-redux";
 import { logo } from "../assets";
-import { useState } from "react";
+import { useDisconnect } from "wagmi";
+import { Link } from "react-router-dom";
+
+const { Text } = Typography;
 
 const ProfileDropDown = () => {
-  const [open, setOpen] = useState(false);
-
+  const { disconnect } = useDisconnect();
+  const disconnectHandler = () => {
+    disconnect();
+    window.location.reload();
+  };
   const address = useSelector((state: any) => state.wallet.addresses?.[0]);
 
   return (
@@ -21,21 +28,47 @@ const ProfileDropDown = () => {
           <DropdownTrigger>
             <Avatar
               as="button"
-              className="w-[100%] h-[100%] object-contain transition-transform"
+              className="w-8 h-8 sm:w-10 sm:h-10 transition-transform hover:scale-105 bg-[#2c2f32] p-1.5"
               src={logo}
+              alt="Profile"
             />
           </DropdownTrigger>
-          <DropdownMenu aria-label="Profile Actions" variant="flat">
+          <DropdownMenu
+            aria-label="Profile Actions"
+            variant="flat"
+            className="bg-[#1c1c24] min-w-[200px] p-0 rounded-xl shadow-xl"
+          >
             <DropdownItem
               key="profile"
               textValue="wallet"
-              className="h-14 gap-2"
+              className="py-3 px-4 border-b border-gray-700"
             >
-              <p className="font-semibold">Wallet Address</p>
-              <p className="font-semibold">{address}</p>
+              <div className="flex flex-col gap-1">
+                <p className="text-sm text-gray-400">Wallet Address</p>
+                <Text style={{ padding: "12px", color: "#60a5fa" }} copyable>
+                  {address}
+                </Text>
+              </div>
             </DropdownItem>
-            <DropdownItem key="settings">My Profile</DropdownItem>
-            <DropdownItem key="all_orders">All Orders</DropdownItem>
+            <DropdownItem
+              key="settings"
+              className="py-3 px-4 hover:bg-[#2c2f32] text-white"
+              textValue="profile"
+            >
+              <Link to="/profile" className="text-sm text-white no-underline">
+                <span>My Profile</span>
+              </Link>
+            </DropdownItem>
+            <DropdownItem
+              key="logout"
+              className="py-3 px-4 hover:bg-[#2c2f32] text-white"
+              textValue="logout"
+              onPress={disconnectHandler}
+            >
+              <span className="text-sm text-white group-hover:text-red-500 group-active:text-red-700 transition-colors">
+                Log Out
+              </span>
+            </DropdownItem>
           </DropdownMenu>
         </Dropdown>
       )}

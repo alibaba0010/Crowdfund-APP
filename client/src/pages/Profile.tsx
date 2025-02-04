@@ -1,7 +1,20 @@
 import React from "react";
+import { useSelector } from "react-redux";
+import { useReadContract } from "wagmi";
+import { wagmiContractConfig } from "../utils/contract";
 
 const Profile = () => {
-  // const { status, error } = useConnect();
+  const address = useSelector((state: any) => state.wallet.addresses?.[0]);
+  const { data, isLoading, refetch } = useReadContract({
+    ...wagmiContractConfig,
+    functionName: "getCampaignsByCreator",
+    args: [address],
+
+    query: {
+      enabled: !!address,
+    },
+  });
+  console.log("Data: " + data);
   // const { disconnect } = useDisconnect();
   /* <div>
 <h2>Account</h2>
