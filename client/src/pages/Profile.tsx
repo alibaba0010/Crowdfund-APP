@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useReadContract } from "wagmi";
 import { wagmiContractConfig } from "../utils/contract";
-import { refreshCampaigns, setAvailableCampaigns } from "../actions/campaigns";
+import { refreshCampaigns, setCreatorCampaigns } from "../actions/campaigns";
 import DisplayCampaigns, { Campaign } from "../components/DisplayCampaigns";
 
 const Profile = () => {
@@ -30,7 +30,7 @@ const Profile = () => {
   useEffect(() => {
     if (data) {
       dispatch(
-        setAvailableCampaigns({
+        setCreatorCampaigns({
           data: data as Campaign[],
         })
       );
@@ -42,6 +42,7 @@ const Profile = () => {
       <DisplayCampaigns
         title="Campaigns created by you"
         isLoading={isLoading}
+        campaignType="creator"
       />
     </>
   );

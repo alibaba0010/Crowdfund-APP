@@ -9,6 +9,13 @@ const initialState = {
   availableCampaigns: {
     campaigns: [],
   },
+  pastCampaigns: {
+    campaigns: [],
+  },
+  creatorCampaigns: {
+    campaigns: [],
+  },
+
   campaignDetails: {},
 };
 
@@ -20,24 +27,25 @@ const campaignsSlice = createSlice({
       state.isChanged = !state.isChanged;
     },
     setAvailableCampaigns(state, action) {
-      const parsedCampaigns = action.payload.data.map(
-        (campaign: Campaign, i: number) => ({
-          creator: campaign.creator,
-          name: campaign.name,
-          title: campaign.title,
-          description: campaign.description,
-          targetAmount: formatEther(campaign.targetAmount),
-          deadline: daysLeft(campaign.deadline),
-          totalDonated: Number(formatEther(campaign.totalDonated)),
-          image: campaign.image,
-          // createdAt: campaign.createdAt,
-          donators: campaign.donators,
-          id: i,
-          pId: uuidv4(),
-        })
-      );
+      const campaigns = parseActionData(action.payload.data);
+
       state.availableCampaigns = {
-        campaigns: parsedCampaigns,
+        campaigns,
+      };
+    },
+    setPastCampaigns(state, action) {
+      const campaigns = parseActionData(action.payload.data);
+
+      state.pastCampaigns = {
+        campaigns,
+      };
+    },
+    setCreatorCampaigns(state, action) {
+      const campaigns = parseActionData(action.payload.data);
+      console.log("Campaigns: " + campaigns);
+
+      state.creatorCampaigns = {
+        campaigns,
       };
     },
     getCampaignById(state, action) {
@@ -60,6 +68,28 @@ const campaignsSlice = createSlice({
     },
   },
 });
-export const { refreshCampaigns, setAvailableCampaigns, getCampaignById } =
-  campaignsSlice.actions;
+const parseActionData = (campaigns: any) => {
+  const parsedCampaigns = campaigns.map((campaign: Campaign, i: number) => ({
+    creator: campaign.creator,
+    name: campaign.name,
+    title: campaign.title,
+    description: campaign.description,
+    targetAmount: formatEther(campaign.targetAmount),
+    deadline: daysLeft(campaign.deadline),
+    totalDonated: Number(formatEther(campaign.totalDonated)),
+    image: campaign.image,
+    // createdAt: campaign.createdAt,
+    donators: campaign.donators,
+    id: i,
+    pId: uuidv4(),
+  }));
+  return parsedCampaigns;
+};
+export const {
+  refreshCampaigns,
+  setAvailableCampaigns,
+  setPastCampaigns,
+  getCampaignById,
+  setCreatorCampaigns,
+} = campaignsSlice.actions;
 export default campaignsSlice.reducer;

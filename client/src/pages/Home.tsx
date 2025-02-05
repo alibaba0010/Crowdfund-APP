@@ -19,9 +19,21 @@ const Home = () => {
       enabled: !!address,
     },
   });
+  const {
+    data: campaigns,
+    isLoading: isRefreshing,
+    refetch: refresh,
+  } = useReadContract({
+    ...wagmiContractConfig,
+    functionName: "getPastCampaigns",
+    query: {
+      enabled: !!address,
+    },
+  });
   useEffect(() => {
     if (refreshCampaign) {
       refetch();
+      refresh();
       dispatch(refreshCampaigns());
     }
   }, [address, refreshCampaign]);
@@ -33,11 +45,28 @@ const Home = () => {
         })
       );
     }
-  }, [data, isLoading]);
-
+    // if (campaigns) {
+    //   dispatch(
+    //     setAvailableCampaigns({
+    //       data: campaigns as Campaign[],
+    //     })
+    //   );
+    // }
+  }, [data, campaigns, isLoading]);
   return (
     <>
-      <DisplayCampaigns title="Available Campaigns" isLoading={isLoading} />
+      <DisplayCampaigns
+        title="Available Campaigns"
+        isLoading={isLoading}
+        campaignType="available"
+      />
+      <div className="mt-32">
+        <DisplayCampaigns
+          title="Past Campaigns"
+          isLoading={isRefreshing}
+          campaignType="past"
+        />
+      </div>
     </>
   );
 };

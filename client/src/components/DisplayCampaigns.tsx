@@ -32,14 +32,19 @@ export type CampaignData = {
 interface DisplayCampaignsProps {
   isLoading: boolean;
   title: string;
+  campaignType: "available" | "past" | "creator";
 }
 
-const DisplayCampaigns = ({ isLoading, title }: DisplayCampaignsProps) => {
+const DisplayCampaigns = ({
+  isLoading,
+  title,
+  campaignType,
+}: DisplayCampaignsProps) => {
   const navigate = useNavigate();
-  const availableCampaigns = useSelector(
-    (state: any) => state.campaigns.availableCampaigns
+  const campaignData = useSelector(
+    (state: any) => state.campaigns[`${campaignType}Campaigns`]
   );
-  const { campaigns } = availableCampaigns;
+  const { campaigns } = campaignData;
   const sortedCampaigns = useMemo(() => {
     return [...campaigns].sort((a, b) => b.id - a.id);
   }, [campaigns]);
@@ -66,7 +71,7 @@ const DisplayCampaigns = ({ isLoading, title }: DisplayCampaignsProps) => {
 
         {!isLoading && campaigns.length === 0 && (
           <p className="font-epilogue font-semibold text-[14px] leading-[30px] text-[#818183]">
-            You have not created any campaigns yet
+            You have no campaigns yet
           </p>
         )}
 
