@@ -4,7 +4,11 @@ import { DisplayCampaigns } from "../components";
 import { useReadContract } from "wagmi";
 import { wagmiContractConfig } from "../utils/contract";
 import { Campaign } from "../components/DisplayCampaigns";
-import { refreshCampaigns, setAvailableCampaigns } from "../actions/campaigns";
+import {
+  refreshCampaigns,
+  setAvailableCampaigns,
+  setPastCampaigns,
+} from "../actions/campaigns";
 
 const Home = () => {
   const address = useSelector((state: any) => state.wallet.addresses?.[0]);
@@ -45,13 +49,13 @@ const Home = () => {
         })
       );
     }
-    // if (campaigns) {
-    //   dispatch(
-    //     setAvailableCampaigns({
-    //       data: campaigns as Campaign[],
-    //     })
-    //   );
-    // }
+    if (campaigns) {
+      dispatch(
+        setPastCampaigns({
+          data: campaigns as Campaign[],
+        })
+      );
+    }
   }, [data, campaigns, isLoading]);
   return (
     <>

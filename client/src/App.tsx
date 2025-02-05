@@ -6,13 +6,7 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setWalletAdress } from "./actions/wallet";
 import { Sidebar } from "./components";
-import {
-  CampaignById,
-  CreateCampaign,
-  CreatorCampaigns,
-  Home,
-  Profile,
-} from "./pages";
+import { CampaignById, CreateCampaign, Home, Profile } from "./pages";
 
 function App() {
   const account = useAccount();
@@ -46,7 +40,6 @@ function App() {
               path="/campaign-details/:pId/:id"
               element={<CampaignById />}
             />
-            <Route path="/my-campaigns" element={<CreatorCampaigns />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         ) : (
