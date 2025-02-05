@@ -12,7 +12,7 @@ import { useDisconnect } from "wagmi";
 import { Link } from "react-router-dom";
 import { useBalance } from "wagmi";
 import { formatEther } from "viem";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { setBalance } from "../actions/wallet";
 
 const { Text } = Typography;
