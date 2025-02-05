@@ -10,16 +10,24 @@ import { useSelector } from "react-redux";
 import { logo } from "../assets";
 import { useDisconnect } from "wagmi";
 import { Link } from "react-router-dom";
+import { useBalance } from "wagmi";
+import { formatEther } from "viem";
+import { useEffect, useState } from "react";
 
 const { Text } = Typography;
 
 const ProfileDropDown = () => {
   const { disconnect } = useDisconnect();
+  const address = useSelector((state: any) => state.wallet.addresses?.[0]);
+  const [balance, setBalance] = useState("");
+  const { data } = useBalance({ address });
   const disconnectHandler = () => {
     disconnect();
     window.location.reload();
   };
-  const address = useSelector((state: any) => state.wallet.addresses?.[0]);
+  useEffect(() => {
+    if (data) setBalance(formatEther(data.value));
+  }, [data]);
 
   return (
     <div className="flex items-center gap-4">
@@ -47,6 +55,18 @@ const ProfileDropDown = () => {
                 <p className="text-sm text-gray-400">Wallet Address</p>
                 <Text style={{ padding: "12px", color: "#60a5fa" }} copyable>
                   {address}
+                </Text>
+              </div>
+              {/* Add formatted balance and its symbol*/}
+              <div className="flex items-center py-2">
+                <Text
+                  style={{
+                    color: "white ",
+                    fontWeight: "600",
+                    fontSize: "14px",
+                  }}
+                >
+                  Balance: {Number(balance).toFixed(4)} {data?.symbol}
                 </Text>
               </div>
             </DropdownItem>

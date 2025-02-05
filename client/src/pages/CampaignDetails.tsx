@@ -52,8 +52,8 @@ const CampaignDetails = ({
     writeContract,
     error: writeError,
   } = useWriteContract();
-
-  const isDeadlinePassed = new Date(deadline).getTime() < Date.now();
+  // Deadline passed
+  // const isDeadlinePassed = new Date(deadline).getTime() < Date.now();
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({
       hash,
@@ -182,9 +182,11 @@ const CampaignDetails = ({
                 btnType="button"
                 title="Set New Target"
                 styles={`w-full mt-4 ${
-                  isPending ? "bg-gray-500 cursor-not-allowed" : "bg-[#8c6dfd]"
+                  isPending || isConfirming
+                    ? "bg-gray-500 cursor-not-allowed"
+                    : "bg-[#8c6dfd]"
                 }`}
-                disabled={isPending}
+                disabled={isPending || isConfirming}
                 handleClick={handleIncreaseTarget}
               />
               {writeError && (
@@ -336,24 +338,23 @@ const CampaignDetails = ({
                       Champion dreams that resonate with your soul
                     </p>
                   </div>
-
+                  {/* // TODO: isDeadlinePassed */}
                   <CustomButton
                     btnType="button"
                     title="Fund Campaign"
+                    disabled={isPending || isConfirming}
                     styles={`w-full ${
-                      isPending || isDeadlinePassed
+                      isPending || isConfirming
                         ? "bg-gray-500 cursor-not-allowed"
                         : "bg-[#8c6dfd]"
                     }`}
                     handleClick={handleDonate}
-                    disabled={isPending || isDeadlinePassed}
                   />
                   {writeError && !newTarget && (
                     <span className="text-red-500 text-sm mt-1">
                       Error: {writeError.message}
                     </span>
                   )}
-
                   {isConfirming && (
                     <Loader
                       text={
@@ -363,7 +364,6 @@ const CampaignDetails = ({
                       }
                     />
                   )}
-
                   {isConfirmed && (
                     <Loader
                       text={
