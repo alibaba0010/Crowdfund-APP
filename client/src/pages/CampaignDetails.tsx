@@ -18,7 +18,6 @@ import { parseEther } from "viem";
 import { shortenAddress } from "../utils";
 import { loader } from "../assets";
 import type { CampaignData } from "../components/DisplayCampaigns";
-import { useNavigate } from "react-router-dom";
 
 const CampaignDetails = ({
   isLoading,
@@ -31,7 +30,6 @@ const CampaignDetails = ({
   const address = useSelector((state: any) => state.wallet.addresses?.[0]);
   const [error, setError] = useState("");
   const [openWithdraw, setOpenWithdraw] = useState(false);
-  const navigate = useNavigate();
   const [newTarget, setNewTarget] = useState(false);
 
   const {
@@ -42,10 +40,10 @@ const CampaignDetails = ({
     image,
     description,
     creator,
-    pId,
+    // pId,
     id,
+    totalDonated,
   } = campaign;
-  const totalDonated = 0.02;
   const creatorAddress = shortenAddress(campaign.creator);
   const target = Number(targetAmount);
   const {
@@ -54,16 +52,16 @@ const CampaignDetails = ({
     writeContract,
     error: writeError,
   } = useWriteContract();
+
+  const isDeadlinePassed = new Date(deadline).getTime() < Date.now();
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({
       hash,
     });
-
-  const isDeadlinePassed = new Date(deadline).getTime() < Date.now();
-
   useEffect(() => {
     if (isConfirmed) {
-      navigate(`/campaign-details/${pId}/${id}`);
+      console.log("in progress");
+      window.location.reload();
     }
     const totalTarget = Number(targetAmount);
     if (address === creator && totalDonated >= totalTarget) {
@@ -74,14 +72,39 @@ const CampaignDetails = ({
 
   const handleWithDraw = async () => {
     // Implement withdrawal logic here
+    try {
+      writeContract({
+        ...wagmiContractConfig,
+        functionName: "withdrawFunds",
+        args: [id],
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleIncreaseTarget = async () => {
-    // Implement increase target logic here
-    // writeContract({
-    //   functionName: "increaseTarget",
-    //   args: [id, parseEther(amount)],
-    // })
+    const newTargetAmount = Number(amount);
+    if (isNaN(newTargetAmount) || newTargetAmount <= target) {
+      setError(
+        "Invalid amount or new target is not higher than current target."
+      );
+      return;
+    }
+    if (totalDonated > newTargetAmount) {
+      setError("New target must be greater than amount donated");
+      return;
+    }
+    setError("");
+    try {
+      writeContract({
+        ...wagmiContractConfig,
+        functionName: "updateTargetAmount",
+        args: [id, parseEther(amount)],
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleDonate = async () => {
@@ -110,6 +133,10 @@ const CampaignDetails = ({
     <>
       {openWithdraw && (
         <div className="fixed inset-0 z-10 h-screen bg-[rgba(0,0,0,0.7)] flex items-center justify-center flex-col">
+          <FiHeart className="text-gray-400 text-4xl mb-4" />
+          <span className="text-2xl font-bold text-white mb-4">
+            Campaign is completed
+          </span>
           <div className="text-white text-xl mb-4">
             <p className="mb-2">
               Target Amount:{" "}
@@ -120,39 +147,51 @@ const CampaignDetails = ({
               <span className="font-bold">{totalDonated} ETH</span>
             </p>
           </div>
-          <div className="mt-4 space-x-4">
-            <CustomButton
-              btnType="button"
-              title="Increase Target"
-              styles="bg-[#4acd8d]"
-              handleClick={() => setNewTarget(true)}
-            />
-            <CustomButton
-              btnType="button"
-              title="Withdraw Donations"
-              styles="bg-[#8c6dfd]"
-              handleClick={handleWithDraw}
-            />
-          </div>
-          {newTarget && (
-            <div className="flex flex-col space-y-4">
-              <div className="flex flex-col gap-2">
-                <label className="text-sm text-gray-400">
-                  New Target Amount
-                </label>
-                <input
-                  type="number"
-                  className="w-full py-2 px-4 border border-gray-300 rounded-lg"
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
-                />
-              </div>
+          {!newTarget && (
+            <div className="mt-4 space-x-4">
               <CustomButton
                 btnType="button"
-                title="Confirm"
+                title="Increase Target"
                 styles="bg-[#4acd8d]"
+                handleClick={() => setNewTarget(true)}
+              />
+              <CustomButton
+                btnType="button"
+                title="Withdraw Donations"
+                styles="bg-[#8c6dfd] "
+                handleClick={handleWithDraw}
+              />
+            </div>
+          )}
+          {newTarget && (
+            <div className="flex flex-col items-center">
+              <input
+                type="number"
+                placeholder="ETH 0.1"
+                step="0.0001"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                className="w-full px-4 py-3 bg-[#1a1b1f] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              />
+              {error && (
+                <p className="mt-[10px] font-epilogue font-normal leading-[22px] text-red-500">
+                  {error}
+                </p>
+              )}
+              <CustomButton
+                btnType="button"
+                title="Set New Target"
+                styles={`w-full mt-4 ${
+                  isPending ? "bg-gray-500 cursor-not-allowed" : "bg-[#8c6dfd]"
+                }`}
+                disabled={isPending}
                 handleClick={handleIncreaseTarget}
               />
+              {writeError && (
+                <span className="text-red-500 text-sm mt-1">
+                  Error: {writeError.message}
+                </span>
+              )}
             </div>
           )}
         </div>
@@ -284,7 +323,7 @@ const CampaignDetails = ({
                     onChange={(e) => setAmount(e.target.value)}
                     className="w-full px-4 py-3 bg-[#1a1b1f] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
                   />
-                  {error && (
+                  {error && !newTarget && (
                     <p className="mt-[10px] font-epilogue font-normal leading-[22px] text-red-500">
                       {error}
                     </p>
@@ -309,7 +348,7 @@ const CampaignDetails = ({
                     handleClick={handleDonate}
                     disabled={isPending || isDeadlinePassed}
                   />
-                  {writeError && (
+                  {writeError && !newTarget && (
                     <span className="text-red-500 text-sm mt-1">
                       Error: {writeError.message}
                     </span>
