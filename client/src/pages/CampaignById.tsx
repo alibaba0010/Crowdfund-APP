@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { useReadContract } from "wagmi";
 import CampaignDetails from "./CampaignDetails";
@@ -13,7 +13,7 @@ const CampaignById = () => {
   const campaignId = id ? parseInt(id, 10) : undefined; // Convert to number
   const address = useSelector((state: any) => state.wallet.addresses?.[0]);
   const [campaign, setCampaign] = useState<CampaignData | null>(null);
-  const { data, isLoading, error, refetch } = useReadContract({
+  const { data, isLoading } = useReadContract({
     ...wagmiContractConfig,
     functionName: "getCampaignById",
     args: [campaignId],

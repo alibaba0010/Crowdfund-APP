@@ -9,7 +9,7 @@ import {
   FiBookOpen,
   FiHeart,
 } from "react-icons/fi";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useWaitForTransactionReceipt } from "wagmi";
 import { useWriteContract } from "wagmi";
 import { CustomButton, Loader } from "../components";
