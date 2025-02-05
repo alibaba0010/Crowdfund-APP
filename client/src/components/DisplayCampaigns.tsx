@@ -46,7 +46,7 @@ const DisplayCampaigns = ({ isLoading, title }: DisplayCampaignsProps) => {
   const handleNavigate = (campaign: CampaignData) => {
     const { id, pId } = campaign;
 
-    navigate(`/campaign-details/${pId}/${id}`, { state: campaign });
+    navigate(`/campaign-details/${pId}/${id}`);
   };
 
   return (

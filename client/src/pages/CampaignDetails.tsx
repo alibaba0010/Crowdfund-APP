@@ -18,6 +18,7 @@ import { parseEther } from "viem";
 import { shortenAddress } from "../utils";
 import { loader } from "../assets";
 import { CampaignData } from "../components/DisplayCampaigns";
+import { useNavigate } from "react-router-dom";
 
 const CampaignDetails = ({
   isLoading,
@@ -29,10 +30,8 @@ const CampaignDetails = ({
   const [amount, setAmount] = useState("");
   const address = useSelector((state: any) => state.wallet.addresses?.[0]);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    setError("");
-  }, [amount]);
   const {
     deadline,
     donators,
@@ -42,7 +41,7 @@ const CampaignDetails = ({
     image,
     description,
     creator,
-    // pId,
+    pId,
     id,
   } = campaign;
   const creatorAddress = shortenAddress(campaign.creator);
@@ -53,6 +52,12 @@ const CampaignDetails = ({
     writeContract,
     error: writeError,
   } = useWriteContract();
+  useEffect(() => {
+    if (isConfirmed) {
+      navigate(`/campaign-details/${pId}/${id}`);
+    }
+    setError("");
+  }, [amount]);
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({
       hash,
@@ -78,8 +83,6 @@ const CampaignDetails = ({
     } catch (error) {
       console.log(error);
     }
-
-    //  await donate(state.pId, amount);
   };
 
   return (
