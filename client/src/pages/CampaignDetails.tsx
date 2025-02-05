@@ -17,7 +17,7 @@ import { wagmiContractConfig } from "../utils/contract";
 import { parseEther } from "viem";
 import { shortenAddress } from "../utils";
 import { loader } from "../assets";
-import { CampaignData } from "../components/DisplayCampaigns";
+import type { CampaignData } from "../components/DisplayCampaigns";
 import { useNavigate } from "react-router-dom";
 
 const CampaignDetails = ({
@@ -30,13 +30,14 @@ const CampaignDetails = ({
   const [amount, setAmount] = useState("");
   const address = useSelector((state: any) => state.wallet.addresses?.[0]);
   const [error, setError] = useState("");
+  const [openWithdraw, setOpenWithdraw] = useState(false);
   const navigate = useNavigate();
+  const [newTarget, setNewTarget] = useState(false);
 
   const {
     deadline,
     donators,
     targetAmount,
-    totalDonated,
     name,
     image,
     description,
@@ -44,6 +45,7 @@ const CampaignDetails = ({
     pId,
     id,
   } = campaign;
+  const totalDonated = 0.02;
   const creatorAddress = shortenAddress(campaign.creator);
   const target = Number(targetAmount);
   const {
@@ -52,16 +54,35 @@ const CampaignDetails = ({
     writeContract,
     error: writeError,
   } = useWriteContract();
-  useEffect(() => {
-    if (isConfirmed) {
-      navigate(`/campaign-details/${pId}/${id}`);
-    }
-    setError("");
-  }, [amount]);
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({
       hash,
     });
+
+  const isDeadlinePassed = new Date(deadline).getTime() < Date.now();
+
+  useEffect(() => {
+    if (isConfirmed) {
+      navigate(`/campaign-details/${pId}/${id}`);
+    }
+    const totalTarget = Number(targetAmount);
+    if (address === creator && totalDonated >= totalTarget) {
+      setOpenWithdraw(true);
+    }
+    setError("");
+  }, [amount, totalDonated, address, isConfirmed]);
+
+  const handleWithDraw = async () => {
+    // Implement withdrawal logic here
+  };
+
+  const handleIncreaseTarget = async () => {
+    // Implement increase target logic here
+    // writeContract({
+    //   functionName: "increaseTarget",
+    //   args: [id, parseEther(amount)],
+    // })
+  };
 
   const handleDonate = async () => {
     const donate = Number(amount);
@@ -87,9 +108,58 @@ const CampaignDetails = ({
 
   return (
     <>
+      {openWithdraw && (
+        <div className="fixed inset-0 z-10 h-screen bg-[rgba(0,0,0,0.7)] flex items-center justify-center flex-col">
+          <div className="text-white text-xl mb-4">
+            <p className="mb-2">
+              Target Amount:{" "}
+              <span className="font-bold">{targetAmount} ETH</span>
+            </p>
+            <p>
+              Total Donated:{" "}
+              <span className="font-bold">{totalDonated} ETH</span>
+            </p>
+          </div>
+          <div className="mt-4 space-x-4">
+            <CustomButton
+              btnType="button"
+              title="Increase Target"
+              styles="bg-[#4acd8d]"
+              handleClick={() => setNewTarget(true)}
+            />
+            <CustomButton
+              btnType="button"
+              title="Withdraw Donations"
+              styles="bg-[#8c6dfd]"
+              handleClick={handleWithDraw}
+            />
+          </div>
+          {newTarget && (
+            <div className="flex flex-col space-y-4">
+              <div className="flex flex-col gap-2">
+                <label className="text-sm text-gray-400">
+                  New Target Amount
+                </label>
+                <input
+                  type="number"
+                  className="w-full py-2 px-4 border border-gray-300 rounded-lg"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                />
+              </div>
+              <CustomButton
+                btnType="button"
+                title="Confirm"
+                styles="bg-[#4acd8d]"
+                handleClick={handleIncreaseTarget}
+              />
+            </div>
+          )}
+        </div>
+      )}
       {isLoading ? (
         <img
-          src={loader}
+          src={loader || "/placeholder.svg"}
           alt="loader"
           className="w-[100px] h-[100px] object-contain"
         />
@@ -98,7 +168,7 @@ const CampaignDetails = ({
           <div className="max-w-6xl mx-auto space-y-8">
             {/* Main Image */}
             <img
-              src={image}
+              src={image || "/placeholder.svg"}
               alt="CrowdFund Me"
               className="h-[400px] object-contain w-full rounded-xl"
             />
@@ -198,6 +268,14 @@ const CampaignDetails = ({
                   Donate to the campaign
                 </h2>
                 <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <span>Target Amount:</span>
+                    <span>{targetAmount} ETH</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span>Total Donated:</span>
+                    <span>{totalDonated} ETH</span>
+                  </div>
                   <input
                     type="number"
                     placeholder="ETH 0.1"
@@ -223,9 +301,13 @@ const CampaignDetails = ({
                   <CustomButton
                     btnType="button"
                     title="Fund Campaign"
-                    styles="w-full bg-[#8c6dfd]"
+                    styles={`w-full ${
+                      isPending || isDeadlinePassed
+                        ? "bg-gray-500 cursor-not-allowed"
+                        : "bg-[#8c6dfd]"
+                    }`}
                     handleClick={handleDonate}
-                    disabled={isPending}
+                    disabled={isPending || isDeadlinePassed}
                   />
                   {writeError && (
                     <span className="text-red-500 text-sm mt-1">
@@ -262,4 +344,5 @@ const CampaignDetails = ({
     </>
   );
 };
+
 export default CampaignDetails;
