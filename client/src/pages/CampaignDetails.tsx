@@ -86,7 +86,7 @@ const CampaignDetails = ({
     <>
       {isLoading ? (
         <img
-          src={loader || "/placeholder.svg"}
+          src={loader}
           alt="loader"
           className="w-[100px] h-[100px] object-contain"
         />

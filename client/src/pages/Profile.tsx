@@ -1,10 +1,13 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useReadContract } from "wagmi";
 import { wagmiContractConfig } from "../utils/contract";
+import { refreshCampaigns, setAvailableCampaigns } from "../actions/campaigns";
+import DisplayCampaigns, { Campaign } from "../components/DisplayCampaigns";
 
 const Profile = () => {
   const address = useSelector((state: any) => state.wallet.addresses?.[0]);
+  const dispatch = useDispatch();
   const { data, isLoading, refetch } = useReadContract({
     ...wagmiContractConfig,
     functionName: "getCampaignsByCreator",
@@ -14,27 +17,33 @@ const Profile = () => {
       enabled: !!address,
     },
   });
-  console.log("Data: " + data);
-  // const { disconnect } = useDisconnect();
-  /* <div>
-<h2>Account</h2>
+  const refreshCampaign = useSelector(
+    (state: any) => state.campaigns.isChanged
+  );
 
-<div>
-  status: {account.status}
-  chainId: {account.chainId}
-</div>
+  useEffect(() => {
+    if (refreshCampaign) {
+      refetch();
+      dispatch(refreshCampaigns());
+    }
+  }, [address, refreshCampaign]);
+  useEffect(() => {
+    if (data) {
+      dispatch(
+        setAvailableCampaigns({
+          data: data as Campaign[],
+        })
+      );
+    }
+  }, [data, isLoading]);
 
-{account.status === "connected" && (
-  <button type="button" onClick={() => disconnect()}>
-    Disconnect
-  </button>
-)}
-</div>
-
-<div>
-<div>{status}</div>
-<div>{error?.message}</div>
-</div> */
-  return <div>Profile</div>;
+  return (
+    <>
+      <DisplayCampaigns
+        title="Campaigns created by you"
+        isLoading={isLoading}
+      />
+    </>
+  );
 };
 export default Profile;
