@@ -131,10 +131,13 @@ contract GoFundme {
         // Transfer funds
         (bool success, ) = campaign.creator.call{value: amount}("");
         require(success, "Transfer failed");
+        campaign.totalDonated = 0;
 
         emit FundsWithdrawn(campaignId, msg.sender, amount);
     }
-
+function getAddressBalance() public view returns (uint256) {
+        return address(this).balance;
+    }
     // 6. Fetch the balance for a campaign
     function getBalance(uint256 campaignId) public view campaignExists(campaignId) returns (uint256) {
         Campaign storage campaign = campaigns[campaignId];
@@ -292,3 +295,7 @@ contract GoFundme {
         emit RefundClaimed(campaignId, msg.sender, donatedAmount);
     }
 }
+// TODO:  in withdraw funds 
+// unable to transfer the total donated to creator, the transfer was successful but the value wasn't transferred to the creator address  
+// update target amount after withdraw successfully
+// add to show if campaign funds has already been withdrwan to past campaign

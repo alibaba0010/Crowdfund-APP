@@ -6,27 +6,32 @@ import {
   DropdownTrigger,
 } from "@nextui-org/react";
 import { Typography } from "antd";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logo } from "../assets";
 import { useDisconnect } from "wagmi";
 import { Link } from "react-router-dom";
 import { useBalance } from "wagmi";
 import { formatEther } from "viem";
 import { useEffect, useState } from "react";
+import { setBalance } from "../actions/wallet";
 
 const { Text } = Typography;
 
 const ProfileDropDown = () => {
   const { disconnect } = useDisconnect();
   const address = useSelector((state: any) => state.wallet.addresses?.[0]);
-  const [balance, setBalance] = useState("");
+  const { balance } = useSelector((state: any) => state.wallet);
+  const dispatch = useDispatch();
   const { data } = useBalance({ address });
   const disconnectHandler = () => {
     disconnect();
     window.location.reload();
   };
   useEffect(() => {
-    if (data) setBalance(formatEther(data.value));
+    if (data) {
+      const balance = formatEther(data.value);
+      dispatch(setBalance(balance));
+    }
   }, [data]);
 
   return (

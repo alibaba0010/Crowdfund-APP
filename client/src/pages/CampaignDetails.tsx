@@ -31,6 +31,7 @@ const CampaignDetails = ({
   const [error, setError] = useState("");
   const [openWithdraw, setOpenWithdraw] = useState(false);
   const [newTarget, setNewTarget] = useState(false);
+  const { balance } = useSelector((state: any) => state.wallet);
 
   const {
     deadline,
@@ -60,7 +61,6 @@ const CampaignDetails = ({
     });
   useEffect(() => {
     if (isConfirmed) {
-      console.log("in progress");
       window.location.reload();
     }
     const totalTarget = Number(targetAmount);
@@ -117,6 +117,10 @@ const CampaignDetails = ({
       setError("You can't donate to your own campaign.");
       return;
     }
+    if (donate >= Number(balance)) {
+      setError("Insufficient balance.");
+      return;
+    }
     try {
       writeContract({
         ...wagmiContractConfig,
@@ -133,10 +137,6 @@ const CampaignDetails = ({
     <>
       {openWithdraw && (
         <div className="fixed inset-0 z-10 h-screen bg-[rgba(0,0,0,0.7)] flex items-center justify-center flex-col">
-          <FiHeart className="text-gray-400 text-4xl mb-4" />
-          <span className="text-2xl font-bold text-white mb-4">
-            Campaign is completed
-          </span>
           <div className="text-white text-xl mb-4">
             <p className="mb-2">
               Target Amount:{" "}
@@ -287,7 +287,7 @@ const CampaignDetails = ({
                           className="flex justify-between items-center gap-4"
                         >
                           <p className="font-epilogue font-normal text-[16px] text-[#b2b3bd] leading-[26px] break-ll">
-                            {index + 1}. {item.donator}
+                            {index + 1}. {item}
                           </p>
                           <p className="font-epilogue font-normal text-[16px] text-[#808191] leading-[26px] break-ll">
                             {item.donation}
