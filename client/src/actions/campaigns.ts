@@ -42,7 +42,6 @@ const campaignsSlice = createSlice({
     },
     setCreatorCampaigns(state, action) {
       const campaigns = parseActionData(action.payload.data);
-      console.log("Campaigns: " + campaigns);
 
       state.creatorCampaigns = {
         campaigns,

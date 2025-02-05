@@ -47,10 +47,8 @@ const CampaignById = () => {
   }, [data, id, pId]);
   return (
     <>
-      {campaign ? (
+      {campaign && (
         <CampaignDetails isLoading={isLoading} campaign={campaign} />
-      ) : (
-        <div>Loading...</div>
       )}
     </>
   );
