@@ -145,8 +145,8 @@ const CampaignDetails = ({
                       <FiUser className="w-6 h-6" />
                     </div>
                     <div>
-                      <p className="text-sm text-gray-400">{name}</p>
-                      <p className="text-xs text-gray-500 break-all">
+                      <p className="text-base text-gray-400">{name}</p>
+                      <p className="text-base text-[#60a5fa] break-all">
                         {creatorAddress}
                       </p>
                     </div>
@@ -159,7 +159,7 @@ const CampaignDetails = ({
                     <FiBookOpen />
                     STORY
                   </h2>
-                  <p className="text-gray-400 text-sm">{description}</p>
+                  <p className="text-gray-400 text-base">{description}</p>
                 </div>
 
                 {/* Donators Section */}
