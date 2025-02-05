@@ -1,19 +1,14 @@
 import abi from "./Crowdfund.json";
 import axios from "axios";
 export const contractABI = abi.abi;
-export const contractAddress = "0xd40B7753C20397330BB63D7Dd2140Ada1CDC5f33";
-// export const contractAddress = "0xd509662722AdF6613d58252259Ef559632951A83";
+// export const contractAddress = "0xd40B7753C20397330BB63D7Dd2140Ada1CDC5f33";
+export const contractAddress = "0xDF24A6Be6A8509C4905EC1E47f0ebDFe242dFb3b";
 
 export const calculateBarPercentage = (goal: number, raisedAmount: number) => {
   const percentage = Math.round((raisedAmount * 100) / goal);
 
   return percentage;
 };
-// src/utils/cryptoUtils.js
-
-// Encrypt the campaign ID
-
-// Decrypt the campaign ID
 
 // export const checkIfImage = (url, callback) => {
 //   const img = new Image();
