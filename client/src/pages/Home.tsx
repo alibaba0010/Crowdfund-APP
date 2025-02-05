@@ -29,7 +29,6 @@ const Home = () => {
     if (data) {
       dispatch(
         setAvailableCampaigns({
-          title: "Available Campaigns",
           data: data as Campaign[],
         })
       );
@@ -38,7 +37,7 @@ const Home = () => {
 
   return (
     <>
-      <DisplayCampaigns isLoading={isLoading} />
+      <DisplayCampaigns title="Available Campaigns" isLoading={isLoading} />
     </>
   );
 };

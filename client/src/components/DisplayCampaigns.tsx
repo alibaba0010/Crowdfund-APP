@@ -29,12 +29,17 @@ export type CampaignData = {
   id: number;
   pId: number;
 };
-const DisplayCampaigns = ({ isLoading }: { isLoading: boolean }) => {
+interface DisplayCampaignsProps {
+  isLoading: boolean;
+  title: string;
+}
+
+const DisplayCampaigns = ({ isLoading, title }: DisplayCampaignsProps) => {
   const navigate = useNavigate();
   const availableCampaigns = useSelector(
     (state: any) => state.campaigns.availableCampaigns
   );
-  const { title, campaigns } = availableCampaigns;
+  const { campaigns } = availableCampaigns;
   const sortedCampaigns = useMemo(() => {
     return [...campaigns].sort((a, b) => b.id - a.id);
   }, [campaigns]);

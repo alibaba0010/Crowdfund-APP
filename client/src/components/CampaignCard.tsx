@@ -58,10 +58,10 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
         <div className="grid grid-cols-2 gap-4 mb-4">
           <div className="space-y-1">
             <p className="text-sm text-[#b2b3bd] font-medium">
-              {totalDonated.toFixed(4)} ETH
+              {totalDonated === 0 ? "0" : totalDonated.toFixed(3)} ETH
             </p>
             <p className="text-xs text-[#808191]">
-              Raised of {Number(targetAmount).toFixed(3)} ETH
+              Raised of {parseFloat(targetAmount).toString()} ETH
             </p>
           </div>
           <div className="space-y-1">

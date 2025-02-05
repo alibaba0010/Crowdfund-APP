@@ -27,7 +27,7 @@ const formSchema = z.object({
   description: z
     .string()
     .min(10, "Description must be at least 8 characters long!")
-    .max(250, "Description must be less than 100 characters"),
+    .max(400, "Description must be less than 400 characters"),
   targetAmount: z.coerce.number().min(0, "Amount must not be negative"),
   deadline: z.coerce
     .date({ message: "End Date is required!" })
@@ -41,6 +41,7 @@ type CreateCampaignSchema = z.infer<typeof formSchema>;
 
 const CreateCampaign = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [descriptionLength, setDescriptionLength] = useState(0);
   const [drag, setDrag] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -172,11 +173,16 @@ const CreateCampaign = () => {
         {/* Description Field */}
         <div className="flex flex-col gap-2">
           <FormField
-            {...register("description")}
+            {...register("description", {
+              onChange: (e) => setDescriptionLength(e.target.value.length),
+            })}
             labelName="Campaign Description *"
             placeholder="State what the crowdfunding is going to achieve"
             isTextArea
           />
+          <span className="text-gray-400 text-sm">
+            {descriptionLength} / 400
+          </span>
           {errors.description && (
             <span className="text-red-500 text-sm mt-1">
               {errors.description.message}
