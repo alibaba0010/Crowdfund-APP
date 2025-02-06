@@ -32,7 +32,6 @@ const CampaignDetails = ({
   const [openWithdraw, setOpenWithdraw] = useState(false);
   const [newTarget, setNewTarget] = useState(false);
   const { balance } = useSelector((state: any) => state.wallet);
-  console.log(campaign.reachedDeadline);
   const {
     deadline,
     donators,

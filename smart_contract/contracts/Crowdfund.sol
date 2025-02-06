@@ -5,6 +5,7 @@ contract GoFundme {
     constructor() payable {}
 
     struct Campaign {
+        uint256 id;
         address payable creator;
         string name;
         string title; 
@@ -22,6 +23,7 @@ contract GoFundme {
     
     // Struct for returning campaign details in memory (no mappings)
     struct CampaignDetails {
+        uint256 id;
         address creator;
         string name;
         string title;
@@ -59,6 +61,7 @@ contract GoFundme {
 
     // 1. Create a new campaign
     function createCampaign(
+        uint256 campaignId,
         string memory name,
         string memory title,
         string memory description,
@@ -70,6 +73,8 @@ contract GoFundme {
         require(deadline > block.timestamp, "Deadline must be in the future.");
 
         Campaign storage newCampaign = campaigns[campaignCount];
+
+        newCampaign.id = campaignId;
         newCampaign.creator = payable(msg.sender);
         newCampaign.name = name;
         newCampaign.title = title;
@@ -88,25 +93,27 @@ contract GoFundme {
     }
 
     // 2. Donate to the campaign
-    function donate(uint256 campaignId) public payable campaignExists(campaignId) {
-        Campaign storage campaign = campaigns[campaignId];
-          if (block.timestamp >= campaign.deadline && !campaign.reachedDeadline) {
-        campaign.reachedDeadline = true;  // Mark as reached the deadline
+function donate(uint256 campaignId) public payable campaignExists(campaignId) {
+    Campaign storage campaign = campaigns[campaignId];
+    
+    // Only mark reachedDeadline if the actual deadline has passed.
+    if (checkDeadline(campaignId) && !campaign.reachedDeadline) {
+        campaign.reachedDeadline = true;
     }
-        require(!campaign.withdrawn, "Campaign funds already withdrawn.");
-        require(block.timestamp <= campaign.deadline, "Campaign has expired");
-        require(!campaign.reachedDeadline, "Campaign deadline has passed.");
+    
+    require(!campaign.withdrawn, "Campaign funds already withdrawn.");
+    require(block.timestamp <= campaign.deadline, "Campaign has expired");
+    require(!campaign.reachedDeadline, "Campaign deadline has passed.");
 
-        // If first donation from sender, add them to the donators array.
-        if (campaign.donations[msg.sender] == 0) {
-            campaign.donators.push(msg.sender);
-        }
-
-        campaign.totalDonated += msg.value;
-        campaign.donations[msg.sender] += msg.value;
-        emit DonationMade(campaignId, msg.sender, msg.value);
+    // If first donation from sender, add them to the donators array.
+    if (campaign.donations[msg.sender] == 0) {
+        campaign.donators.push(msg.sender);
     }
 
+    campaign.totalDonated += msg.value;
+    campaign.donations[msg.sender] += msg.value;
+    emit DonationMade(campaignId, msg.sender, msg.value);
+}
     // 3. Check if campaign has reached the deadline
     function checkDeadline(uint256 campaignId) public view campaignExists(campaignId) returns (bool) {
         Campaign storage campaign = campaigns[campaignId];
@@ -255,6 +262,7 @@ function getAddressBalance() public view returns (uint256) {
     // Internal helper to map storage Campaign struct to a memory CampaignDetails struct
     function _mapCampaign(Campaign storage c) internal view returns (CampaignDetails memory) {
         return CampaignDetails({
+            id: c.id,
             creator: c.creator,
             name: c.name,
             title: c.title,
