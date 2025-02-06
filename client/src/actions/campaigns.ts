@@ -61,6 +61,8 @@ const campaignsSlice = createSlice({
         image: campaign.image,
         // createdAt: campaign.createdAt,
         donators: campaign.donators,
+        reachedDeadline: campaign.reachedDeadline,
+        withdrawn: campaign.withdrawn,
         id: campaign.id,
         pId: campaign.pId,
       };
@@ -79,6 +81,8 @@ const parseActionData = (campaigns: any) => {
     image: campaign.image,
     // createdAt: campaign.createdAt,
     donators: campaign.donators,
+    reachedDeadline: campaign.reachedDeadline,
+    withdrawn: campaign.withdrawn,
     id: i,
     pId: uuidv4(),
   }));

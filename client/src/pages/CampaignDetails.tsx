@@ -32,7 +32,7 @@ const CampaignDetails = ({
   const [openWithdraw, setOpenWithdraw] = useState(false);
   const [newTarget, setNewTarget] = useState(false);
   const { balance } = useSelector((state: any) => state.wallet);
-
+  console.log(campaign.reachedDeadline);
   const {
     deadline,
     donators,
@@ -42,9 +42,12 @@ const CampaignDetails = ({
     description,
     creator,
     // pId,
+    withdrawn,
+    reachedDeadline,
     id,
     totalDonated,
   } = campaign;
+  console.log(withdrawn);
   const creatorAddress = shortenAddress(campaign.creator);
   const target = Number(targetAmount);
   const {
@@ -147,7 +150,7 @@ const CampaignDetails = ({
               <span className="font-bold">{totalDonated} ETH</span>
             </p>
           </div>
-          {!newTarget && (
+          {!newTarget && !withdrawn && (
             <div className="mt-4 space-x-4">
               <CustomButton
                 btnType="button"
@@ -342,7 +345,7 @@ const CampaignDetails = ({
                   <CustomButton
                     btnType="button"
                     title="Fund Campaign"
-                    disabled={isPending || isConfirming}
+                    disabled={isPending || isConfirming || reachedDeadline}
                     styles={`w-full ${
                       isPending || isConfirming
                         ? "bg-gray-500 cursor-not-allowed"

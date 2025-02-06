@@ -54,7 +54,7 @@ export const store = configureStore({
           "campaigns/setAvailableCampaigns",
           "campaigns/getCampaignById",
           "campaigns/setCreatorCampaigns",
-          "campaigns/pastCampaigns",
+          "campaigns/setPastCampaigns",
         ],
       },
     }),

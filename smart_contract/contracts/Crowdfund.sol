@@ -298,4 +298,3 @@ function getAddressBalance() public view returns (uint256) {
 // TODO:  in withdraw funds 
 // unable to transfer the total donated to creator, the transfer was successful but the value wasn't transferred to the creator address  
 // update target amount after withdraw successfully
-// add to show if campaign funds has already been withdrwan to past campaign

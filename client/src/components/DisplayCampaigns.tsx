@@ -16,6 +16,7 @@ export interface Campaign {
   image: string;
   createdAt: bigint;
   reachedDeadline: boolean;
+  withdrawn: boolean;
 }
 export type CampaignData = {
   creator: string;
@@ -30,6 +31,7 @@ export type CampaignData = {
   id: number;
   pId: number;
   reachedDeadline: boolean;
+  withdrawn: boolean;
 };
 interface DisplayCampaignsProps {
   isLoading: boolean;
