@@ -138,7 +138,7 @@ const CampaignDetails = ({
 
   return (
     <>
-      {openWithdraw && (
+      {openWithdraw && !withdrawn && (
         <div className="fixed inset-0 z-10 h-screen bg-[rgba(0,0,0,0.7)] flex items-center justify-center flex-col">
           <div className="text-white text-xl mb-4">
             <p className="mb-2">
@@ -150,7 +150,7 @@ const CampaignDetails = ({
               <span className="font-bold">{totalDonated} ETH</span>
             </p>
           </div>
-          {!newTarget && !withdrawn && (
+          {!newTarget && (
             <div className="mt-4 space-x-4">
               <CustomButton
                 btnType="button"

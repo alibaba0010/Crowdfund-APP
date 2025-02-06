@@ -36,6 +36,8 @@ const CampaignById = () => {
         donators: campaign.donators,
         id: Number(id),
         pId: Number(pId),
+        reachedDeadline: campaign.reachedDeadline,
+        withdrawn: campaign.withdrawn,
       };
 
       setCampaign((prev) =>
