@@ -63,12 +63,14 @@ const Home = () => {
         title="Available Campaigns"
         isLoading={isLoading}
         campaignType="available"
+        text="You have no available campaigns yet"
       />
       <div className="mt-32">
         <DisplayCampaigns
           title="Past Campaigns"
           isLoading={isRefreshing}
           campaignType="past"
+          text="You have no past campaigns yet"
         />
       </div>
     </>

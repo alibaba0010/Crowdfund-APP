@@ -37,12 +37,14 @@ interface DisplayCampaignsProps {
   isLoading: boolean;
   title: string;
   campaignType: "available" | "past" | "creator";
+  text: string;
 }
 
 const DisplayCampaigns = ({
   isLoading,
   title,
   campaignType,
+  text,
 }: DisplayCampaignsProps) => {
   const navigate = useNavigate();
   const campaignData = useSelector(
@@ -75,7 +77,7 @@ const DisplayCampaigns = ({
 
         {!isLoading && campaigns.length === 0 && (
           <p className="font-epilogue font-semibold text-[14px] leading-[30px] text-[#818183]">
-            You have no campaigns yet
+            {text}
           </p>
         )}
 

@@ -90,6 +90,9 @@ contract GoFundme {
     // 2. Donate to the campaign
     function donate(uint256 campaignId) public payable campaignExists(campaignId) {
         Campaign storage campaign = campaigns[campaignId];
+          if (block.timestamp >= campaign.deadline && !campaign.reachedDeadline) {
+        campaign.reachedDeadline = true;  // Mark as reached the deadline
+    }
         require(!campaign.withdrawn, "Campaign funds already withdrawn.");
         require(block.timestamp <= campaign.deadline, "Campaign has expired");
         require(!campaign.reachedDeadline, "Campaign deadline has passed.");
@@ -118,8 +121,8 @@ contract GoFundme {
 
     // 5. Withdraw funds by the campaign creator
     function withdrawFunds(uint256 campaignId) public campaignExists(campaignId) {
-        updateDeadlineStatus(campaignId); 
         Campaign storage campaign = campaigns[campaignId];
+         
         require(campaign.creator == msg.sender, "Only the creator can withdraw funds.");
         require(!campaign.withdrawn, "Funds already withdrawn.");
         require(checkTargetReached(campaignId), "Target not reached.");
@@ -283,12 +286,6 @@ function getAddressBalance() public view returns (uint256) {
         return _mapCampaign(campaigns[campaignId]);
     }
 
-   function updateDeadlineStatus(uint256 campaignId) internal {
-    Campaign storage campaign = campaigns[campaignId];
-    if (block.timestamp >= campaign.deadline && !campaign.reachedDeadline) {
-        campaign.reachedDeadline = true;  // Mark as reached the deadline
-    }
-}
 
     // Update targetAmount field for a campaign.
     function updateTargetAmount(uint256 campaignId, uint256 newTargetAmount) public campaignExists(campaignId) {
