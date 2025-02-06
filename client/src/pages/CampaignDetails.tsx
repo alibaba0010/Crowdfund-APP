@@ -47,7 +47,7 @@ const CampaignDetails = ({
     id,
     totalDonated,
   } = campaign;
-  console.log(withdrawn);
+
   const creatorAddress = shortenAddress(campaign.creator);
   const target = Number(targetAmount);
   const {
@@ -56,8 +56,6 @@ const CampaignDetails = ({
     writeContract,
     error: writeError,
   } = useWriteContract();
-  // Deadline passed
-  // const isDeadlinePassed = new Date(deadline).getTime() < Date.now();
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({
       hash,
@@ -186,7 +184,7 @@ const CampaignDetails = ({
                 title="Set New Target"
                 styles={`w-full mt-4 ${
                   isPending || isConfirming
-                    ? "bg-gray-500 cursor-not-allowed"
+                    ? "bg-gray-500 cursor-not-allowed pointer-events-none"
                     : "bg-[#8c6dfd]"
                 }`}
                 disabled={isPending || isConfirming}
@@ -341,14 +339,13 @@ const CampaignDetails = ({
                       Champion dreams that resonate with your soul
                     </p>
                   </div>
-                  {/* // TODO: isDeadlinePassed */}
                   <CustomButton
                     btnType="button"
                     title="Fund Campaign"
                     disabled={isPending || isConfirming || reachedDeadline}
                     styles={`w-full ${
-                      isPending || isConfirming
-                        ? "bg-gray-500 cursor-not-allowed"
+                      isPending || isConfirming || reachedDeadline
+                        ? "bg-gray-500 cursor-not-allowed pointer-events-none"
                         : "bg-[#8c6dfd]"
                     }`}
                     handleClick={handleDonate}

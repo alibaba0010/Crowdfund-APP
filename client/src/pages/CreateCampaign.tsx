@@ -287,7 +287,11 @@ const CreateCampaign = () => {
           <CustomButton
             btnType="submit"
             title="Submit new campaign"
-            styles="bg-[#1dc071]"
+            styles={`${
+              isSubmitting || isPending
+                ? "bg-gray-500 cursor-not-allowed pointer-events-none"
+                : "bg-[#1dc071]"
+            }`}
             disabled={isSubmitting || isPending}
           />
         </div>

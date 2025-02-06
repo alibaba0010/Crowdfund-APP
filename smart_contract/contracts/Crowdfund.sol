@@ -118,20 +118,19 @@ contract GoFundme {
 
     // 5. Withdraw funds by the campaign creator
     function withdrawFunds(uint256 campaignId) public campaignExists(campaignId) {
+        updateDeadlineStatus(campaignId); 
         Campaign storage campaign = campaigns[campaignId];
         require(campaign.creator == msg.sender, "Only the creator can withdraw funds.");
         require(!campaign.withdrawn, "Funds already withdrawn.");
         require(checkTargetReached(campaignId), "Target not reached.");
-        require(block.timestamp <= campaign.deadline, "Deadline passed");
 
         uint256 amount = campaign.totalDonated;
         campaign.withdrawn = true;
-        campaign.reachedDeadline = true; // Prevent further withdrawals
+        campaign.reachedDeadline = true;
 
         // Transfer funds
-        (bool success, ) = campaign.creator.call{value: amount}("");
+        (bool success, ) = payable(campaign.creator).call{value: amount}("");
         require(success, "Transfer failed");
-        campaign.totalDonated = 0;
 
         emit FundsWithdrawn(campaignId, msg.sender, amount);
     }
@@ -161,11 +160,11 @@ function getAddressBalance() public view returns (uint256) {
     }
 
     // 8. Get all campaigns for a particular creator using _mapCampaign
-    function getCampaignsByCreator(address creator) public view returns (CampaignDetails[] memory) {
+    function getAvailableCampaignsByCreator(address creator) public view returns (CampaignDetails[] memory) {
         // First, count how many campaigns are created by the given creator.
         uint256 countResult;
         for (uint256 i = 0; i < campaignCount; i++) {
-            if (campaigns[i].creator == creator) {
+            if (_isAvailable(campaigns[i]) && campaigns[i].creator == creator) {
                 countResult++;
             }
         }
@@ -174,7 +173,27 @@ function getAddressBalance() public view returns (uint256) {
         CampaignDetails[] memory result = new CampaignDetails[](countResult);
         uint256 index;
         for (uint256 i = 0; i < campaignCount; i++) {
-            if (campaigns[i].creator == creator) {
+            if (_isAvailable(campaigns[i]) && campaigns[i].creator == creator) {
+                result[index] = _mapCampaign(campaigns[i]);
+                index++;
+            }
+        }
+        return result;
+    }
+    function getPastCampaignsByCreator(address creator) public view returns (CampaignDetails[] memory) {
+        // First, count how many campaigns are created by the given creator.
+        uint256 countResult;
+        for (uint256 i = 0; i < campaignCount; i++) {
+            if (_isPast(campaigns[i]) && campaigns[i].creator == creator) {
+                countResult++;
+            }
+        }
+
+        // Allocate a new array for matching campaigns.
+        CampaignDetails[] memory result = new CampaignDetails[](countResult);
+        uint256 index;
+        for (uint256 i = 0; i < campaignCount; i++) {
+            if (_isPast(campaigns[i]) && campaigns[i].creator == creator) {
                 result[index] = _mapCampaign(campaigns[i]);
                 index++;
             }
@@ -264,7 +283,12 @@ function getAddressBalance() public view returns (uint256) {
         return _mapCampaign(campaigns[campaignId]);
     }
 
-    // --- New functions based on TODOs ---
+   function updateDeadlineStatus(uint256 campaignId) internal {
+    Campaign storage campaign = campaigns[campaignId];
+    if (block.timestamp >= campaign.deadline && !campaign.reachedDeadline) {
+        campaign.reachedDeadline = true;  // Mark as reached the deadline
+    }
+}
 
     // Update targetAmount field for a campaign.
     function updateTargetAmount(uint256 campaignId, uint256 newTargetAmount) public campaignExists(campaignId) {
@@ -295,6 +319,3 @@ function getAddressBalance() public view returns (uint256) {
         emit RefundClaimed(campaignId, msg.sender, donatedAmount);
     }
 }
-// TODO:  in withdraw funds 
-// unable to transfer the total donated to creator, the transfer was successful but the value wasn't transferred to the creator address  
-// update target amount after withdraw successfully
