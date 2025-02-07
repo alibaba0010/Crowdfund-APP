@@ -5,7 +5,6 @@ contract GoFundme {
     constructor() payable {}
 
     struct Campaign {
-        string id;
         address payable creator;
         string name;
         string title; 
@@ -23,7 +22,6 @@ contract GoFundme {
     
     // Struct for returning campaign details in memory (no mappings)
     struct CampaignDetails {
-        string id;
         address creator;
         string name;
         string title;
@@ -61,7 +59,6 @@ contract GoFundme {
 
     // 1. Create a new campaign
     function createCampaign(
-        string memory campaignId,
         string memory name,
         string memory title,
         string memory description,
@@ -74,7 +71,6 @@ contract GoFundme {
 
         Campaign storage newCampaign = campaigns[campaignCount];
 
-        newCampaign.id = campaignId;
         newCampaign.creator = payable(msg.sender);
         newCampaign.name = name;
         newCampaign.title = title;
@@ -262,7 +258,6 @@ function getAddressBalance() public view returns (uint256) {
     // Internal helper to map storage Campaign struct to a memory CampaignDetails struct
     function _mapCampaign(Campaign storage c) internal view returns (CampaignDetails memory) {
         return CampaignDetails({
-            id: c.id,
             creator: c.creator,
             name: c.name,
             title: c.title,
@@ -278,17 +273,16 @@ function getAddressBalance() public view returns (uint256) {
         });
     }
 
-    // 11. Delete a campaign by the creator
-    function deleteCampaign(uint256 campaignId) public campaignExists(campaignId) {
-        Campaign storage campaign = campaigns[campaignId];
-        require(campaign.creator == msg.sender, "Only the creator can delete this campaign.");
-        require(campaign.totalDonated == 0, "Cannot delete a campaign that has received donations.");
-
-        campaign.withdrawn = true;
-        campaign.reachedDeadline = true;
-        // The donators array remains intact to maintain record history.
-    }
-
+    // 11. Get All Campaigns
+    function getAllCampaigns() public view returns (CampaignDetails[] memory) {
+        
+        CampaignDetails[] memory allCampaigns = new CampaignDetails[](campaignCount);
+        uint256 index;
+             for (uint256 i = 0; i < campaignCount; i++) {
+                allCampaigns[index++] = _mapCampaign(campaigns[i]);
+             }
+             return allCampaigns;
+        }
     // 12. Get a campaign using its ID
     function getCampaignById(uint256 campaignId) public view campaignExists(campaignId) returns (CampaignDetails memory) {
         return _mapCampaign(campaigns[campaignId]);

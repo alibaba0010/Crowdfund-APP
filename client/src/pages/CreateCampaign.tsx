@@ -11,7 +11,6 @@ import { type ChangeEvent, DragEvent, useEffect, useState } from "react";
 import { uploadToPinata } from "../utils";
 import { refreshCampaigns } from "../actions/campaigns";
 import { useDispatch } from "react-redux";
-import { v4 as uuidv4 } from "uuid";
 
 const validateDate = (date: Date) => {
   const today = new Date();
@@ -102,12 +101,10 @@ const CreateCampaign = () => {
       const parsedAmount = parseEther(targetAmount.toString());
       const deadlineTimestamp = Math.floor(deadline.getTime() / 1000);
       const image = await uploadImage();
-      const campaignId = uuidv4();
       writeContract({
         ...wagmiContractConfig,
         functionName: "createCampaign",
         args: [
-          campaignId,
           name,
           title,
           description,

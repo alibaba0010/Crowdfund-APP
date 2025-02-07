@@ -63,7 +63,7 @@ const parseActionData = (campaigns: any) => {
     donators: campaign.donators,
     reachedDeadline: campaign.reachedDeadline,
     withdrawn: campaign.withdrawn,
-    id: campaign.id,
+    id: i,
     pId: uuidv4(),
   }));
   return parsedCampaigns;

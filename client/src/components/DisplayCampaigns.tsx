@@ -5,7 +5,6 @@ import { useSelector } from "react-redux";
 import { useMemo } from "react";
 
 export interface Campaign {
-  id: string;
   creator: string;
   name: string;
   title: string;
