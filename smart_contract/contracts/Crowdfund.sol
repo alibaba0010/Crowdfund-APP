@@ -5,7 +5,7 @@ contract GoFundme {
     constructor() payable {}
 
     struct Campaign {
-        uint256 id;
+        string id;
         address payable creator;
         string name;
         string title; 
@@ -23,7 +23,7 @@ contract GoFundme {
     
     // Struct for returning campaign details in memory (no mappings)
     struct CampaignDetails {
-        uint256 id;
+        string id;
         address creator;
         string name;
         string title;
@@ -61,7 +61,7 @@ contract GoFundme {
 
     // 1. Create a new campaign
     function createCampaign(
-        uint256 campaignId,
+        string memory campaignId,
         string memory name,
         string memory title,
         string memory description,

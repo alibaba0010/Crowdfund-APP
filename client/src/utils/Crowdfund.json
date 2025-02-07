@@ -152,7 +152,7 @@
       "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
       "name": "campaigns",
       "outputs": [
-        { "internalType": "uint256", "name": "id", "type": "uint256" },
+        { "internalType": "string", "name": "id", "type": "string" },
         {
           "internalType": "address payable",
           "name": "creator",
@@ -209,7 +209,7 @@
     },
     {
       "inputs": [
-        { "internalType": "uint256", "name": "campaignId", "type": "uint256" },
+        { "internalType": "string", "name": "campaignId", "type": "string" },
         { "internalType": "string", "name": "name", "type": "string" },
         { "internalType": "string", "name": "title", "type": "string" },
         { "internalType": "string", "name": "description", "type": "string" },
@@ -257,7 +257,7 @@
       "outputs": [
         {
           "components": [
-            { "internalType": "uint256", "name": "id", "type": "uint256" },
+            { "internalType": "string", "name": "id", "type": "string" },
             { "internalType": "address", "name": "creator", "type": "address" },
             { "internalType": "string", "name": "name", "type": "string" },
             { "internalType": "string", "name": "title", "type": "string" },
@@ -315,7 +315,7 @@
       "outputs": [
         {
           "components": [
-            { "internalType": "uint256", "name": "id", "type": "uint256" },
+            { "internalType": "string", "name": "id", "type": "string" },
             { "internalType": "address", "name": "creator", "type": "address" },
             { "internalType": "string", "name": "name", "type": "string" },
             { "internalType": "string", "name": "title", "type": "string" },
@@ -382,7 +382,7 @@
       "outputs": [
         {
           "components": [
-            { "internalType": "uint256", "name": "id", "type": "uint256" },
+            { "internalType": "string", "name": "id", "type": "string" },
             { "internalType": "address", "name": "creator", "type": "address" },
             { "internalType": "string", "name": "name", "type": "string" },
             { "internalType": "string", "name": "title", "type": "string" },
@@ -457,7 +457,7 @@
       "outputs": [
         {
           "components": [
-            { "internalType": "uint256", "name": "id", "type": "uint256" },
+            { "internalType": "string", "name": "id", "type": "string" },
             { "internalType": "address", "name": "creator", "type": "address" },
             { "internalType": "string", "name": "name", "type": "string" },
             { "internalType": "string", "name": "title", "type": "string" },
@@ -515,7 +515,7 @@
       "outputs": [
         {
           "components": [
-            { "internalType": "uint256", "name": "id", "type": "uint256" },
+            { "internalType": "string", "name": "id", "type": "string" },
             { "internalType": "address", "name": "creator", "type": "address" },
             { "internalType": "string", "name": "name", "type": "string" },
             { "internalType": "string", "name": "title", "type": "string" },

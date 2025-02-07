@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { useMemo } from "react";
 
 export interface Campaign {
+  id: number;
   creator: string;
   name: string;
   title: string;
@@ -19,6 +20,7 @@ export interface Campaign {
   withdrawn: boolean;
 }
 export type CampaignData = {
+  id: number;
   creator: string;
   name: string;
   title: string;
@@ -28,7 +30,6 @@ export type CampaignData = {
   totalDonated: number;
   donators: string[];
   image: string;
-  id: number;
   pId: number;
   reachedDeadline: boolean;
   withdrawn: boolean;

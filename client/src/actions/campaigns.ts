@@ -47,26 +47,6 @@ const campaignsSlice = createSlice({
         campaigns,
       };
     },
-    getCampaignById(state, action) {
-      const { campaign } = action.payload;
-
-      state.campaignDetails = {
-        creator: campaign.creator,
-        name: campaign.name,
-        title: campaign.title,
-        description: campaign.description,
-        targetAmount: formatEther(campaign.targetAmount),
-        deadline: daysLeft(campaign.deadline),
-        totalDonated: Number(formatEther(campaign.totalDonated)),
-        image: campaign.image,
-        // createdAt: campaign.createdAt,
-        donators: campaign.donators,
-        reachedDeadline: campaign.reachedDeadline,
-        withdrawn: campaign.withdrawn,
-        id: campaign.id,
-        pId: campaign.pId,
-      };
-    },
   },
 });
 const parseActionData = (campaigns: any) => {
@@ -83,7 +63,7 @@ const parseActionData = (campaigns: any) => {
     donators: campaign.donators,
     reachedDeadline: campaign.reachedDeadline,
     withdrawn: campaign.withdrawn,
-    id: i,
+    id: campaign.id,
     pId: uuidv4(),
   }));
   return parsedCampaigns;
@@ -92,7 +72,6 @@ export const {
   refreshCampaigns,
   setAvailableCampaigns,
   setPastCampaigns,
-  getCampaignById,
   setCreatorCampaigns,
 } = campaignsSlice.actions;
 export default campaignsSlice.reducer;
