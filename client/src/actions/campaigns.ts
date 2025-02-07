@@ -1,22 +1,23 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { Campaign } from "../components/DisplayCampaigns";
+import type { Campaign } from "../components/DisplayCampaigns";
 import { formatEther } from "viem";
 import { daysLeft } from "../utils";
 import { v4 as uuidv4 } from "uuid";
 
 const initialState = {
   isChanged: false,
+  isLoading: false,
   availableCampaigns: {
-    campaigns: [],
+    campaigns: [] as Campaign[],
   },
   pastCampaigns: {
-    campaigns: [],
+    campaigns: [] as Campaign[],
   },
   availableCreatorCampaigns: {
-    campaigns: [],
+    campaigns: [] as Campaign[],
   },
   pastCreatorCampaigns: {
-    campaigns: [],
+    campaigns: [] as Campaign[],
   },
 
   campaignDetails: {},
@@ -31,12 +32,27 @@ const campaignsSlice = createSlice({
     },
 
     setAllCampaigns(state, action) {
-      const { data, address } = action.payload;
-      // sort data
-      // i. if reachedDeadline is true campaigns will be set to past campaigns
-      // ii. else campaigns will be set to available campaigns
-      /// iii. if reached deadline is true and creator is  equal to address set past creator campaign
-      // if reachedDeadline is false and creator is equal to address set available creator campaign
+      const { data, address, isLoading } = action.payload;
+      const parsedCampaigns = parseActionData(data);
+      state.isLoading = isLoading;
+      state.availableCampaigns.campaigns = [];
+      state.pastCampaigns.campaigns = [];
+      state.availableCreatorCampaigns.campaigns = [];
+      state.pastCreatorCampaigns.campaigns = [];
+
+      parsedCampaigns.forEach((campaign: any) => {
+        if (campaign.reachedDeadline) {
+          state.pastCampaigns.campaigns.push(campaign);
+          if (campaign.creator === address) {
+            state.pastCreatorCampaigns.campaigns.push(campaign);
+          }
+        } else {
+          state.availableCampaigns.campaigns.push(campaign);
+          if (campaign.creator === address) {
+            state.availableCreatorCampaigns.campaigns.push(campaign);
+          }
+        }
+      });
     },
   },
 });

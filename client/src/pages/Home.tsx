@@ -32,6 +32,7 @@ const Home = () => {
         setAllCampaigns({
           data: data as Campaign[],
           address,
+          isLoading,
         })
       );
     }

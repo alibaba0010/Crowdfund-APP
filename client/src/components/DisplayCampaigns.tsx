@@ -36,7 +36,7 @@ export type CampaignData = {
 interface DisplayCampaignsProps {
   isLoading: boolean;
   title: string;
-  campaignType: "available" | "past" | "creator";
+  campaignType: "available" | "past" | "availableCreator" | "pastCreator";
   text: string;
 }
 
