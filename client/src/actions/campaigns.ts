@@ -29,26 +29,14 @@ const campaignsSlice = createSlice({
     refreshCampaigns(state) {
       state.isChanged = !state.isChanged;
     },
-    setAvailableCampaigns(state, action) {
-      const campaigns = parseActionData(action.payload.data);
 
-      state.availableCampaigns = {
-        campaigns,
-      };
-    },
-    setPastCampaigns(state, action) {
-      const campaigns = parseActionData(action.payload.data);
-
-      state.pastCampaigns = {
-        campaigns,
-      };
-    },
-    setCreatorCampaigns(state, action) {
-      const campaigns = parseActionData(action.payload.data);
-
-      state.availableCreatorCampaigns = {
-        campaigns,
-      };
+    setAllCampaigns(state, action) {
+      const { data, address } = action.payload;
+      // sort data
+      // i. if reachedDeadline is true campaigns will be set to past campaigns
+      // ii. else campaigns will be set to available campaigns
+      /// iii. if reached deadline is true and creator is  equal to address set past creator campaign
+      // if reachedDeadline is false and creator is equal to address set available creator campaign
     },
   },
 });
@@ -71,10 +59,5 @@ const parseActionData = (campaigns: any) => {
   }));
   return parsedCampaigns;
 };
-export const {
-  refreshCampaigns,
-  setAvailableCampaigns,
-  setPastCampaigns,
-  setCreatorCampaigns,
-} = campaignsSlice.actions;
+export const { refreshCampaigns, setAllCampaigns } = campaignsSlice.actions;
 export default campaignsSlice.reducer;

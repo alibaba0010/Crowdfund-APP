@@ -51,7 +51,7 @@ export const store = configureStore({
     getDefaultMiddleware({
       serializableCheck: {
         ignoredActions: [
-          "campaigns/setAvailableCampaigns",
+          "campaigns/setAllCampaigns",
           "campaigns/getCampaignById",
           "campaigns/setCreatorCampaigns",
           "campaigns/setPastCampaigns",

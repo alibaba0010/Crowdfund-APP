@@ -4,11 +4,7 @@ import { DisplayCampaigns } from "../components";
 import { useReadContract } from "wagmi";
 import { wagmiContractConfig } from "../utils/contract";
 import { Campaign } from "../components/DisplayCampaigns";
-import {
-  refreshCampaigns,
-  setAvailableCampaigns,
-  setPastCampaigns,
-} from "../actions/campaigns";
+import { refreshCampaigns, setAllCampaigns } from "../actions/campaigns";
 
 const Home = () => {
   const address = useSelector((state: any) => state.wallet.addresses?.[0]);
@@ -18,45 +14,28 @@ const Home = () => {
   );
   const { data, isLoading, refetch } = useReadContract({
     ...wagmiContractConfig,
-    functionName: "getAvailableCampaigns",
+    functionName: "getAllCampaigns",
     query: {
       enabled: !!address,
     },
   });
-  const {
-    data: campaigns,
-    isLoading: isRefreshing,
-    refetch: refresh,
-  } = useReadContract({
-    ...wagmiContractConfig,
-    functionName: "getPastCampaigns",
-    query: {
-      enabled: !!address,
-    },
-  });
+
   useEffect(() => {
     if (refreshCampaign) {
       refetch();
-      refresh();
       dispatch(refreshCampaigns());
     }
   }, [address, refreshCampaign]);
   useEffect(() => {
     if (data) {
       dispatch(
-        setAvailableCampaigns({
+        setAllCampaigns({
           data: data as Campaign[],
+          address,
         })
       );
     }
-    if (campaigns) {
-      dispatch(
-        setPastCampaigns({
-          data: campaigns as Campaign[],
-        })
-      );
-    }
-  }, [data, campaigns, isLoading]);
+  }, [data, isLoading]);
   return (
     <>
       <DisplayCampaigns
@@ -68,7 +47,7 @@ const Home = () => {
       <div className="mt-32">
         <DisplayCampaigns
           title="Past Campaigns"
-          isLoading={isRefreshing}
+          isLoading={isLoading}
           campaignType="past"
           text="You have no past campaigns yet"
         />
