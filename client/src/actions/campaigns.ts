@@ -12,7 +12,10 @@ const initialState = {
   pastCampaigns: {
     campaigns: [],
   },
-  creatorCampaigns: {
+  availableCreatorCampaigns: {
+    campaigns: [],
+  },
+  pastCreatorCampaigns: {
     campaigns: [],
   },
 
@@ -43,7 +46,7 @@ const campaignsSlice = createSlice({
     setCreatorCampaigns(state, action) {
       const campaigns = parseActionData(action.payload.data);
 
-      state.creatorCampaigns = {
+      state.availableCreatorCampaigns = {
         campaigns,
       };
     },

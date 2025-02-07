@@ -152,7 +152,6 @@
       "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
       "name": "campaigns",
       "outputs": [
-        { "internalType": "string", "name": "id", "type": "string" },
         {
           "internalType": "address payable",
           "name": "creator",
@@ -209,7 +208,6 @@
     },
     {
       "inputs": [
-        { "internalType": "string", "name": "campaignId", "type": "string" },
         { "internalType": "string", "name": "name", "type": "string" },
         { "internalType": "string", "name": "title", "type": "string" },
         { "internalType": "string", "name": "description", "type": "string" },
@@ -230,15 +228,6 @@
       "inputs": [
         { "internalType": "uint256", "name": "campaignId", "type": "uint256" }
       ],
-      "name": "deleteCampaign",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        { "internalType": "uint256", "name": "campaignId", "type": "uint256" }
-      ],
       "name": "donate",
       "outputs": [],
       "stateMutability": "payable",
@@ -253,69 +242,10 @@
     },
     {
       "inputs": [],
-      "name": "getAvailableCampaigns",
+      "name": "getAllCampaigns",
       "outputs": [
         {
           "components": [
-            { "internalType": "string", "name": "id", "type": "string" },
-            { "internalType": "address", "name": "creator", "type": "address" },
-            { "internalType": "string", "name": "name", "type": "string" },
-            { "internalType": "string", "name": "title", "type": "string" },
-            {
-              "internalType": "string",
-              "name": "description",
-              "type": "string"
-            },
-            {
-              "internalType": "uint256",
-              "name": "targetAmount",
-              "type": "uint256"
-            },
-            { "internalType": "string", "name": "image", "type": "string" },
-            {
-              "internalType": "uint256",
-              "name": "createdAt",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "deadline",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "totalDonated",
-              "type": "uint256"
-            },
-            {
-              "internalType": "address[]",
-              "name": "donators",
-              "type": "address[]"
-            },
-            { "internalType": "bool", "name": "withdrawn", "type": "bool" },
-            {
-              "internalType": "bool",
-              "name": "reachedDeadline",
-              "type": "bool"
-            }
-          ],
-          "internalType": "struct GoFundme.CampaignDetails[]",
-          "name": "",
-          "type": "tuple[]"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        { "internalType": "address", "name": "creator", "type": "address" }
-      ],
-      "name": "getAvailableCampaignsByCreator",
-      "outputs": [
-        {
-          "components": [
-            { "internalType": "string", "name": "id", "type": "string" },
             { "internalType": "address", "name": "creator", "type": "address" },
             { "internalType": "string", "name": "name", "type": "string" },
             { "internalType": "string", "name": "title", "type": "string" },
@@ -382,7 +312,6 @@
       "outputs": [
         {
           "components": [
-            { "internalType": "string", "name": "id", "type": "string" },
             { "internalType": "address", "name": "creator", "type": "address" },
             { "internalType": "string", "name": "name", "type": "string" },
             { "internalType": "string", "name": "title", "type": "string" },
@@ -444,120 +373,6 @@
             { "internalType": "uint256", "name": "amount", "type": "uint256" }
           ],
           "internalType": "struct GoFundme.Donor[]",
-          "name": "",
-          "type": "tuple[]"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "getPastCampaigns",
-      "outputs": [
-        {
-          "components": [
-            { "internalType": "string", "name": "id", "type": "string" },
-            { "internalType": "address", "name": "creator", "type": "address" },
-            { "internalType": "string", "name": "name", "type": "string" },
-            { "internalType": "string", "name": "title", "type": "string" },
-            {
-              "internalType": "string",
-              "name": "description",
-              "type": "string"
-            },
-            {
-              "internalType": "uint256",
-              "name": "targetAmount",
-              "type": "uint256"
-            },
-            { "internalType": "string", "name": "image", "type": "string" },
-            {
-              "internalType": "uint256",
-              "name": "createdAt",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "deadline",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "totalDonated",
-              "type": "uint256"
-            },
-            {
-              "internalType": "address[]",
-              "name": "donators",
-              "type": "address[]"
-            },
-            { "internalType": "bool", "name": "withdrawn", "type": "bool" },
-            {
-              "internalType": "bool",
-              "name": "reachedDeadline",
-              "type": "bool"
-            }
-          ],
-          "internalType": "struct GoFundme.CampaignDetails[]",
-          "name": "",
-          "type": "tuple[]"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        { "internalType": "address", "name": "creator", "type": "address" }
-      ],
-      "name": "getPastCampaignsByCreator",
-      "outputs": [
-        {
-          "components": [
-            { "internalType": "string", "name": "id", "type": "string" },
-            { "internalType": "address", "name": "creator", "type": "address" },
-            { "internalType": "string", "name": "name", "type": "string" },
-            { "internalType": "string", "name": "title", "type": "string" },
-            {
-              "internalType": "string",
-              "name": "description",
-              "type": "string"
-            },
-            {
-              "internalType": "uint256",
-              "name": "targetAmount",
-              "type": "uint256"
-            },
-            { "internalType": "string", "name": "image", "type": "string" },
-            {
-              "internalType": "uint256",
-              "name": "createdAt",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "deadline",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "totalDonated",
-              "type": "uint256"
-            },
-            {
-              "internalType": "address[]",
-              "name": "donators",
-              "type": "address[]"
-            },
-            { "internalType": "bool", "name": "withdrawn", "type": "bool" },
-            {
-              "internalType": "bool",
-              "name": "reachedDeadline",
-              "type": "bool"
-            }
-          ],
-          "internalType": "struct GoFundme.CampaignDetails[]",
           "name": "",
           "type": "tuple[]"
         }

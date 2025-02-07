@@ -166,95 +166,11 @@ function getAddressBalance() public view returns (uint256) {
     }
 
     // 8. Get all campaigns for a particular creator using _mapCampaign
-    function getAvailableCampaignsByCreator(address creator) public view returns (CampaignDetails[] memory) {
-        // First, count how many campaigns are created by the given creator.
-        uint256 countResult;
-        for (uint256 i = 0; i < campaignCount; i++) {
-            if (_isAvailable(campaigns[i]) && campaigns[i].creator == creator) {
-                countResult++;
-            }
-        }
-
-        // Allocate a new array for matching campaigns.
-        CampaignDetails[] memory result = new CampaignDetails[](countResult);
-        uint256 index;
-        for (uint256 i = 0; i < campaignCount; i++) {
-            if (_isAvailable(campaigns[i]) && campaigns[i].creator == creator) {
-                result[index] = _mapCampaign(campaigns[i]);
-                index++;
-            }
-        }
-        return result;
-    }
-    function getPastCampaignsByCreator(address creator) public view returns (CampaignDetails[] memory) {
-        // First, count how many campaigns are created by the given creator.
-        uint256 countResult;
-        for (uint256 i = 0; i < campaignCount; i++) {
-            if (_isPast(campaigns[i]) && campaigns[i].creator == creator) {
-                countResult++;
-            }
-        }
-
-        // Allocate a new array for matching campaigns.
-        CampaignDetails[] memory result = new CampaignDetails[](countResult);
-        uint256 index;
-        for (uint256 i = 0; i < campaignCount; i++) {
-            if (_isPast(campaigns[i]) && campaigns[i].creator == creator) {
-                result[index] = _mapCampaign(campaigns[i]);
-                index++;
-            }
-        }
-        return result;
-    }
+  
 
     // 9. Get all active campaigns
-    function getAvailableCampaigns() public view returns (CampaignDetails[] memory) {
-        uint256 matchCount;
-        for (uint256 i = 0; i < campaignCount; i++) {
-            if (_isAvailable(campaigns[i])) {
-                matchCount++;
-            }
-        }
-
-        CampaignDetails[] memory result = new CampaignDetails[](matchCount);
-        uint256 index;
-        for (uint256 i = 0; i < campaignCount; i++) {
-            if (_isAvailable(campaigns[i])) {
-                result[index++] = _mapCampaign(campaigns[i]);
-            }
-        }
-        return result;
-    }
 
     // 10. Get all past campaigns
-    function getPastCampaigns() public view returns (CampaignDetails[] memory) {
-        uint256 matchCount;
-        for (uint256 i = 0; i < campaignCount; i++) {
-            if (_isPast(campaigns[i])) {
-                matchCount++;
-            }
-        }
-
-        CampaignDetails[] memory result = new CampaignDetails[](matchCount);
-        uint256 index;
-        for (uint256 i = 0; i < campaignCount; i++) {
-            if (_isPast(campaigns[i])) {
-                result[index++] = _mapCampaign(campaigns[i]);
-            }
-        }
-        return result;
-    }
-
-    // Internal helper to check campaign availability
-    function _isAvailable(Campaign storage c) internal view returns (bool) {
-        return !c.withdrawn && !c.reachedDeadline && block.timestamp <= c.deadline;
-    }
-
-    // Internal helper to check if a campaign is past (i.e. finished or expired)
-    function _isPast(Campaign storage c) internal view returns (bool) {
-        return c.withdrawn || c.reachedDeadline || block.timestamp > c.deadline;
-    }
-
     // Internal helper to map storage Campaign struct to a memory CampaignDetails struct
     function _mapCampaign(Campaign storage c) internal view returns (CampaignDetails memory) {
         return CampaignDetails({

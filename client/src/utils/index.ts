@@ -3,8 +3,8 @@ import axios from "axios";
 export const contractABI = abi.abi;
 export const activeChain = "sepolia";
 export const clientId = import.meta.env.VITE_HELLO;
-// export const contractAddress = "0x1636e5b737CD967a2c0A9C1d03B5b4F63DB75254";
-export const contractAddress = "0x53a0553Cd12FFbD9Aa1B9c85a08e6A4D860C5213";
+export const contractAddress = "0x74B2e72879876a8535deBc56ae3844bb1a2c7ca1";
+// export const contractAddress = "0x53a0553Cd12FFbD9Aa1B9c85a08e6A4D860C5213";
 
 export const calculateBarPercentage = (goal: number, raisedAmount: number) => {
   const percentage = Math.round((raisedAmount * 100) / goal);
