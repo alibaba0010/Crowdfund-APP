@@ -8,6 +8,10 @@ import type { Campaign, CampaignData } from "../components/DisplayCampaigns";
 import { formatEther } from "viem";
 import { daysLeft } from "../utils";
 
+export interface Donations {
+  donor: string;
+  amount: bigint;
+}
 const CampaignById = () => {
   const { id, pId } = useParams();
   const campaignId = id ? parseInt(id, 10) : undefined; // Convert to number
@@ -21,6 +25,15 @@ const CampaignById = () => {
       enabled: !!address,
     },
   });
+  const { data: donations, isLoading: isRefreshing } = useReadContract({
+    ...wagmiContractConfig,
+    functionName: "getDonors",
+    args: [campaignId],
+    query: {
+      enabled: !!address,
+    },
+  });
+  console.log(donations);
   useEffect(() => {
     if (data) {
       const campaign = data as Campaign;
@@ -50,7 +63,12 @@ const CampaignById = () => {
   return (
     <>
       {campaign && (
-        <CampaignDetails isLoading={isLoading} campaign={campaign} />
+        <CampaignDetails
+          isLoading={isLoading}
+          campaign={campaign}
+          donations={donations as Donations[]}
+          isRefreshing={isRefreshing}
+        />
       )}
     </>
   );

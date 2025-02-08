@@ -14,22 +14,30 @@ import { useWaitForTransactionReceipt } from "wagmi";
 import { useWriteContract } from "wagmi";
 import { CustomButton, Loader } from "../components";
 import { wagmiContractConfig } from "../utils/contract";
-import { parseEther } from "viem";
+import { formatEther, parseEther } from "viem";
 import { shortenAddress } from "../utils";
 import { loader } from "../assets";
 import type { CampaignData } from "../components/DisplayCampaigns";
+import { Donations } from "./CampaignById";
+
+interface CampaignDetailsProps {
+  isLoading: boolean;
+  isRefreshing: boolean;
+  campaign: CampaignData;
+  donations: Donations[];
+}
 
 const CampaignDetails = ({
   isLoading,
+  isRefreshing,
   campaign,
-}: {
-  isLoading: boolean;
-  campaign: CampaignData;
-}) => {
+  donations,
+}: CampaignDetailsProps) => {
   const [amount, setAmount] = useState("");
   const address = useSelector((state: any) => state.wallet.addresses?.[0]);
   const [error, setError] = useState("");
   const [openWithdraw, setOpenWithdraw] = useState(false);
+  const [openWithdrawFunds, setOpenWithdrawFunds] = useState(false);
   const [newTarget, setNewTarget] = useState(false);
   const { balance } = useSelector((state: any) => state.wallet);
   const {
@@ -42,11 +50,11 @@ const CampaignDetails = ({
     creator,
     // pId,
     withdrawn,
-    reachedDeadline,
+
     id,
     totalDonated,
   } = campaign;
-
+  const reachedDeadline = true;
   const creatorAddress = shortenAddress(campaign.creator);
   const target = Number(targetAmount);
   const {
@@ -67,11 +75,13 @@ const CampaignDetails = ({
     if (address === creator && totalDonated >= totalTarget) {
       setOpenWithdraw(true);
     }
+    if (address !== creator && reachedDeadline) {
+      setOpenWithdrawFunds(true);
+    }
     setError("");
   }, [amount, totalDonated, address, isConfirmed]);
 
   const handleWithDraw = async () => {
-    // Implement withdrawal logic here
     try {
       writeContract({
         ...wagmiContractConfig,
@@ -132,9 +142,38 @@ const CampaignDetails = ({
       console.log(error);
     }
   };
-
+  const handleWithdrawFunds = async () => {
+    try {
+      writeContract({
+        ...wagmiContractConfig,
+        functionName: "claimRefund",
+        args: [id],
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <>
+      {reachedDeadline && !withdrawn && (
+        <div className="fixed inset-0 z-10 h-screen bg-[rgba(0,0,0,0.7)] flex items-center justify-center flex-col">
+          <div className="text-white text-xl mb-4">
+            Campaign has reached its deadline. Unfortunately, the Campaign was
+            unable to reach its target,
+          </div>
+          <CustomButton
+            btnType="button"
+            title="Withdraw Your Donation(s)"
+            styles={`mt-4 ${
+              isPending || isConfirming
+                ? "bg-gray-500 cursor-not-allowed pointer-events-none"
+                : "bg-[#8c6dfd]"
+            }`}
+            disabled={isPending || isConfirming}
+            handleClick={handleWithdrawFunds}
+          />
+        </div>
+      )}
       {openWithdraw && !withdrawn && (
         <div className="fixed inset-0 z-10 h-screen bg-[rgba(0,0,0,0.7)] flex items-center justify-center flex-col">
           <div className="text-white text-xl mb-4">
@@ -181,7 +220,7 @@ const CampaignDetails = ({
               <CustomButton
                 btnType="button"
                 title="Set New Target"
-                styles={`w-full mt-4 ${
+                styles={`mt-4 ${
                   isPending || isConfirming
                     ? "bg-gray-500 cursor-not-allowed pointer-events-none"
                     : "bg-[#8c6dfd]"
@@ -198,6 +237,7 @@ const CampaignDetails = ({
           )}
         </div>
       )}
+      {/* Display Campaign By its ID */}
       {isLoading ? (
         <img
           src={loader || "/placeholder.svg"}
@@ -281,19 +321,24 @@ const CampaignDetails = ({
                   </h2>
                   <div className="mt-[20px] flex flex-col gap-4">
                     {donators.length > 0 ? (
-                      donators.map((item: any, index: any) => (
-                        <div
-                          key={`${item.donator}-${index}`}
-                          className="flex justify-between items-center gap-4"
-                        >
-                          <p className="font-epilogue font-normal text-[16px] text-[#b2b3bd] leading-[26px] break-ll">
-                            {index + 1}. {item}
-                          </p>
-                          <p className="font-epilogue font-normal text-[16px] text-[#808191] leading-[26px] break-ll">
-                            {item.donation}
-                          </p>
-                        </div>
-                      ))
+                      donations.map(
+                        (
+                          item: Donations,
+                          index: number // Add proper types
+                        ) => (
+                          <div
+                            key={`${item.donor}-${index}`}
+                            className="flex justify-between items-center gap-4"
+                          >
+                            <p className="font-epilogue font-normal text-[16px] text-[#b2b3bd] leading-[26px] break-all">
+                              {index + 1}. {shortenAddress(item.donor)}{" "}
+                            </p>
+                            <p className="font-epilogue font-normal text-[16px] text-[#808191] leading-[26px] break-ll">
+                              {formatEther(item.amount)} ETH{" "}
+                            </p>
+                          </div>
+                        )
+                      )
                     ) : (
                       <p className="font-epilogue font-normal text-[16px] text-[#808191] leading-[26px] text-justify">
                         No donators yet. Be the first one!
