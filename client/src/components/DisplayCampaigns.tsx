@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { loader } from "../assets";
 import CampaignCard from "./CampaignCard";
 import { useSelector } from "react-redux";
@@ -51,19 +51,36 @@ const DisplayCampaigns = ({
     (state: any) => state.campaigns[`${campaignType}Campaigns`]
   );
   const { campaigns } = campaignData;
-  const sortedCampaigns = useMemo(() => {
-    return [...campaigns].sort((a, b) => b.id - a.id);
-  }, [campaigns]);
+  const [searchParams] = useSearchParams();
+  const searchQuery = searchParams.get("search")?.toLowerCase() || "";
+
   const handleNavigate = (campaign: CampaignData) => {
     const { id, pId } = campaign;
 
     navigate(`/campaign-details/${pId}/${id}`);
   };
 
+  const sortedCampaigns = useMemo(() => {
+    let filtered = [...campaigns];
+
+    if (searchQuery) {
+      filtered = filtered.filter((campaign) =>
+        campaign.title.toLowerCase().includes(searchQuery)
+      );
+    }
+
+    return filtered.sort((a, b) => b.id - a.id);
+  }, [campaigns, searchQuery]);
+
   return (
     <div>
       <h1 className="font-epilogue font-semibold text-[18px] text-white text-left">
-        {title} ({campaigns.length})
+        {title} ({sortedCampaigns.length})
+        {searchQuery && (
+          <span className="text-gray-400 text-sm ml-2">
+            - Searching for: "{searchQuery}"
+          </span>
+        )}
       </h1>
 
       <div className="flex flex-wrap mt-[20px] gap-[26px]">

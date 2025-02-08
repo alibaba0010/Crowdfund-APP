@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { CustomButton, ProfileDropDown, WalletConnect } from ".";
 import { logo, menu, search } from "../assets";
 import { navlinks } from "../constants";
@@ -13,6 +13,23 @@ const Navbar = () => {
   const address = useSelector((state: any) => state.wallet.addresses?.[0]);
   const { isWalletConnectOpen } = useSelector((state: any) => state.wallet);
   const dispatch = useDispatch();
+  const [searchQuery, setSearchQuery] = useState("");
+  const location = useLocation();
+  const [searchParams] = useSearchParams();
+  // Initialize search query from URL
+  useEffect(() => {
+    const query = searchParams.get("search") || "";
+    setSearchQuery(query);
+  }, [location]);
+
+  const handleSearch = () => {
+    const params = new URLSearchParams();
+    if (searchQuery.trim()) {
+      params.set("search", searchQuery.trim());
+    }
+    setSearchQuery("");
+    navigate({ search: params.toString() });
+  };
 
   return (
     <div className="flex md:flex-row flex-col-reverse justify-between mb-[35px] gap-6">
@@ -22,8 +39,14 @@ const Navbar = () => {
           type="text"
           placeholder="Search for campaigns"
           className="flex w-full font-epilogue font-normal text-[14px] placeholder:text-[#4b5264] text-white bg-transparent outline-none"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && handleSearch()}
         />
-        <div className="w-[72px] h-full rounded-[20px] bg-[#4acd8d] flex justify-center items-center cursor-pointer">
+        <div
+          className="w-[72px] h-full rounded-[20px] bg-[#4acd8d] flex justify-center items-center cursor-pointer"
+          onClick={handleSearch}
+        >
           <img
             src={search}
             alt="search"
