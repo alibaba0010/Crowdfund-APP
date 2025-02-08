@@ -40,6 +40,7 @@ const CampaignDetails = ({
   const [openWithdrawFunds, setOpenWithdrawFunds] = useState(false);
   const [newTarget, setNewTarget] = useState(false);
   const { balance } = useSelector((state: any) => state.wallet);
+
   const {
     deadline,
     donators,
@@ -50,23 +51,30 @@ const CampaignDetails = ({
     creator,
     // pId,
     withdrawn,
-
+    reachedDeadline,
     id,
     totalDonated,
   } = campaign;
-  const reachedDeadline = true;
+
   const creatorAddress = shortenAddress(campaign.creator);
+
   const target = Number(targetAmount);
+
+  const isCurrentUserDonor = donations?.some(
+    (donation) => donation.donor.toLowerCase() === address?.toLowerCase()
+  );
   const {
     data: hash,
     isPending,
     writeContract,
     error: writeError,
   } = useWriteContract();
+
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({
       hash,
     });
+
   useEffect(() => {
     if (isConfirmed) {
       window.location.reload();
@@ -75,7 +83,12 @@ const CampaignDetails = ({
     if (address === creator && totalDonated >= totalTarget) {
       setOpenWithdraw(true);
     }
-    if (address !== creator && reachedDeadline) {
+    if (
+      address !== creator &&
+      reachedDeadline &&
+      isCurrentUserDonor &&
+      totalDonated <= totalTarget
+    ) {
       setOpenWithdrawFunds(true);
     }
     setError("");
@@ -155,7 +168,7 @@ const CampaignDetails = ({
   };
   return (
     <>
-      {reachedDeadline && !withdrawn && (
+      {reachedDeadline && !withdrawn && openWithdrawFunds && (
         <div className="fixed inset-0 z-10 h-screen bg-[rgba(0,0,0,0.7)] flex items-center justify-center flex-col">
           <div className="text-white text-xl mb-4">
             Campaign has reached its deadline. Unfortunately, the Campaign was

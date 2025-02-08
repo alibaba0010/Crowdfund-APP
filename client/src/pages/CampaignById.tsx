@@ -33,7 +33,6 @@ const CampaignById = () => {
       enabled: !!address,
     },
   });
-  console.log(donations);
   useEffect(() => {
     if (data) {
       const campaign = data as Campaign;
