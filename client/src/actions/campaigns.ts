@@ -6,7 +6,6 @@ import { v4 as uuidv4 } from "uuid";
 
 const initialState = {
   isChanged: false,
-  isLoading: false,
   availableCampaigns: {
     campaigns: [] as Campaign[],
   },
@@ -32,9 +31,8 @@ const campaignsSlice = createSlice({
     },
 
     setAllCampaigns(state, action) {
-      const { data, address, isLoading } = action.payload;
+      const { data, address } = action.payload;
       const parsedCampaigns = parseActionData(data);
-      state.isLoading = isLoading;
       state.availableCampaigns.campaigns = [];
       state.pastCampaigns.campaigns = [];
       state.availableCreatorCampaigns.campaigns = [];

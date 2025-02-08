@@ -1,22 +1,41 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { refreshCampaigns } from "../actions/campaigns";
-import DisplayCampaigns from "../components/DisplayCampaigns";
+import { refreshCampaigns, setAllCampaigns } from "../actions/campaigns";
+import DisplayCampaigns, { Campaign } from "../components/DisplayCampaigns";
+import { wagmiContractConfig } from "../utils/contract";
+import { useReadContract } from "wagmi";
 
 const Profile = () => {
   const address = useSelector((state: any) => state.wallet.addresses?.[0]);
-  const isLoading = useSelector((state: any) => state.campaigns.isLoading);
   const dispatch = useDispatch();
 
   const refreshCampaign = useSelector(
     (state: any) => state.campaigns.isChanged
   );
+  const { data, isLoading, refetch } = useReadContract({
+    ...wagmiContractConfig,
+    functionName: "getAllCampaigns",
+    query: {
+      enabled: !!address,
+    },
+  });
 
   useEffect(() => {
     if (refreshCampaign) {
+      refetch();
       dispatch(refreshCampaigns());
     }
   }, [address, refreshCampaign]);
+  useEffect(() => {
+    if (data) {
+      dispatch(
+        setAllCampaigns({
+          data: data as Campaign[],
+          address,
+        })
+      );
+    }
+  }, [data, isLoading]);
 
   return (
     <>
