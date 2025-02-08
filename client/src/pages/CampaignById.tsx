@@ -1,12 +1,12 @@
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { useReadContract } from "wagmi";
-import CampaignDetails from "./CampaignDetails";
 import { useEffect, useState } from "react";
 import { wagmiContractConfig } from "../utils/contract";
 import type { Campaign, CampaignData } from "../components/DisplayCampaigns";
 import { formatEther } from "viem";
 import { daysLeft } from "../utils";
+import { CampaignDetails } from "../components";
 
 export interface Donations {
   donor: string;

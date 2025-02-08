@@ -12,13 +12,13 @@ import {
 import { useSelector } from "react-redux";
 import { useWaitForTransactionReceipt } from "wagmi";
 import { useWriteContract } from "wagmi";
-import { CustomButton, Loader } from "../components";
+import { CustomButton, Loader } from ".";
 import { wagmiContractConfig } from "../utils/contract";
 import { formatEther, parseEther } from "viem";
 import { shortenAddress } from "../utils";
 import { loader } from "../assets";
-import type { CampaignData } from "../components/DisplayCampaigns";
-import { Donations } from "./CampaignById";
+import type { CampaignData } from "./DisplayCampaigns";
+import { Donations } from "../pages/CampaignById";
 
 interface CampaignDetailsProps {
   isLoading: boolean;
