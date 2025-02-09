@@ -8,6 +8,7 @@ import {
   FiUser,
   FiBookOpen,
   FiHeart,
+  FiShare2,
 } from "react-icons/fi";
 import { useSelector } from "react-redux";
 import { useWaitForTransactionReceipt } from "wagmi";
@@ -41,7 +42,8 @@ const CampaignDetails = ({
   const [openWithdrawFunds, setOpenWithdrawFunds] = useState(false);
   const [newTarget, setNewTarget] = useState(false);
   const { balance } = useSelector((state: any) => state.wallet);
-
+  const [shareUrl, setShareUrl] = useState("");
+  console.log(`isLoading ${isLoading} with isRefreshing: ${isRefreshing}`);
   const {
     deadline,
     donators,
@@ -64,6 +66,11 @@ const CampaignDetails = ({
   const isCurrentUserDonor = donations?.some(
     (donation) => donation.donor.toLowerCase() === address?.toLowerCase()
   );
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setShareUrl(window.location.href);
+    }
+  }, []);
   const {
     data: hash,
     isPending,
@@ -255,7 +262,7 @@ const CampaignDetails = ({
         </div>
       )}
       {/* Display Campaign By its ID */}
-      {isLoading ? (
+      {isLoading || isRefreshing ? (
         <img
           src={loader || "/placeholder.svg"}
           alt="loader"
@@ -296,6 +303,30 @@ const CampaignDetails = ({
                   <span className="text-2xl font-bold">{donators.length}</span>
                 </div>
               </div>
+              {isCreator && (
+                <div className="bg-[#21222d] rounded-lg p-4">
+                  <p className="text-gray-400 text-sm">Share Campaign</p>
+                  <div className="flex items-center gap-2 mt-1">
+                    <FiShare2 className="text-gray-400" />
+                    <input
+                      type="text"
+                      value={shareUrl}
+                      readOnly
+                      className="bg-[#1a1b1f] border border-gray-700 rounded-lg text-white px-2 py-1 text-sm flex-grow"
+                    />
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(shareUrl);
+                        alert("Link copied to clipboard!");
+                      }}
+                      className="bg-[#8c6dfd] text-white rounded-lg px-2 py-1"
+                      title="Copy to clipboard"
+                    >
+                      Copy
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Main Content Grid */}
@@ -379,6 +410,7 @@ const CampaignDetails = ({
                     <span>Total Donated:</span>
                     <span>{totalDonated} ETN</span>
                   </div>
+
                   <input
                     type="number"
                     placeholder="ETN 0.1"
@@ -403,11 +435,9 @@ const CampaignDetails = ({
                   <CustomButton
                     btnType="button"
                     title="Fund Campaign"
-                    disabled={
-                      isPending || isConfirming || reachedDeadline || isCreator
-                    }
+                    disabled={isPending || isConfirming || reachedDeadline}
                     styles={`w-full ${
-                      isPending || isConfirming || reachedDeadline || isCreator
+                      isPending || isConfirming || reachedDeadline
                         ? "bg-gray-500 cursor-not-allowed pointer-events-none"
                         : "bg-[#8c6dfd]"
                     }`}
