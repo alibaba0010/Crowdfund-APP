@@ -10,7 +10,7 @@ export const config = createConfig({
     walletConnect({ projectId: import.meta.env.VITE_WC_PROJECT_ID }),
   ],
   transports: {
-    [electroneumTestnet.id]: http(),
+    [electroneumTestnet.id]: http("https://rpc.ankr.com/electroneum_testnet"),
     [electroneum.id]: http(),
   },
 });

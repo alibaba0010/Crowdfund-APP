@@ -13,7 +13,6 @@ function App() {
   const [hasAccess, setHasAccess] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  console.log(account?.chain?.name);
   useEffect(() => {
     if (account.isConnected) {
       const { address, addresses, status, chain } = account;

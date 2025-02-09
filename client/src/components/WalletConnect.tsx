@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { toggleWalletConnect } from "../actions/wallet";
 
 const WalletConnect = () => {
-  const { connectors, connect, status, error } = useConnect();
+  const { connectors, connect, status } = useConnect();
   const dispatch = useDispatch();
   const showWalletConnect = () => {
     dispatch(toggleWalletConnect());
@@ -81,15 +81,6 @@ const WalletConnect = () => {
             );
           })}
         </div>
-
-        {/* Display error message if there's an error */}
-        {error && (
-          <div className="mt-4 text-center text-red-500">
-            {error.message.includes("already pending for origin")
-              ? "A wallet request is already pending. Please check your wallet."
-              : error.message}
-          </div>
-        )}
       </div>
     </div>
   );
