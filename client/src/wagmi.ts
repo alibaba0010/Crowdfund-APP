@@ -1,9 +1,9 @@
-import { http, createConfig } from 'wagmi'
-import { mainnet, sepolia } from 'wagmi/chains'
-import { coinbaseWallet, injected, walletConnect } from 'wagmi/connectors'
+import { http, createConfig } from "wagmi";
+import { mainnet, sepolia, electroneum } from "wagmi/chains";
+import { coinbaseWallet, injected, walletConnect } from "wagmi/connectors";
 
 export const config = createConfig({
-  chains: [mainnet, sepolia],
+  chains: [mainnet, sepolia, electroneum],
   connectors: [
     injected(),
     coinbaseWallet(),
@@ -12,11 +12,12 @@ export const config = createConfig({
   transports: {
     [mainnet.id]: http(),
     [sepolia.id]: http(),
+    [electroneum.id]: http(),
   },
-})
+});
 
-declare module 'wagmi' {
+declare module "wagmi" {
   interface Register {
-    config: typeof config
+    config: typeof config;
   }
 }

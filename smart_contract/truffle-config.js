@@ -80,7 +80,7 @@ module.exports = {
           providerOrUrl:
             "https://eth-sepolia.g.alchemy.com/v2/CQ4Q9t6KDnKDTZeqNjvmVpYzeO-SywWX",
         }),
-      network_id: 11155111,
+      network_id: 5201420,
     },
     //
     // An additional network, but with some advanced options…
