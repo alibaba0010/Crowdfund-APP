@@ -36,6 +36,7 @@ const CampaignDetails = ({
   const [amount, setAmount] = useState("");
   const address = useSelector((state: any) => state.wallet.addresses?.[0]);
   const [error, setError] = useState("");
+  const [isCreator, setIsCreator] = useState(false);
   const [openWithdraw, setOpenWithdraw] = useState(false);
   const [openWithdrawFunds, setOpenWithdrawFunds] = useState(false);
   const [newTarget, setNewTarget] = useState(false);
@@ -80,8 +81,11 @@ const CampaignDetails = ({
       window.location.reload();
     }
     const totalTarget = Number(targetAmount);
-    if (address === creator && totalDonated >= totalTarget) {
-      setOpenWithdraw(true);
+    if (address === creator) {
+      setIsCreator(true);
+      if (totalDonated >= totalTarget) {
+        setOpenWithdraw(true);
+      }
     }
     if (
       address !== creator &&
@@ -399,9 +403,11 @@ const CampaignDetails = ({
                   <CustomButton
                     btnType="button"
                     title="Fund Campaign"
-                    disabled={isPending || isConfirming || reachedDeadline}
+                    disabled={
+                      isPending || isConfirming || reachedDeadline || isCreator
+                    }
                     styles={`w-full ${
-                      isPending || isConfirming || reachedDeadline
+                      isPending || isConfirming || reachedDeadline || isCreator
                         ? "bg-gray-500 cursor-not-allowed pointer-events-none"
                         : "bg-[#8c6dfd]"
                     }`}

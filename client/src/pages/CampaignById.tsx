@@ -1,11 +1,11 @@
 import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useReadContract } from "wagmi";
 import { useEffect, useState } from "react";
 import { wagmiContractConfig } from "../utils/contract";
 import type { Campaign, CampaignData } from "../components/DisplayCampaigns";
 import { formatEther } from "viem";
-import { daysLeft } from "../utils";
+import { daysLeft, decryptId } from "../utils";
 import { CampaignDetails } from "../components";
 
 export interface Donations {
@@ -14,10 +14,11 @@ export interface Donations {
 }
 const CampaignById = () => {
   const { id, pId } = useParams();
-  const campaignId = id ? parseInt(id, 10) : undefined; // Convert to number
+  const navigate = useNavigate();
+  const campaignId = decryptId(id) ? parseInt(decryptId(id), 10) : undefined; // Convert to number
   const address = useSelector((state: any) => state.wallet.addresses?.[0]);
   const [campaign, setCampaign] = useState<CampaignData | null>(null);
-  const { data, isLoading } = useReadContract({
+  const { data, isLoading, error } = useReadContract({
     ...wagmiContractConfig,
     functionName: "getCampaignById",
     args: [campaignId],
@@ -34,6 +35,9 @@ const CampaignById = () => {
     },
   });
   useEffect(() => {
+    if (error) {
+      navigate("/", { replace: true });
+    }
     if (data) {
       const campaign = data as Campaign;
       const campaignData = {
@@ -46,7 +50,7 @@ const CampaignById = () => {
         totalDonated: Number(formatEther(campaign.totalDonated)),
         image: campaign.image,
         donators: campaign.donators,
-        id: Number(id),
+        id: Number(decryptId(id)),
         pId: Number(pId),
         reachedDeadline: campaign.reachedDeadline,
         withdrawn: campaign.withdrawn,

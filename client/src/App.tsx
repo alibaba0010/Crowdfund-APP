@@ -37,7 +37,7 @@ function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/create-campaign" element={<CreateCampaign />} />
             <Route
-              path="/campaign-details/:pId/:id"
+              path="/campaign-details/:id/:pId"
               element={<CampaignById />}
             />
             <Route path="*" element={<Navigate to="/" replace />} />

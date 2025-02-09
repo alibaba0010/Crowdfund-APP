@@ -11,9 +11,15 @@ export const calculateBarPercentage = (goal: number, raisedAmount: number) => {
 
   return percentage;
 };
+export const encryptId = (id: any) => {
+  return btoa(id); // Encode to Base64
+};
 
+export const decryptId = (encryptedId: any) => {
+  return atob(encryptedId); // Decode from Base64
+};
 export const daysLeft = (deadline: bigint) => {
-  const msPerDay = 86_400_000n; // 1000 * 60 * 60 * 24
+  const msPerDay = 86_400_000n; // 1000 * 60 * 60 * 24P
   const deadlineMs = deadline * 1000n;
   const now = BigInt(Date.now());
   const difference = deadlineMs - now;
