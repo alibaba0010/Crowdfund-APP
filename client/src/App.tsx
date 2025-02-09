@@ -13,11 +13,12 @@ function App() {
   const [hasAccess, setHasAccess] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  console.log(account?.chain?.name);
   useEffect(() => {
     if (account.isConnected) {
       const { address, addresses, status, chain } = account;
       dispatch(setWalletAdress({ address, addresses, status }));
-      if (chain?.name === "Sepolia") {
+      if (chain?.name === "Electroneum Testnet") {
         setHasAccess(true);
       }
     } else {
@@ -29,7 +30,7 @@ function App() {
       <div className="sm:flex hidden mr-10 relative">{<Sidebar />}</div>
 
       <div className="flex-1 max-sm:w-full max-w-[1280px] mx-auto sm:pr-5">
-        <Navbar />
+        <Navbar hasAccess={hasAccess} />
 
         {hasAccess ? (
           <Routes>

@@ -192,11 +192,11 @@ const CampaignDetails = ({
           <div className="text-white text-xl mb-4">
             <p className="mb-2">
               Target Amount:{" "}
-              <span className="font-bold">{targetAmount} ETH</span>
+              <span className="font-bold">{targetAmount} ETN</span>
             </p>
             <p>
               Total Donated:{" "}
-              <span className="font-bold">{totalDonated} ETH</span>
+              <span className="font-bold">{totalDonated} ETN</span>
             </p>
           </div>
           {!newTarget && (
@@ -219,7 +219,7 @@ const CampaignDetails = ({
             <div className="flex flex-col items-center">
               <input
                 type="number"
-                placeholder="ETH 0.1"
+                placeholder="ETN 0.1"
                 step="0.0001"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
@@ -347,7 +347,7 @@ const CampaignDetails = ({
                               {index + 1}. {shortenAddress(item.donor)}{" "}
                             </p>
                             <p className="font-epilogue font-normal text-[16px] text-[#808191] leading-[26px] break-ll">
-                              {formatEther(item.amount)} ETH{" "}
+                              {formatEther(item.amount)} ETN{" "}
                             </p>
                           </div>
                         )
@@ -369,15 +369,15 @@ const CampaignDetails = ({
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
                     <span>Target Amount:</span>
-                    <span>{targetAmount} ETH</span>
+                    <span>{targetAmount} ETN</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span>Total Donated:</span>
-                    <span>{totalDonated} ETH</span>
+                    <span>{totalDonated} ETN</span>
                   </div>
                   <input
                     type="number"
-                    placeholder="ETH 0.1"
+                    placeholder="ETN 0.1"
                     step="0.0001"
                     value={amount}
                     onChange={(e) => setAmount(e.target.value)}

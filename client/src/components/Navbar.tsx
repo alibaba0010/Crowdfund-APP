@@ -6,7 +6,7 @@ import { navlinks } from "../constants";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleWalletConnect } from "../actions/wallet";
 
-const Navbar = () => {
+const Navbar = ({ hasAccess }: { hasAccess: boolean }) => {
   const navigate = useNavigate();
   const [isActive, setIsActive] = useState("dashboard");
   const [toggleDrawer, setToggleDrawer] = useState(false);
@@ -61,10 +61,10 @@ const Navbar = () => {
         {/* Added ml-auto */}
         <CustomButton
           btnType="button"
-          title={address ? "Create a campaign" : "Connect Wallet"}
-          styles={address ? "bg-[#1dc071]" : "bg-[#8c6dfd]"}
+          title={address && hasAccess ? "Create a campaign" : "Connect Wallet"}
+          styles={address && hasAccess ? "bg-[#1dc071]" : "bg-[#8c6dfd]"}
           handleClick={() => {
-            if (address) {
+            if (address && hasAccess) {
               navigate("create-campaign");
             } else {
               dispatch(toggleWalletConnect());
