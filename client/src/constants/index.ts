@@ -53,8 +53,6 @@ export const store = configureStore({
         ignoredActions: [
           "campaigns/setAllCampaigns",
           "campaigns/getCampaignById",
-          "campaigns/setCreatorCampaigns",
-          "campaigns/setPastCampaigns",
         ],
       },
     }),

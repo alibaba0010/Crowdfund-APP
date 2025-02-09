@@ -114,7 +114,7 @@ const CreateCampaign = () => {
         ],
       });
     } catch (error) {
-      console.error("Error creating campaign:", error);
+      console.log("Error creating campaign:", error);
     }
   };
   useEffect(() => {

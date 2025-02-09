@@ -102,7 +102,7 @@ const CampaignDetails = ({
         args: [id],
       });
     } catch (error) {
-      console.log(error);
+      console.log((error as any)?.message);
     }
   };
 
@@ -126,7 +126,7 @@ const CampaignDetails = ({
         args: [id, parseEther(amount)],
       });
     } catch (error) {
-      console.log(error);
+      console.log((error as any)?.message);
     }
   };
 
@@ -152,7 +152,7 @@ const CampaignDetails = ({
         value: parseEther(amount),
       });
     } catch (error) {
-      console.log(error);
+      console.log((error as any)?.message);
     }
   };
   const handleWithdrawFunds = async () => {
@@ -163,7 +163,7 @@ const CampaignDetails = ({
         args: [id],
       });
     } catch (error) {
-      console.log(error);
+      console.log((error as any)?.message);
     }
   };
   return (
