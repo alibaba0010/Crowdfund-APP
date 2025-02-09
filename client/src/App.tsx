@@ -10,7 +10,9 @@ import { CampaignById, CreateCampaign, Home, Profile } from "./pages";
 
 function App() {
   const account = useAccount();
+  const [url, setUrl] = useState("");
   const [hasAccess, setHasAccess] = useState(false);
+  const [hasNavigated, setHasNavigated] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   useEffect(() => {
@@ -19,11 +21,22 @@ function App() {
       dispatch(setWalletAdress({ address, addresses, status }));
       if (chain?.name === "Electroneum Testnet") {
         setHasAccess(true);
+        if (url && !hasNavigated) {
+          navigate(url);
+          setHasNavigated(true);
+        }
       }
     } else {
       navigate("/");
     }
-  }, [account]);
+  }, [account, url, hasNavigated]);
+
+  useEffect(() => {
+    const path = window.location.pathname;
+    if (path !== "/") {
+      setUrl(path);
+    }
+  }, []);
   return (
     <div className="relative sm:-8 p-4 bg-[#13131a] min-h-screen flex flex-row">
       <div className="sm:flex hidden mr-10 relative">{<Sidebar />}</div>
