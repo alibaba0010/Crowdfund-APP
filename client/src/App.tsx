@@ -57,7 +57,7 @@ function App() {
           </Routes>
         ) : (
           <p className="text-center text-xl font-medium text-gray-300 bg-gray-800 rounded-lg p-6 shadow-lg mt-8">
-            Connect Wallet and set network to Sepolia testnet to access this
+            Connect Wallet and set network to Electroneum testnet to access this
             application
           </p>
         )}
