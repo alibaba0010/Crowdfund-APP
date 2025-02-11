@@ -19,7 +19,7 @@ import { formatEther, parseEther } from "viem";
 import { shortenAddress } from "../utils";
 import { loader } from "../assets";
 import type { CampaignData } from "./DisplayCampaigns";
-import { Donations } from "../pages/CampaignById";
+import type { Donations } from "../pages/CampaignById";
 
 interface CampaignDetailsProps {
   isLoading: boolean;
@@ -103,7 +103,7 @@ const CampaignDetails = ({
       setOpenWithdrawFunds(true);
     }
     setError("");
-  }, [amount, totalDonated, address, isConfirmed]);
+  }, [amount, totalDonated, address, isConfirmed, creator]); // Added creator to dependencies
 
   const handleWithDraw = async () => {
     try {
@@ -275,7 +275,7 @@ const CampaignDetails = ({
             <img
               src={image || "/placeholder.svg"}
               alt="CrowdFund Me"
-              className="h-[400px] object-contain w-full rounded-xl"
+              className="w-full h-[400px] object-cover rounded-xl"
             />
 
             {/* Stats Grid */}
@@ -303,8 +303,9 @@ const CampaignDetails = ({
                   <span className="text-2xl font-bold">{donators.length}</span>
                 </div>
               </div>
+              {/* Share Campaign Section - Now aligned with stats */}
               {isCreator && (
-                <div className="bg-[#21222d] rounded-lg p-4">
+                <div className="col-start-3 bg-[#21222d] rounded-lg p-4">
                   <p className="text-gray-400 text-sm">Share Campaign</p>
                   <div className="flex items-center gap-2 mt-1">
                     <FiShare2 className="text-gray-400" />
