@@ -1,32 +1,39 @@
-import React, { useEffect } from "react";
+"use client";
+
 import { useConnect } from "wagmi";
-import { brave, coinbase, metamask } from "../assets";
 import { useDispatch } from "react-redux";
 import { toggleWalletConnect } from "../actions/wallet";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Wallet2, ChevronRight } from "lucide-react";
+import Image from "next/image";
 
 const WalletConnect = () => {
   const { connectors, connect, status } = useConnect();
   const dispatch = useDispatch();
-  const showWalletConnect = () => {
-    dispatch(toggleWalletConnect());
-  };
-  // List of supported wallet names
+
+  // List of supported wallet names and their configurations
   const supportedWallets = [
     {
       name: "Coinbase Wallet",
-      icon: coinbase,
+      icon: "/coinbase.svg", // Using external SVG for specific brand logos
       color: "rgb(0, 82, 255)",
       textColor: "white",
     },
     {
       name: "Brave Wallet",
-      icon: brave,
+      icon: "/brave.svg",
       color: "rgb(255, 80, 0)",
       textColor: "white",
     },
     {
       name: "MetaMask",
-      icon: metamask,
+      icon: "/metamask.svg",
       color: "rgb(255, 163, 9)",
       textColor: "text-zinc-900",
     },
@@ -37,34 +44,24 @@ const WalletConnect = () => {
     supportedWallets.map((w) => w.name).includes(connector.name)
   );
 
-  // Close the wallet component when the overlay (screen) is clicked
-  const handleClose = (e: React.MouseEvent<HTMLElement>) => {
-    if (e.target === e.currentTarget) {
-      dispatch(toggleWalletConnect());
-    }
+  const handleClose = () => {
+    dispatch(toggleWalletConnect());
   };
-  useEffect(() => {
-    if (status === "success") {
-      showWalletConnect();
-    }
-  }, [status]);
-  return (
-    <div
-      id="screen"
-      className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
-      onClick={handleClose}
-    >
-      <div className="bg-white rounded-lg shadow-lg p-6 w-96">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold">Connect Wallet</h2>
-          <button
-            onClick={handleClose}
-            className="text-gray-500 hover:text-gray-700"
-          >
-            &times;
-          </button>
-        </div>
 
+  // Handle successful connection
+  if (status === "success") {
+    handleClose();
+  }
+
+  return (
+    <Dialog open onOpenChange={handleClose}>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2">
+            <Wallet2 className="w-5 h-5" />
+            Connect Wallet
+          </DialogTitle>
+        </DialogHeader>
         <div className="flex flex-col gap-3 pt-4">
           {filteredConnectors.map((connector) => {
             const walletConfig = supportedWallets.find(
@@ -76,6 +73,7 @@ const WalletConnect = () => {
               <button
                 key={connector.uid}
                 onClick={() => connect({ connector })}
+                variant="outline"
                 className="w-full p-6 flex items-center justify-between group hover:border-primary transition-all"
                 style={{
                   backgroundColor: "transparent",
@@ -88,7 +86,7 @@ const WalletConnect = () => {
                       backgroundColor: walletConfig.color,
                     }}
                   >
-                    {walletConfig && (
+                    {icon && (
                       <img
                         src={walletConfig.icon || "/placeholder.svg"}
                         alt={connector.name}
@@ -106,8 +104,8 @@ const WalletConnect = () => {
             );
           })}
         </div>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 };
 
