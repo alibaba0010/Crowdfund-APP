@@ -27,7 +27,7 @@ const formSchema = z.object({
   description: z
     .string()
     .min(10, "Description must be at least 8 characters long!")
-    .max(400, "Description must be less than 400 characters"),
+    .max(500, "Description must be less than 500 characters"),
   targetAmount: z.coerce.number().min(0, "Amount must not be negative"),
   deadline: z.coerce
     .date({ message: "End Date is required!" })
@@ -181,7 +181,7 @@ const CreateCampaign = () => {
             isTextArea
           />
           <span className="text-gray-400 text-sm">
-            {descriptionLength} / 400
+            {descriptionLength} / 500
           </span>
           {errors.description && (
             <span className="text-red-500 text-sm mt-1">

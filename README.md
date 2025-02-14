@@ -51,10 +51,10 @@ The CrowdFunding Platform enables users to:
 
 ## ⛓️ Dependencies / Limitations <a name = "limitations"></a>
 
-- Requires Ethereum and gas fees for transactions.
-- Smart contracts are immutable; upgrades require deploying new contracts.
-- Refunds are only possible if the campaign fails to reach its target.
-- Funds cannot be withdrawn if the target is not met.
+- Platform requires Electroneum cryptocurrency and ETN for gas fees, creating cost barriers
+- Smart contracts are immutable - changes require new deployments with associated costs
+- Refund functionality limited to campaigns that don't reach targets
+- Legal uncertainties in different regions
 
 ## 🚀 Future Scope <a name = "future_scope"></a>
 
@@ -62,6 +62,7 @@ The CrowdFunding Platform enables users to:
 - Adding support for multiple cryptocurrencies.
 - Integrating with Layer 2 solutions for reduced gas fees.
 - Providing enhanced analytics for campaign performance tracking.
+- Advanced funds monitoring and management
 
 ## 🏁 Getting Started <a name = "getting_started"></a>
 
@@ -73,12 +74,21 @@ Ensure you have the following installed:
 - [Hardhat](https://hardhat.org/)
 - [MetaMask](https://metamask.io/)
 - [Solidity](https://soliditylang.org/)
+- [Electroneum Blockchain](http://testnet-scblockexplorer.electroneum.com/)
+
+### Faucet and Electroneum Network Integration
+
+Click the link below to get testnet faucet
+
+-[Electroneum Faucet](https://faucet.electroneum.com/)
+
+Add these network configurations to your wallet
 
 ### Installing
 
 1. Clone the repository:
    ```sh
-   git clone https://github.com/your-repo/gofundme-smart-contract.git
+   git clone https://github.com/alibaba0010/Crowdfund-APP.git
    ```
 2. Install dependencies:
    ```sh
@@ -86,37 +96,40 @@ Ensure you have the following installed:
    ```
 3. Compile the contract:
    ```sh
-   npx hardhat compile
+   truffle init
+   truffle deploy --network electroneum
    ```
 4. Deploy the contract:
+
    ```sh
-   npx hardhat run scripts/deploy.js --network goerli
+   truffle run verify GoFundme --network electroneum
+
+   or deploy manually on the electroneum blockchain under contract tab
    ```
 
 ## 🎈 Usage <a name="usage"></a>
 
-- Deploy the smart contract on Ethereum.
-- Create a campaign by calling `createCampaign`.
-- Donate to a campaign using `donate`.
-- Withdraw funds using `withdrawFunds` when the target is met.
-- Claim a refund using `claimRefund` if the campaign fails.
-- Retrieve campaign details using `getCampaignById`.
+- Deploy smart contract on Electroneum network with sufficient ETN
+- Create campaign via createCampaign with goals and timeline
+- Process donations through donate function
+- Campaign creators withdraw funds using withdrawFunds after target met
+- Failed campaign backers claim refunds via claimRefund
+- Track campaign details using getCampaignById
+- Manage reward distribution and campaign updates through dashboard
 
 ## ⛏️ Built With <a name = "tech_stack"></a>
 
 - [Solidity](https://soliditylang.org/) - Smart Contract Language
-- [Ethereum](https://ethereum.org/) - Blockchain Platform
-- [Hardhat](https://hardhat.org/) - Development Environment
+- [Electroneum](http://testnet-scblockexplorer.electroneum.com/) - Electroneum Blockchain Platform
+- [Hardhat](https://archive.trufflesuite.com/docs/truffle/) - Development Environment
+- [Wagmi](https://wagmi.sh/) - Blockchain Contract Intregration Package
 
 ## ✍️ Authors <a name = "authors"></a>
 
-- [@yourgithub](https://github.com/yourgithub) - Smart Contract Development
-
-See also the list of [contributors](https://github.com/your-repo/gofundme-smart-contract/contributors)
-who participated in this project.
+- [@alibaba](https://github.com/alibaba0010) - Smart Contract Development
 
 ## 🎉 Acknowledgments <a name = "acknowledgments"></a>
 
 - Inspiration from existing crowdfunding platforms.
-- Ethereum developer community.
+- Electroneum developer community.
 - Solidity documentation.
