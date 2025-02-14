@@ -287,7 +287,9 @@ const CampaignDetails = ({
               </div>
 
               <div className="bg-[#21222d] rounded-lg p-4">
-                <p className="text-gray-400 text-sm">{`Raised of ${target}`}</p>
+                <p className="text-gray-400 text-sm">
+                  {`Raised of ${target}`} ETN
+                </p>
                 <div className="flex items-center gap-2 mt-1">
                   <FiDollarSign className="text-gray-400" />
                   <span className="text-2xl font-bold">{totalDonated}</span>
