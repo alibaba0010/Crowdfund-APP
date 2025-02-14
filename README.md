@@ -83,6 +83,15 @@ Click the link below to get testnet faucet
 -[Electroneum Faucet](https://faucet.electroneum.com/)
 
 Add these network configurations to your wallet
+Network Name: Ankr Electroneum Testnet
+
+RPC URL: https://rpc.ankr.com/electroneum_testnet
+
+Chain ID: 5201420
+
+Currency Symbol: ETN
+
+Block Explorer URL (Optional): https://blockexplorer.thesecurityteam.rocks/
 
 ### Installing
 

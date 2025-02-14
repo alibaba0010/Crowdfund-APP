@@ -434,9 +434,11 @@ const CampaignDetails = ({
                   <CustomButton
                     btnType="button"
                     title="Fund Campaign"
-                    disabled={isPending || isConfirming || reachedDeadline}
+                    disabled={
+                      isPending || isConfirming || reachedDeadline || isCreator
+                    }
                     styles={`w-full ${
-                      isPending || isConfirming || reachedDeadline
+                      isPending || isConfirming || reachedDeadline || isCreator
                         ? "bg-gray-500 cursor-not-allowed pointer-events-none"
                         : "bg-[#8c6dfd]"
                     }`}

@@ -5,42 +5,37 @@ import { useDispatch } from "react-redux";
 import { toggleWalletConnect } from "../actions/wallet";
 
 const WalletConnect = () => {
-  const { connectors, connect, status } = useConnect();
+  const { connectors, connect, status, error } = useConnect();
   const dispatch = useDispatch();
   const showWalletConnect = () => {
     dispatch(toggleWalletConnect());
   };
   // List of supported wallet names
-  const supportedWallets = [
-    {
-      name: "Coinbase Wallet",
-      icon: coinbase,
-      color: "rgb(0, 82, 255)",
-      textColor: "white",
-    },
-    {
-      name: "Brave Wallet",
-      icon: brave,
-      color: "rgb(255, 80, 0)",
-      textColor: "white",
-    },
-    {
-      name: "MetaMask",
-      icon: metamask,
-      color: "rgb(255, 163, 9)",
-      textColor: "text-zinc-900",
-    },
-  ];
+  const supportedWallets = ["MetaMask", "Brave Wallet", "Coinbase Wallet"];
 
   // Filter connectors to only include supported wallets
   const filteredConnectors = connectors.filter((connector) =>
-    supportedWallets.map((w) => w.name).includes(connector.name)
+    supportedWallets.includes(connector.name)
   );
+
+  // Map connector names to their respective icons
+  const getWalletIcon = (connectorName: string) => {
+    switch (connectorName) {
+      case "MetaMask":
+        return metamask;
+      case "Brave Wallet":
+        return brave;
+      case "Coinbase Wallet":
+        return coinbase;
+      default:
+        return ""; // Fallback for unknown connectors
+    }
+  };
 
   // Close the wallet component when the overlay (screen) is clicked
   const handleClose = (e: React.MouseEvent<HTMLElement>) => {
     if (e.target === e.currentTarget) {
-      dispatch(toggleWalletConnect());
+      showWalletConnect();
     }
   };
   useEffect(() => {
@@ -65,43 +60,23 @@ const WalletConnect = () => {
           </button>
         </div>
 
-        <div className="flex flex-col gap-3 pt-4">
+        <div className="space-y-4">
           {filteredConnectors.map((connector) => {
-            const walletConfig = supportedWallets.find(
-              (w) => w.name === connector.name
-            );
-            if (!walletConfig) return null;
-
+            const icon = getWalletIcon(connector.name);
             return (
               <button
                 key={connector.uid}
                 onClick={() => connect({ connector })}
-                className="w-full p-6 flex items-center justify-between group hover:border-primary transition-all"
-                style={{
-                  backgroundColor: "transparent",
-                }}
+                className="w-full flex items-center p-4 rounded-lg border border-gray-200 hover:bg-gray-50 transition duration-200"
               >
-                <div className="flex items-center gap-3">
-                  <div
-                    className="w-10 h-10 rounded-full flex items-center justify-center"
-                    style={{
-                      backgroundColor: walletConfig.color,
-                    }}
-                  >
-                    {walletConfig && (
-                      <img
-                        src={walletConfig.icon || "/placeholder.svg"}
-                        alt={connector.name}
-                        width={24}
-                        height={24}
-                        className={walletConfig.textColor}
-                      />
-                    )}
-                  </div>
-                  <span className="text-base font-medium">
-                    {connector.name}
-                  </span>
-                </div>
+                {icon && (
+                  <img
+                    src={icon}
+                    alt={connector.name}
+                    className="w-8 h-8 mr-4"
+                  />
+                )}
+                <span className="text-lg font-medium">{connector.name}</span>
               </button>
             );
           })}
