@@ -40,19 +40,21 @@ const CampaignById = () => {
     }
     if (data) {
       const campaign = data as Campaign;
+      const deadline = daysLeft(campaign.deadline);
+      console.log(deadline);
       const campaignData = {
         creator: campaign.creator,
         name: campaign.name,
         title: campaign.title,
         description: campaign.description,
         targetAmount: formatEther(campaign.targetAmount),
-        deadline: daysLeft(campaign.deadline),
+        deadline,
         totalDonated: Number(formatEther(campaign.totalDonated)),
         image: campaign.image,
         donators: campaign.donators,
         id: Number(decryptId(id)),
         pId: Number(pId),
-        reachedDeadline: campaign.reachedDeadline,
+        reachedDeadline: Number(deadline) === 0 || campaign.reachedDeadline,
         withdrawn: campaign.withdrawn,
       };
 

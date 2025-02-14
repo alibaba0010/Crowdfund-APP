@@ -43,7 +43,6 @@ const CampaignDetails = ({
   const [newTarget, setNewTarget] = useState(false);
   const { balance } = useSelector((state: any) => state.wallet);
   const [shareUrl, setShareUrl] = useState("");
-  console.log(`isLoading ${isLoading} with isRefreshing: ${isRefreshing}`);
   const {
     deadline,
     donators,
@@ -58,7 +57,6 @@ const CampaignDetails = ({
     id,
     totalDonated,
   } = campaign;
-
   const creatorAddress = shortenAddress(campaign.creator);
 
   const target = Number(targetAmount);

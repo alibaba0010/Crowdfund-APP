@@ -39,7 +39,7 @@ const campaignsSlice = createSlice({
       state.pastCreatorCampaigns.campaigns = [];
 
       parsedCampaigns.forEach((campaign: any) => {
-        if (campaign.reachedDeadline) {
+        if (campaign.reachedDeadline || Number(campaign.deadline) === 0) {
           state.pastCampaigns.campaigns.push(campaign);
           if (campaign.creator === address) {
             state.pastCreatorCampaigns.campaigns.push(campaign);

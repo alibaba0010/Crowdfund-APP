@@ -1,15 +1,15 @@
 <p align="center">
   <a href="" rel="noopener">
- <img src="https://i.imgur.com/AZ2iWek.png" alt="Project logo"></a>
+ <img src="./images/image 1.png" alt="Project logo"></a>
 </p>
-<h3 align="center">GoFundMe Smart Contract</h3>
+<h3 align="center">CrowdFunding Platform</h3>
 
 <div align="center">
 
-[![Hackathon](https://img.shields.io/badge/hackathon-name-orange.svg)](http://hackathon.url.com)
+[![Hackathon](https://img.shields.io/badge/hackathon-name-orange.svg)](https://crowdfund-app-rho.vercel.app/)
 [![Status](https://img.shields.io/badge/status-active-success.svg)]()
-[![GitHub Issues](https://img.shields.io/github/issues/kylelobo/The-Documentation-Compendium.svg)](https://github.com/kylelobo/The-Documentation-Compendium/issues)
-[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/kylelobo/The-Documentation-Compendium.svg)](https://github.com/kylelobo/The-Documentation-Compendium/pulls)
+[![GitHub Issues](https://img.shields.io/github/issues/alibaba0010/Crowdfund-APP.svg)](https://github.com/alibaba0010/Crowdfund-APP/issues)
+[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/alibaba0010/Crowdfund-APP.svg)](https://github.com/alibaba0010/Crowdfund-APP/pulls)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.md)
 
 </div>
@@ -35,11 +35,13 @@
 
 ## 🧐 Problem Statement <a name = "problem_statement"></a>
 
-Crowdfunding platforms often involve intermediaries that take a percentage of the funds raised. This project aims to create a decentralized solution that allows users to create fundraising campaigns, receive donations, and withdraw funds without third-party involvement.
+Traditional crowdfunding platforms face significant challenges with high transaction fees, lengthy processing times, and centralized control over funds, often charging creators 5-10% of their raised capital while adding administrative complexities. These intermediaries not only increase costs but also create potential security risks and limit campaign creators' autonomy over their funds.
+
+This project addresses these inefficiencies by developing a decentralized crowdfunding platform that leverages blockchain technology to enable direct peer-to-peer transactions. By eliminating intermediaries, the solution aims to reduce costs, enhance transparency, and provide creators with immediate access to their funds while ensuring secure, traceable transactions through smart contracts.
 
 ## 💡 Idea / Solution <a name = "idea"></a>
 
-The GoFundMe Smart Contract enables users to:
+The CrowdFunding Platform enables users to:
 
 - Create a fundraising campaign with a target amount and deadline.
 - Donate directly to campaigns.
