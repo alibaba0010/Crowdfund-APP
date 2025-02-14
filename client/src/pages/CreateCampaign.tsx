@@ -23,7 +23,7 @@ const formSchema = z.object({
   title: z
     .string()
     .min(1, "Campaign Title is required!")
-    .max(30, "Campaign Title is must not be more than 30 words!"),
+    .max(50, "Campaign Title is must not be more than 50 words!"),
   description: z
     .string()
     .min(10, "Description must be at least 8 characters long!")
