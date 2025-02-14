@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { toggleWalletConnect } from "../actions/wallet";
 
 const WalletConnect = () => {
-  const { connectors, connect, status, error } = useConnect();
+  const { connectors, connect, status } = useConnect();
   const dispatch = useDispatch();
   const showWalletConnect = () => {
     dispatch(toggleWalletConnect());
