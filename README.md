@@ -16,7 +16,7 @@
 
 ---
 
-<p align="center"> A decentralized crowdfunding platform built on Ethereum.
+<p align="center"> A decentralized crowdfunding platform built on Electroneum network.
     <br> 
 </p>
 
