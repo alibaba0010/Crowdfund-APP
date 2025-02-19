@@ -25,7 +25,7 @@ const ProfileDropDown = () => {
   const { data } = useBalance({ address });
   const disconnectHandler = () => {
     disconnect();
-    window.location.reload();
+    window.location.href = window.location.href;
   };
   useEffect(() => {
     if (data) {
