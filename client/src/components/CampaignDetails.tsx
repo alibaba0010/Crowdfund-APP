@@ -83,7 +83,7 @@ const CampaignDetails = ({
 
   useEffect(() => {
     if (isConfirmed) {
-      window.location.href = window.location.href;
+      history.go(0);
     }
     const totalTarget = Number(targetAmount);
     if (address === creator) {
