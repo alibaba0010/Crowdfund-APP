@@ -164,7 +164,7 @@ const CampaignDetails = ({
       console.log((error as any)?.message);
     }
   };
-  const handleWithdrawFunds = async () => {
+  const handleClaimReFunds = async () => {
     try {
       writeContract({
         ...wagmiContractConfig,
@@ -192,7 +192,7 @@ const CampaignDetails = ({
                 : "bg-[#8c6dfd]"
             }`}
             disabled={isPending || isConfirming}
-            handleClick={handleWithdrawFunds}
+            handleClick={handleClaimReFunds}
           />
         </div>
       )}
