@@ -6,7 +6,13 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setWalletAdress } from "./actions/wallet";
 import { Sidebar } from "./components";
-import { CampaignById, CreateCampaign, Home, Profile } from "./pages";
+import {
+  CampaignById,
+  CreateCampaign,
+  AvailableCampaigns,
+  Profile,
+  About,
+} from "./pages";
 
 function App() {
   const account = useAccount();
@@ -44,23 +50,25 @@ function App() {
       <div className="flex-1 max-sm:w-full max-w-[1280px] mx-auto sm:pr-5">
         <Navbar hasAccess={hasAccess} />
 
-        {hasAccess ? (
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/create-campaign" element={<CreateCampaign />} />
-            <Route
-              path="/campaign-details/:id/:pId"
-              element={<CampaignById />}
-            />
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        ) : (
-          <p className="text-center text-xl font-medium text-gray-300 bg-gray-800 rounded-lg p-6 shadow-lg mt-8">
-            Connect Wallet and set network to Electroneum testnet to access this
-            application
-          </p>
-        )}
+        <Routes>
+          <Route path="/" element={<About hasAccess={hasAccess} />} />
+          {hasAccess && (
+            <>
+              <Route
+                path="/available-campaigns"
+                element={<AvailableCampaigns />}
+              />
+              <Route path="/past-campaigns" element={<AvailableCampaigns />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/create-campaign" element={<CreateCampaign />} />
+              <Route
+                path="/campaign-details/:id/:pId"
+                element={<CampaignById />}
+              />
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </>
+          )}
+        </Routes>
       </div>
     </div>
   );

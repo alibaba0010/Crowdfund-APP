@@ -6,7 +6,7 @@ import { wagmiContractConfig } from "../utils/contract";
 import { Campaign } from "../components/DisplayCampaigns";
 import { refreshCampaigns, setAllCampaigns } from "../actions/campaigns";
 
-const Home = () => {
+const AvailableCampaigns = () => {
   const address = useSelector((state: any) => state.wallet.addresses?.[0]);
   const dispatch = useDispatch();
   const refreshCampaign = useSelector(
@@ -56,4 +56,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default AvailableCampaigns;

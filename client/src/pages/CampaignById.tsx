@@ -34,7 +34,6 @@ const CampaignById = () => {
       enabled: !!address,
     },
   });
-  console.log(donations);
   useEffect(() => {
     if (error) {
       navigate("/", { replace: true });
