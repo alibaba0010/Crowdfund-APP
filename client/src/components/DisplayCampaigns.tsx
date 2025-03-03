@@ -6,11 +6,13 @@ import CampaignCard from "./CampaignCard";
 import { useSelector } from "react-redux";
 import { useMemo, useState } from "react";
 import { encryptId } from "../utils";
-
+import { Select, SelectItem } from "@nextui-org/react";
+import { categories } from "../constants";
 export interface Campaign {
   creator: string;
   name: string;
   title: string;
+  category: string;
   description: string;
   targetAmount: bigint;
   deadline: bigint;
@@ -21,11 +23,13 @@ export interface Campaign {
   reachedDeadline: boolean;
   withdrawn: boolean;
 }
+
 export type CampaignData = {
   id: number;
   creator: string;
   name: string;
   title: string;
+  category: string;
   description: string;
   targetAmount: string;
   deadline: string;
@@ -36,6 +40,7 @@ export type CampaignData = {
   reachedDeadline: boolean;
   withdrawn: boolean;
 };
+
 interface DisplayCampaignsProps {
   isLoading: boolean;
   title: string;
@@ -61,6 +66,9 @@ const DisplayCampaigns = ({
   const [currentPage, setCurrentPage] = useState(1);
   const campaignsPerPage = 10;
 
+  // Category filter state
+  const [selectedCategory, setSelectedCategory] = useState("all");
+
   const handleNavigate = (campaign: CampaignData) => {
     const { id, pId } = campaign;
     const encryptedId = encryptId(id);
@@ -76,8 +84,14 @@ const DisplayCampaigns = ({
       );
     }
 
+    if (selectedCategory !== "all") {
+      filtered = filtered.filter(
+        (campaign) => campaign.category === selectedCategory
+      );
+    }
+
     return filtered.sort((a, b) => b.id - a.id);
-  }, [campaigns, searchQuery]);
+  }, [campaigns, searchQuery, selectedCategory]);
 
   // Calculate pagination values
   const totalPages = Math.ceil(sortedCampaigns.length / campaignsPerPage);
@@ -103,14 +117,47 @@ const DisplayCampaigns = ({
 
   return (
     <div>
-      <h1 className="font-epilogue font-semibold text-[18px] text-white text-left">
-        {title} ({sortedCampaigns.length})
-        {searchQuery && (
-          <span className="text-gray-400 text-sm ml-2">
-            - Searching for: "{searchQuery}"
-          </span>
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="font-epilogue font-semibold text-[18px] text-white">
+          {title} ({sortedCampaigns.length})
+        </h1>
+        {selectedCategory === "all" && (
+          <Select
+            label="Sort by Category"
+            className="max-w-xs bg-[#13131A] text-white"
+            onChange={(e) => setSelectedCategory(e.target.value as string)}
+          >
+            <SelectItem key="all" value="all" className="text-white">
+              All Categories
+            </SelectItem>
+            {
+              categories.map((category) => (
+                <SelectItem
+                  key={category.name}
+                  value={category.name}
+                  className="text-white"
+                >
+                  {category.name}
+                </SelectItem>
+              )) as any
+            }
+          </Select>
         )}
-      </h1>
+        {selectedCategory !== "all" && (
+          <button
+            onClick={() => setSelectedCategory("all")}
+            className="px-4 py-2 bg-[#1dc071] text-white rounded-md hover:bg-[#18a05e] transition-colors"
+          >
+            Clear Filter
+          </button>
+        )}
+      </div>
+
+      {searchQuery && (
+        <p className="text-gray-400 text-sm mb-4">
+          Searching for: "{searchQuery}"
+        </p>
+      )}
 
       <div className="flex flex-wrap mt-[20px] gap-[26px]">
         {isLoading && (

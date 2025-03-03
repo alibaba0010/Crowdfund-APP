@@ -16,6 +16,7 @@ import metamask from "./metamask.svg";
 import brave from "./brave.svg";
 import coinbase from "./coinbase.svg";
 import checker from "./checker.svg";
+import past_campaigns from "./past_campaigns.svg";
 
 export {
   tagType,
@@ -25,6 +26,7 @@ export {
   logout,
   payment,
   profile,
+  past_campaigns,
   sun,
   withdraw,
   search,

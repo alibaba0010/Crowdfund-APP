@@ -69,7 +69,7 @@ const parseActionData = (campaigns: any) => {
     deadline: daysLeft(campaign.deadline),
     totalDonated: Number(formatEther(campaign.totalDonated)),
     image: campaign.image,
-    // createdAt: campaign.createdAt,
+    category: campaign.category,
     donators: campaign.donators,
     reachedDeadline: campaign.reachedDeadline,
     withdrawn: campaign.withdrawn,

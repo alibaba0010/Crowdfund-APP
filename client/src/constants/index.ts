@@ -3,6 +3,7 @@ import {
   dashboard,
   logout,
   profile,
+  past_campaigns,
   withdraw,
 } from "../assets";
 import {
@@ -11,6 +12,7 @@ import {
   FaHeartbeat,
   FaHandsHelping,
 } from "react-icons/fa";
+
 import { configureStore } from "@reduxjs/toolkit";
 import walletAddressReducer from "../actions/wallet";
 import campaignsReducer from "../actions/campaigns";
@@ -22,7 +24,7 @@ export const navlinks = [
   },
   {
     name: "Past Campaigns",
-    imgUrl: dashboard,
+    imgUrl: past_campaigns,
     link: "/campaigns/past",
   },
   {
