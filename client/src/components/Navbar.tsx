@@ -31,7 +31,7 @@ const Navbar = ({ hasAccess }: { hasAccess: boolean }) => {
   // Reset search button when not on campaign pages
   useEffect(() => {
     const path = location.pathname;
-    if (!path.includes("campaign") && !path.includes("/")) {
+    if (!path.includes("campaign") && !path.includes("/campains/*")) {
       dispatch({ type: "campaigns/setSearchButtonState", payload: false });
     }
   }, [location.pathname, dispatch]);

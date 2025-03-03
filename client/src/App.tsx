@@ -19,7 +19,7 @@ import { setSearchButtonState } from "./actions/campaigns";
 function App() {
   const account = useAccount();
   const [url, setUrl] = useState("");
-  const [hasAccess, setHasAccess] = useState(false);
+  // const [hasAccess, setHasAccess] = useState(false);
   const [hasNavigated, setHasNavigated] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -27,14 +27,13 @@ function App() {
     if (account.isConnected) {
       const { address, addresses, status, chain } = account;
       dispatch(setWalletAdress({ address, addresses, status }));
-      if (chain?.name === "Electroneum Testnet") {
-        // Electroneum Mainnet remove  testnet in wagmi.ts
-        setHasAccess(true);
-        if (url && !hasNavigated) {
-          navigate(url);
-          setHasNavigated(true);
-        }
-      }
+      // if (chain?.name === "Electroneum Mainnet") {
+      //   setHasAccess(true);
+      //   if (url && !hasNavigated) {
+      //     navigate(url);
+      //     setHasNavigated(true);
+      //   }
+      // }
     } else {
       navigate("/");
     }
@@ -45,12 +44,8 @@ function App() {
     if (path !== "/") {
       setUrl(path);
     }
-    if (path === "/campaigns") {
-      dispatch(setSearchButtonState(true));
-    } else {
-      dispatch(setSearchButtonState(false));
-    }
   }, []);
+  const hasAccess = true;
   return (
     <div className="relative sm:-8 p-4 bg-[#13131a] min-h-screen flex flex-row">
       <div className="sm:flex hidden mr-10 relative">{<Sidebar />}</div>

@@ -5,6 +5,12 @@ import {
   profile,
   withdraw,
 } from "../assets";
+import {
+  FaGraduationCap,
+  FaAmbulance,
+  FaHeartbeat,
+  FaHandsHelping,
+} from "react-icons/fa";
 import { configureStore } from "@reduxjs/toolkit";
 import walletAddressReducer from "../actions/wallet";
 import campaignsReducer from "../actions/campaigns";
@@ -57,8 +63,8 @@ export const store = configureStore({
     }),
 });
 export const categories = [
-  { logo: "logo", name: "Education" },
-  { logo: "logo", name: "Emergencies" },
-  { logo: "logo", name: "Health" },
-  { logo: "logo", name: "Community Support" },
+  { icon: FaGraduationCap, name: "Education" },
+  { icon: FaAmbulance, name: "Emergencies" },
+  { icon: FaHeartbeat, name: "Health" },
+  { icon: FaHandsHelping, name: "Community Support" },
 ];

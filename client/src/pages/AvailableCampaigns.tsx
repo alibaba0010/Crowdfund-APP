@@ -27,7 +27,6 @@ const AvailableCampaigns = () => {
   useEffect(() => {
     if (refreshCampaign) {
       refetch();
-      dispatch(setSearchButtonState(true));
       dispatch(refreshCampaigns());
     }
   }, [address, refreshCampaign]);
@@ -39,6 +38,7 @@ const AvailableCampaigns = () => {
           address,
         })
       );
+      dispatch(setSearchButtonState(true));
     }
   }, [data, isLoading]);
   return (

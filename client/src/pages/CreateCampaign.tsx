@@ -11,18 +11,14 @@ import { type ChangeEvent, DragEvent, useEffect, useState } from "react";
 import { uploadToPinata } from "../utils";
 import { refreshCampaigns } from "../actions/campaigns";
 import { useDispatch } from "react-redux";
+import { categories } from "../constants";
 
 const validateDate = (date: Date) => {
   const today = new Date();
   today.setHours(0, 0, 0, 0); // Set time to midnight to compare only dates
   return date > today;
 };
-const categories = [
-  { logo: "logo", name: "Education" },
-  { logo: "logo", name: "Emergencies" },
-  { logo: "logo", name: "Health" },
-  { logo: "logo", name: "Community Support" },
-];
+
 const formSchema = z.object({
   name: z.string().min(1, "Your Name is required!"),
   title: z
@@ -48,6 +44,7 @@ type CreateCampaignSchema = z.infer<typeof formSchema>;
 const CreateCampaign = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [descriptionLength, setDescriptionLength] = useState(0);
+  const [titleLength, setTitleLength] = useState(0);
   const [drag, setDrag] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -131,7 +128,7 @@ const CreateCampaign = () => {
       setSelectedImage(null);
       dispatch(refreshCampaigns());
 
-      navigate("/");
+      navigate("/campaigns/available");
     }
   }, [isConfirmed]);
 
@@ -167,11 +164,14 @@ const CreateCampaign = () => {
         <div className="flex flex-col lg:flex-row gap-[40px]">
           <div className="flex-1 flex flex-col gap-2">
             <FormField
-              {...register("title")}
+              {...register("title", {
+                onChange: (e) => setTitleLength(e.target.value.length),
+              })}
               labelName="Campaign Title *"
               placeholder="Add the campaign title"
               inputType="text"
             />
+            <span className="text-gray-400 text-sm">{titleLength} / 50</span>
             {errors.title && (
               <span className="text-red-500 text-sm mt-1">
                 {errors.title.message}
