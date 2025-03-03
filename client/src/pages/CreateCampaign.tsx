@@ -9,7 +9,7 @@ import { wagmiContractConfig } from "../utils/contract";
 import { useWaitForTransactionReceipt } from "wagmi";
 import { type ChangeEvent, DragEvent, useEffect, useState } from "react";
 import { uploadToPinata } from "../utils";
-import { refreshCampaigns } from "../actions/campaigns";
+import { refreshCampaigns, setSearchButtonState } from "../actions/campaigns";
 import { useDispatch } from "react-redux";
 import { categories } from "../constants";
 
@@ -122,6 +122,10 @@ const CreateCampaign = () => {
       console.log("Error creating campaign:", error);
     }
   };
+  useEffect(() => {
+    dispatch(setSearchButtonState(false));
+  }, []);
+
   useEffect(() => {
     if (isConfirmed) {
       reset();

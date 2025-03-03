@@ -10,6 +10,12 @@ import {
   FiHeart,
   FiShare2,
 } from "react-icons/fi";
+import {
+  FaGraduationCap,
+  FaAmbulance,
+  FaHeartbeat,
+  FaHandsHelping,
+} from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { useWaitForTransactionReceipt } from "wagmi";
 import { useWriteContract } from "wagmi";
@@ -27,6 +33,12 @@ interface CampaignDetailsProps {
   campaign: CampaignData;
   donations: Donations[];
 }
+const categories = [
+  { icon: FaGraduationCap, name: "Education" },
+  { icon: FaAmbulance, name: "Emergencies" },
+  { icon: FaHeartbeat, name: "Health" },
+  { icon: FaHandsHelping, name: "Community Support" },
+];
 
 const CampaignDetails = ({
   isLoading,
@@ -48,6 +60,7 @@ const CampaignDetails = ({
     donators,
     targetAmount,
     name,
+    category,
     image,
     description,
     creator,
@@ -101,8 +114,15 @@ const CampaignDetails = ({
       setOpenWithdrawFunds(true);
     }
     setError("");
-  }, [amount, totalDonated, address, isConfirmed, creator]); // Added creator to dependencies
-
+  }, [
+    isConfirmed,
+    creator,
+    isCurrentUserDonor,
+    targetAmount,
+    reachedDeadline,
+    address,
+    totalDonated,
+  ]);
   const handleWithDraw = async () => {
     try {
       writeContract({
@@ -175,6 +195,16 @@ const CampaignDetails = ({
       console.log((error as any)?.message);
     }
   };
+
+  const getCategoryIcon = (categoryName: string) => {
+    const category = categories.find(
+      (cat) => cat.name.toLowerCase() === categoryName.toLowerCase()
+    );
+    return category ? (
+      <category.icon className="text-gray-400 text-xl" />
+    ) : null;
+  };
+
   return (
     <>
       {reachedDeadline && !withdrawn && openWithdrawFunds && (
@@ -301,6 +331,13 @@ const CampaignDetails = ({
                 <div className="flex items-center gap-2 mt-1">
                   <FiUsers className="text-gray-400" />
                   <span className="text-2xl font-bold">{donators.length}</span>
+                </div>
+              </div>
+              <div className="bg-[#21222d] rounded-lg p-4">
+                <p className="text-gray-400 text-sm">Category</p>
+                <div className="flex items-center gap-2 mt-1">
+                  {getCategoryIcon(category)}
+                  <span className="text-2xl font-bold">{category}</span>
                 </div>
               </div>
               {/* Share Campaign Section - Now aligned with stats */}

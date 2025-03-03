@@ -46,6 +46,7 @@ const CampaignById = () => {
         creator: campaign.creator,
         name: campaign.name,
         title: campaign.title,
+        category: campaign.category,
         description: campaign.description,
         targetAmount: formatEther(campaign.targetAmount),
         deadline,
