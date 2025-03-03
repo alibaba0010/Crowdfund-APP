@@ -99,7 +99,7 @@ const About = ({ hasAccess }: { hasAccess?: boolean }) => {
                           title="Available Campaigns"
                           styles="bg-gradient-to-r from-[#4acd8d] to-[#3ab97c] hover:from-[#3ab97c] hover:to-[#4acd8d] w-full sm:w-auto shadow-lg"
                           handleClick={() =>
-                            handleButtonClick("/available-campaigns")
+                            handleButtonClick("/campaigns/available")
                           }
                         />
                       </motion.div>
@@ -112,7 +112,7 @@ const About = ({ hasAccess }: { hasAccess?: boolean }) => {
                           title="Past Campaigns"
                           styles="bg-gradient-to-r from-[#8c6dfd] to-[#7a5df0] hover:from-[#7a5df0] hover:to-[#8c6dfd] w-full sm:w-auto shadow-lg"
                           handleClick={() =>
-                            handleButtonClick("/past-campaigns")
+                            handleButtonClick("/campaigns/past")
                           }
                         />
                       </motion.div>

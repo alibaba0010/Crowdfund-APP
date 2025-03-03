@@ -2,7 +2,6 @@ import {
   createCampaign,
   dashboard,
   logout,
-  payment,
   profile,
   withdraw,
 } from "../assets";
@@ -11,21 +10,21 @@ import walletAddressReducer from "../actions/wallet";
 import campaignsReducer from "../actions/campaigns";
 export const navlinks = [
   {
-    name: "Dashboard",
+    name: "Available Campaigns",
     imgUrl: dashboard,
-    link: "/",
+    link: "/campaigns/available",
+  },
+  {
+    name: "Past Campaigns",
+    imgUrl: dashboard,
+    link: "/campaigns/past",
   },
   {
     name: "Create-Campaign",
     imgUrl: createCampaign,
     link: "/create-campaign",
   },
-  {
-    name: "Donate",
-    imgUrl: payment,
-    link: "/",
-    disabled: true,
-  },
+
   {
     name: "Withdraw",
     imgUrl: withdraw,

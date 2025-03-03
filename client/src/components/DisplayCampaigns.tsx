@@ -1,8 +1,10 @@
+"use client";
+
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { loader } from "../assets";
 import CampaignCard from "./CampaignCard";
 import { useSelector } from "react-redux";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { encryptId } from "../utils";
 
 export interface Campaign {
@@ -55,10 +57,14 @@ const DisplayCampaigns = ({
   const [searchParams] = useSearchParams();
   const searchQuery = searchParams.get("search")?.toLowerCase() || "";
 
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const campaignsPerPage = 10;
+
   const handleNavigate = (campaign: CampaignData) => {
     const { id, pId } = campaign;
     const encryptedId = encryptId(id);
-    navigate(`/campaign-details/${encryptedId}/${pId}`);
+    navigate(`/campaigns/campaign-details/${encryptedId}/${pId}`);
   };
 
   const sortedCampaigns = useMemo(() => {
@@ -72,6 +78,28 @@ const DisplayCampaigns = ({
 
     return filtered.sort((a, b) => b.id - a.id);
   }, [campaigns, searchQuery]);
+
+  // Calculate pagination values
+  const totalPages = Math.ceil(sortedCampaigns.length / campaignsPerPage);
+  const indexOfLastCampaign = currentPage * campaignsPerPage;
+  const indexOfFirstCampaign = indexOfLastCampaign - campaignsPerPage;
+  const currentCampaigns = sortedCampaigns.slice(
+    indexOfFirstCampaign,
+    indexOfLastCampaign
+  );
+
+  // Handle page changes
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+    // Scroll to top when changing pages
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  // Generate page numbers
+  const pageNumbers = [];
+  for (let i = 1; i <= totalPages; i++) {
+    pageNumbers.push(i);
+  }
 
   return (
     <div>
@@ -101,7 +129,7 @@ const DisplayCampaigns = ({
 
         {!isLoading &&
           campaigns.length > 0 &&
-          sortedCampaigns.map((campaign: CampaignData) => (
+          currentCampaigns.map((campaign: CampaignData) => (
             <CampaignCard
               key={campaign.pId}
               {...campaign}
@@ -109,6 +137,49 @@ const DisplayCampaigns = ({
             />
           ))}
       </div>
+
+      {/* Pagination Controls */}
+      {!isLoading && totalPages > 1 && (
+        <div className="flex justify-center items-center mt-8 gap-2">
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+            className={`px-4 py-2 rounded-md ${
+              currentPage === 1
+                ? "bg-gray-700 text-gray-500 cursor-not-allowed"
+                : "bg-[#1dc071] text-white hover:bg-[#18a05e] transition-colors"
+            }`}
+          >
+            Previous
+          </button>
+
+          {pageNumbers.map((number) => (
+            <button
+              key={number}
+              onClick={() => handlePageChange(number)}
+              className={`w-10 h-10 rounded-md ${
+                currentPage === number
+                  ? "bg-[#1dc071] text-white"
+                  : "bg-gray-800 text-white hover:bg-gray-700 transition-colors"
+              }`}
+            >
+              {number}
+            </button>
+          ))}
+
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className={`px-4 py-2 rounded-md ${
+              currentPage === totalPages
+                ? "bg-gray-700 text-gray-500 cursor-not-allowed"
+                : "bg-[#1dc071] text-white hover:bg-[#18a05e] transition-colors"
+            }`}
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 };

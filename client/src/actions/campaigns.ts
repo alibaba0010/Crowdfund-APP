@@ -54,6 +54,9 @@ const campaignsSlice = createSlice({
         }
       });
     },
+    setSearchButtonState(state, action) {
+      state.setSearchButton = action.payload;
+    },
   },
 });
 const parseActionData = (campaigns: any) => {
@@ -75,5 +78,6 @@ const parseActionData = (campaigns: any) => {
   }));
   return parsedCampaigns;
 };
-export const { refreshCampaigns, setAllCampaigns } = campaignsSlice.actions;
+export const { refreshCampaigns, setAllCampaigns, setSearchButtonState } =
+  campaignsSlice.actions;
 export default campaignsSlice.reducer;

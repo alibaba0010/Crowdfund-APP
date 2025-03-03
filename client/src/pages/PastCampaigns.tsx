@@ -10,7 +10,7 @@ import {
   setSearchButtonState,
 } from "../actions/campaigns";
 
-const AvailableCampaigns = () => {
+const PastCampaigns = () => {
   const address = useSelector((state: any) => state.wallet.addresses?.[0]);
   const dispatch = useDispatch();
   const refreshCampaign = useSelector(
@@ -43,14 +43,16 @@ const AvailableCampaigns = () => {
   }, [data, isLoading]);
   return (
     <>
-      <DisplayCampaigns
-        title="Available Campaigns"
-        isLoading={isLoading}
-        campaignType="available"
-        text="You have no available campaigns yet"
-      />
+      <div>
+        <DisplayCampaigns
+          title="Past Campaigns"
+          isLoading={isLoading}
+          campaignType="past"
+          text="You have no past campaigns yet"
+        />
+      </div>
     </>
   );
 };
 
-export default AvailableCampaigns;
+export default PastCampaigns;

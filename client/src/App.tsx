@@ -5,14 +5,16 @@ import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setWalletAdress } from "./actions/wallet";
-import { ParticleBackground, Sidebar } from "./components";
+import { Sidebar } from "./components";
 import {
   CampaignById,
   CreateCampaign,
   AvailableCampaigns,
   Profile,
   About,
+  PastCampaigns,
 } from "./pages";
+import { setSearchButtonState } from "./actions/campaigns";
 
 function App() {
   const account = useAccount();
@@ -43,6 +45,11 @@ function App() {
     if (path !== "/") {
       setUrl(path);
     }
+    if (path === "/campaigns") {
+      dispatch(setSearchButtonState(true));
+    } else {
+      dispatch(setSearchButtonState(false));
+    }
   }, []);
   return (
     <div className="relative sm:-8 p-4 bg-[#13131a] min-h-screen flex flex-row">
@@ -56,14 +63,14 @@ function App() {
           {hasAccess && (
             <>
               <Route
-                path="/available-campaigns"
+                path="/campaigns/available"
                 element={<AvailableCampaigns />}
               />
-              <Route path="/past-campaigns" element={<AvailableCampaigns />} />
+              <Route path="/campaigns/past" element={<PastCampaigns />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/create-campaign" element={<CreateCampaign />} />
               <Route
-                path="/campaign-details/:id/:pId"
+                path="/campaigns/campaign-details/:id/:pId"
                 element={<CampaignById />}
               />
               <Route path="*" element={<Navigate to="/" replace />} />
