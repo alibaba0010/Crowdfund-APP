@@ -2,14 +2,15 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { CustomButton } from "../components";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setSearchButtonState } from "../actions/campaigns";
 
 const About = ({ hasAccess }: { hasAccess?: boolean }) => {
   const [displayedText, setDisplayedText] = useState("");
   const [, setIsComplete] = useState(false);
   const { isWalletConnectOpen } = useSelector((state: any) => state.wallet);
   const address = useSelector((state: any) => state.wallet.addresses?.[0]);
-
+  const dispatch = useDispatch();
   const descriptionRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
@@ -19,7 +20,7 @@ const About = ({ hasAccess }: { hasAccess?: boolean }) => {
     let index = 0;
     setDisplayedText("");
     setIsComplete(false);
-
+    dispatch(setSearchButtonState(false));
     const typingInterval = setInterval(() => {
       if (index < description.length) {
         setDisplayedText((prev) => prev + description.charAt(index));

@@ -17,13 +17,19 @@ const validateDate = (date: Date) => {
   today.setHours(0, 0, 0, 0); // Set time to midnight to compare only dates
   return date > today;
 };
-
+const categories = [
+  { logo: "logo", name: "Education" },
+  { logo: "logo", name: "Emergencies" },
+  { logo: "logo", name: "Health" },
+  { logo: "logo", name: "Community Support" },
+];
 const formSchema = z.object({
   name: z.string().min(1, "Your Name is required!"),
   title: z
     .string()
     .min(1, "Campaign Title is required!")
     .max(50, "Campaign Title is must not be more than 50 words!"),
+  category: z.string().min(1, "Campaign Category should be selected!"),
   description: z
     .string()
     .min(10, "Description must be at least 8 characters long!")
@@ -97,7 +103,8 @@ const CreateCampaign = () => {
   };
   const onSubmitHandler = async (data: CreateCampaignSchema) => {
     try {
-      const { deadline, description, targetAmount, title, name } = data;
+      const { deadline, description, targetAmount, title, name, category } =
+        data;
       const parsedAmount = parseEther(targetAmount.toString());
       const deadlineTimestamp = Math.floor(deadline.getTime() / 1000);
       const image = await uploadImage();
@@ -107,6 +114,7 @@ const CreateCampaign = () => {
         args: [
           name,
           title,
+          category,
           description,
           parsedAmount,
           image,
@@ -155,21 +163,44 @@ const CreateCampaign = () => {
           )}
         </div>
 
-        {/* Title Field */}
-        <div className="flex flex-col gap-2">
-          <FormField
-            {...register("title")}
-            labelName="Campaign Title *"
-            placeholder="Add the campaign title"
-            inputType="text"
-          />
-          {errors.title && (
-            <span className="text-red-500 text-sm mt-1">
-              {errors.title.message}
-            </span>
-          )}
-        </div>
+        {/* Title and Category Fields */}
+        <div className="flex flex-col lg:flex-row gap-[40px]">
+          <div className="flex-1 flex flex-col gap-2">
+            <FormField
+              {...register("title")}
+              labelName="Campaign Title *"
+              placeholder="Add the campaign title"
+              inputType="text"
+            />
+            {errors.title && (
+              <span className="text-red-500 text-sm mt-1">
+                {errors.title.message}
+              </span>
+            )}
+          </div>
 
+          <div className="flex-1 flex flex-col gap-2">
+            <label className="font-epilogue font-medium text-[14px] leading-[22px] text-[#808191] mb-[10px]">
+              Campaign Category *
+            </label>
+            <select
+              {...register("category")}
+              className="py-[15px] sm:px-[25px] px-[15px] outline-none border-[1px] border-[#3a3a43] bg-[#13131A] font-epilogue text-white text-[14px] placeholder:text-[#4b5264] rounded-[10px] sm:min-w-[300px]"
+            >
+              <option value="">Select a category</option>
+              {categories.map((category) => (
+                <option key={category.name} value={category.name}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+            {errors.category && (
+              <span className="text-red-500 text-sm mt-1">
+                {errors.category.message}
+              </span>
+            )}
+          </div>
+        </div>
         {/* Description Field */}
         <div className="flex flex-col gap-2">
           <FormField

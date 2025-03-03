@@ -1,6 +1,10 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { refreshCampaigns, setAllCampaigns } from "../actions/campaigns";
+import {
+  refreshCampaigns,
+  setAllCampaigns,
+  setSearchButtonState,
+} from "../actions/campaigns";
 import DisplayCampaigns, { Campaign } from "../components/DisplayCampaigns";
 import { wagmiContractConfig } from "../utils/contract";
 import { useReadContract } from "wagmi";
@@ -34,6 +38,7 @@ const Profile = () => {
           address,
         })
       );
+      dispatch(setSearchButtonState(true));
     }
   }, [data, isLoading]);
 

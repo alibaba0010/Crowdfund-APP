@@ -56,3 +56,9 @@ export const store = configureStore({
       },
     }),
 });
+export const categories = [
+  { logo: "logo", name: "Education" },
+  { logo: "logo", name: "Emergencies" },
+  { logo: "logo", name: "Health" },
+  { logo: "logo", name: "Community Support" },
+];
