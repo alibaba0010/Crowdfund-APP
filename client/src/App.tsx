@@ -5,7 +5,7 @@ import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setWalletAdress } from "./actions/wallet";
-import { Sidebar } from "./components";
+import { ParticleBackground, Sidebar } from "./components";
 import {
   CampaignById,
   CreateCampaign,
@@ -26,6 +26,7 @@ function App() {
       const { address, addresses, status, chain } = account;
       dispatch(setWalletAdress({ address, addresses, status }));
       if (chain?.name === "Electroneum Testnet") {
+        // Electroneum Mainnet remove  testnet in wagmi.ts
         setHasAccess(true);
         if (url && !hasNavigated) {
           navigate(url);
@@ -69,6 +70,7 @@ function App() {
             </>
           )}
         </Routes>
+        {/* <ParticleBackground /> */}
       </div>
     </div>
   );

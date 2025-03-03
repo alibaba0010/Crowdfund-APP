@@ -8,4 +8,5 @@ export { default as Loader } from "./Loader";
 export { default as FormField } from "./FormField";
 export { default as CountBox } from "./CountBox";
 export { default as ProfileDropDown } from "./ProfileDropDown";
-export { default as CampaignDetails } from "../components/CampaignDetails";
+export { default as CampaignDetails } from "./CampaignDetails";
+export { default as ParticleBackground } from "./ParticleBackground";

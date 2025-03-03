@@ -41,3 +41,195 @@ input::-webkit-inner-spin-button {
 .checker-pulse {
   animation: pulse 1.5s ease-in-out infinite;
 }
+
+/* Particle Background Styles */
+.particle-background {
+  @apply absolute inset-0 overflow-hidden z-0 pointer-events-none;
+}
+
+.gradient-background {
+  @apply absolute inset-0;
+  background: radial-gradient(circle at center, #2a1f3d 0%, #1a1625 100%);
+}
+
+.gradient-background.animate {
+  animation: gradientShift 10s infinite alternate;
+}
+
+@keyframes gradientShift {
+  0% {
+    background: radial-gradient(circle at center, #2a1f3d 0%, #1a1625 100%);
+  }
+  50% {
+    background: radial-gradient(circle at center, #1f2a3d 0%, #161a25 100%);
+  }
+  100% {
+    background: radial-gradient(circle at center, #2a1f3d 0%, #1a1625 100%);
+  }
+}
+
+/* Base particle styles */
+.particle {
+  @apply absolute rounded-full;
+  background-color: rgba(255, 255, 255, 0.8);
+  will-change: transform, opacity;
+}
+
+/* Particle sizes */
+.particle-tiny {
+  @apply w-0.5 h-0.5;
+}
+
+.particle-small {
+  @apply w-1 h-1;
+}
+
+.particle-medium {
+  @apply w-1.5 h-1.5;
+}
+
+.particle-large {
+  @apply w-2 h-2;
+}
+
+/* Particle animations */
+.particle-float {
+  animation: particleFloat var(--duration, 15s) infinite;
+  animation-delay: var(--delay, 0s);
+  top: var(--y, 50%);
+  left: var(--x, 50%);
+}
+
+.particle-pulse {
+  animation: particlePulse var(--duration, 4s) infinite;
+  animation-delay: var(--delay, 0s);
+  top: var(--y, 50%);
+  left: var(--x, 50%);
+}
+
+.particle-drift {
+  animation: particleDrift var(--duration, 20s) infinite;
+  animation-delay: var(--delay, 0s);
+  top: var(--y, 50%);
+  left: var(--x, 50%);
+}
+
+/* Particle glow effects */
+.particle-glow-soft {
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+}
+
+.particle-glow-medium {
+  box-shadow:
+    0 0 5px rgba(255, 255, 255, 0.5),
+    0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.particle-glow-strong {
+  box-shadow:
+    0 0 5px rgba(255, 255, 255, 0.5),
+    0 0 10px rgba(255, 255, 255, 0.3),
+    0 0 15px rgba(255, 255, 255, 0.1);
+}
+
+/* Particle colors */
+.particle-white {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.particle-blue {
+  background-color: rgba(100, 149, 237, 0.8);
+}
+
+.particle-purple {
+  background-color: rgba(147, 112, 219, 0.8);
+}
+
+.particle-cyan {
+  background-color: rgba(0, 255, 255, 0.6);
+}
+
+/* Keyframe animations */
+@keyframes particleFloat {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0.2;
+  }
+  50% {
+    transform: translateY(-100px) scale(1.2);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(-200px) scale(1);
+    opacity: 0;
+  }
+}
+
+@keyframes particlePulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+}
+
+@keyframes particleDrift {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 0.2;
+  }
+  25% {
+    transform: translate(100px, -50px) rotate(90deg);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translate(200px, 0) rotate(180deg);
+    opacity: 0.7;
+  }
+  75% {
+    transform: translate(100px, 50px) rotate(270deg);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translate(0, 0) rotate(360deg);
+    opacity: 0.2;
+  }
+}
+
+/* Particle container for JavaScript generation */
+.particles-js {
+  @apply absolute inset-0 z-0 pointer-events-none;
+}
+
+/* Additional animation for connected particles effect */
+@keyframes connectParticles {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Responsive adjustments for particles */
+@media (max-width: 768px) {
+  .particle-medium,
+  .particle-large {
+    @apply w-1 h-1;
+  }
+
+  .particle-glow-medium,
+  .particle-glow-strong {
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+  }
+}

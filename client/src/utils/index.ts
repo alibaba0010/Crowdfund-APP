@@ -58,32 +58,3 @@ export const uploadToPinata = async (
   );
   return response.data;
 };
-// export const checkIfImage = (url, callback) => {
-//   const img = new Image();
-//   img.src = url;
-
-//   if (img.complete) callback(true);
-
-//   img.onload = () => callback(true);
-//   img.onerror = () => callback(false);
-// };
-// src/utils/base64Utils.js
-
-// export const daysLeft = (deadline: bigint) => {
-//   // Convert BigInt deadline (seconds) to milliseconds
-//   const deadlineMs = deadline * 1000n;
-
-//   // Convert to JavaScript Date
-//   const deadlineDate = new Date(Number(deadlineMs));
-
-//   // Calculate difference in milliseconds
-//   const difference = deadlineDate.getTime() - Date.now();
-
-//   // Return 0 if deadline has passed
-//   if (difference <= 0) return "0";
-
-//   // Calculate remaining days (floor value)
-//   const remainingDays = Math.floor(difference / (1000 * 3600 * 24));
-
-//   return remainingDays.toString();
-// };
