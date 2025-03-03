@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 
 const initialState = {
   isChanged: false,
+  setSearchButton: false,
   availableCampaigns: {
     campaigns: [] as Campaign[],
   },
@@ -31,6 +32,7 @@ const campaignsSlice = createSlice({
     },
 
     setAllCampaigns(state, action) {
+      state.setSearchButton = true;
       const { data, address } = action.payload;
       const parsedCampaigns = parseActionData(data);
       state.availableCampaigns.campaigns = [];
