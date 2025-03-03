@@ -1,5 +1,3 @@
-"use client";
-
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { loader } from "../assets";
 import CampaignCard from "./CampaignCard";

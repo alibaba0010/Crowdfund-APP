@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { CustomButton, ProfileDropDown, WalletConnect } from ".";
@@ -13,7 +11,6 @@ const Navbar = ({ hasAccess }: { hasAccess: boolean }) => {
   const [isActive, setIsActive] = useState("dashboard");
   const [toggleDrawer, setToggleDrawer] = useState(false);
   const address = useSelector((state: any) => state.wallet.addresses?.[0]);
-  console.log("Address: " + address);
   const { isWalletConnectOpen } = useSelector((state: any) => state.wallet);
   const setSearchButton = useSelector(
     (state: any) => state.campaigns.setSearchButton

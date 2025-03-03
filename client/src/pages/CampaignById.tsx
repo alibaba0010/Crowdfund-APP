@@ -41,7 +41,6 @@ const CampaignById = () => {
     if (data) {
       const campaign = data as Campaign;
       const deadline = daysLeft(campaign.deadline);
-      console.log(deadline);
       const campaignData = {
         creator: campaign.creator,
         name: campaign.name,
